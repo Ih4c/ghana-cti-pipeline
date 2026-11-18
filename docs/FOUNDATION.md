@@ -1,9 +1,12 @@
-# Milestone 0: foundation proposal and contracts
+# Foundation contracts and component boundaries
 
-This increment implements only the foundation in `CODEX_FIRST_TASK.md`. It does
-not run collection, ranking, enrichment, analysis, approval transitions, or
-publication. All committed examples are synthetic, using reserved `example.org`
-references. No source feasibility or redistribution permission is implied.
+This document describes the implemented foundation and its limitations across
+milestones. Current progress and authorized scope live in [STATUS.md](STATUS.md)
+and the [milestone specifications](milestones/README.md). Historical delivery is
+recorded in the [M0 retrospective](milestones/M0_FOUNDATION.md); the original
+[first task](archive/CODEX_FIRST_TASK.md) is archived, not active guidance.
+All committed examples are synthetic, using reserved `example.org` references.
+No source feasibility or redistribution permission is implied by these contracts.
 
 ## Architecture assessment
 
@@ -16,8 +19,9 @@ A single Python distribution with separate packages is sufficient for this
 stage. Independently replaceable modules do not yet require separate services,
 queues, deployments, or databases. Python 3.11+ and Pydantic 2 provide typed,
 validated JSON contracts; pytest and Ruff provide offline tests and linting.
-These tools are open source. `uv.lock` pins the dependency graph. The choice of
-Pydantic/uv and the initial V1 shapes are proposed for approval in this PR.
+These tools are open source. `uv.lock` pins the dependency graph. Pydantic/uv and
+the initial V1 shapes were delivered in the merged foundation PRs. Future
+contract changes still need explicit review/versioning; see D001 in the decision log.
 
 | Package | Responsibility now | Later boundary |
 | --- | --- | --- |
@@ -102,12 +106,12 @@ enforced for `Text` fields or `FetchedDocument.body`; “bounded” is an adapte
 requirement, not a guarantee of this scaffold. Before live ingestion, approve
 per-field character limits (identifiers, URLs, titles, excerpts, rationales and
 report bodies) and byte limits for fetched bodies, including decompressed data.
-Proposed starting caps for review: 512 characters for titles, 4,096 for URLs,
-256 for identifiers/publisher names, 65,536 for excerpts, 262,144 for report
-bodies, 8,192 for other text, and 2 MiB for fetched bodies. Source feasibility
-must confirm or revise these caps. Enforce body limits while streaming and after
-decompression, reject oversized input without silent truncation, and add tests
-at and above each limit before any collector is enabled.
+The current [M1 specification](milestones/M1_COLLECTION.md) proposes text caps
+and source-specific body caps (8 MiB KEV, 2 MiB RSS), revising the earlier blanket
+2 MiB proposal. Source feasibility must confirm these before activation. Report
+body limits remain a later reporting decision. Enforce body limits while
+streaming and after decompression, reject oversized input without silent
+truncation, and test at/above each limit before any collector is enabled.
 
 `EvidenceRepository.get(id)` returns a record or None. `add(record)` must be
 idempotent for identical ID/content and reject conflicting content with
@@ -137,9 +141,9 @@ read-only permissions, no persisted checkout credentials, no schedule, no
 deployment, and no intelligence artifacts. Python 3.11 and 3.14 cover the
 minimum and current stable versions. Actions and dependency versions are pinned;
 updates should be reviewed in future PRs. Maintainers should require the CI
-checks through branch protection; this PR does not alter repository settings.
+checks through branch protection; changing repository settings requires explicit authorization.
 
-## Phased plan and decisions requiring review
+## Open decisions and future scope
 
 **Open decision — TLP inheritance (F4), required before any exporter:** a derived
 record must not be less restrictive than its sources. A TLP:CLEAR report citing
@@ -152,28 +156,16 @@ before implementing these rules. The strict xfail test
 a proposed evidence lookup context; it is not implemented enforcement or an
 approved validation API. Resolve this expected failure before adding an exporter.
 
-1. **Milestone 0 (this PR):** approve package boundaries, provisional V1 contracts,
-   dependency/tooling choices, and the offline test baseline.
-2. **Milestone 1 (separate approval):** perform feasibility checks and select 2–3
-   permitted machine-readable sources, considering Ghana CSA/CERT-GH coverage.
-   Verify licenses, access methods, quotas and redistribution before collecting.
-   Decide SQLite versus another private store, raw evidence retention, stable
-   identifiers/deduplication, retries, scheduling and operational ownership.
-3. **Milestone 2:** approve Ghana relevance rubric and minimum evidence standard;
-   build deterministic triage first. Any LLM assistance requires a provider,
-   privacy policy, explicit budget, grounded citations and labeled outputs.
-4. **Milestone 3:** implement analyst validation and analysis, authenticated review
-   decisions, append-only audit persistence, and restricted-data access controls.
-5. **Milestone 4:** approve review UX and public hosting; obtain the actual Zeltser
-   template and verify its license before adaptation. Build a revision-bound
-   human approval gate and TLP:CLEAR-only exporter only with explicit approval.
-6. **Milestone 5:** expand sources and aggregation after agreeing on funding,
-   maintenance, backups, retention and authenticated restricted distribution.
+Use [DECISIONS.md](DECISIONS.md) for the current decisions, [ROADMAP.md](ROADMAP.md)
+for the long-term sequence, and [milestone specifications](milestones/README.md)
+for approval scopes and acceptance criteria. Source permissions, stable identity,
+private storage, retries, retention, scheduling and operator ownership require
+review before collection. Ghana relevance criteria, any bounded/labeled LLM use,
+authenticated analyst review, restricted access, report-template licensing,
+public hosting and annual aggregation remain later approved work.
 
-Expected Milestone 0 operating cost: no API, model, hosting, collection or storage
-service charges. Local development has no software license fees. Standard
-GitHub-hosted Actions for this public repository are expected to use GitHub's
-free public-repository allowance; account-specific billing remains the owner's
-responsibility. No paid service or recurring workload is enabled. Later costs
-cannot be estimated credibly until source quotas, scheduling, retention and
-hosting decisions are approved.
+The foundation enables no paid service or recurring workload. Local software
+has no license fees; public standard-runner CI is expected to remain free under
+GitHub's terms. Each milestone must state its own runtime/storage/backup cost
+assumptions and approved budget before activation. See the M1 cost proposal;
+do not infer that later operations are costless or authorized.

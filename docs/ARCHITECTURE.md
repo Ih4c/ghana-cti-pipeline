@@ -1,4 +1,10 @@
-# Proposed modular architecture (not yet finalized)
+# Modular architecture and deployment options
+
+The package boundaries and V1 foundation contracts are implemented. Runtime
+services, persistence, scheduling and publication remain proposals; consult
+[STATUS.md](STATUS.md), [DECISIONS.md](DECISIONS.md), and the approved milestone
+specification before implementation. The full pipeline below is the target,
+not a statement that every stage currently exists.
 
 ```
 Source adapters (independent)
@@ -16,11 +22,22 @@ Source adapters (independent)
 - `reporting/`: Markdown templates, validation, approval, TLP checks, and publication exporter.
 - `storage/`: repository interfaces; SQLite may suit local MVP, with later migration path.
 
-## Proposed initial deployment
-GitHub for code and PRs; local/Codex development; GitHub Actions for tests and cautiously scheduled ingestion; SQLite for prototype; GitHub Pages for approved public Markdown output. **Do not use public GitHub artifacts or Actions logs to store restricted intelligence.** Reassess scheduling/storage limits and migrate to a small VPS when needed.
+## Deployment options and current proposal
+GitHub hosts code/PRs and fixture CI. The [M1 proposal](milestones/M1_COLLECTION.md)
+uses an approved private host, SQLite/snapshots and manual execution first, with
+an optional local timer after explicit activation. Hosted Actions ingestion is
+deferred until private durable storage and operational controls are designed.
+GitHub Pages remains an option for later approved public Markdown output; no
+publisher or hosting choice is authorized here. **Do not use public GitHub
+artifacts or Actions logs to store restricted intelligence.** Reassess scheduling,
+storage, backups and costs before selecting or migrating to a small VPS.
 
 ## Contracts
-Define versioned `SourceItem`, `EvidenceRecord`, `Indicator`, `Assessment`, `ReviewDecision`, and `Report` models. Preserve source-level identifiers, raw reference links, confidence, TLP markings, and lineage. Never let an adapter directly publish.
+The versioned `SourceItem`, `EvidenceRecord`, `Indicator`, `Assessment`,
+`ReviewDecision`, and draft-only `Report` models exist; see
+[FOUNDATION.md](FOUNDATION.md). Preserve source-level identifiers, raw reference
+links, confidence, TLP markings, and lineage. New transport/observation contracts
+need reviewed versions and migrations. Never let an adapter directly publish.
 
 ## Security and resilience
 Untrusted source text cannot issue instructions to agents; least privilege; no secret commits; request timeouts; bounded retries; input validation; no malware execution; human publication gate; structured logs without sensitive payloads.

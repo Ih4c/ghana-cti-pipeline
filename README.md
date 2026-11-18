@@ -1,6 +1,6 @@
 # Ghana CTI Pipeline
 
-**Status:** planning / initial scaffold. Public, Ghana-focused cyber threat intelligence platform.
+Public, Ghana-focused cyber threat intelligence platform. See [project status](docs/STATUS.md) for delivered capabilities, the active proposal, and approval gates.
 
 ## Purpose
 Continuously collect credible cybersecurity information, prioritize Ghana-relevant developments, and support human analysts in creating defensible tactical and operational intelligence with strategic implications where supported.
@@ -12,13 +12,13 @@ Continuously collect credible cybersecurity information, prioritize Ghana-releva
 - Evidence provenance, confidence, TLP-aware handling, and explicit human approval.
 - Open-source development with protected `main` and PR-based changes.
 
-Start with [Project Vision](docs/PROJECT_VISION.md), [Requirements](docs/REQUIREMENTS.md), [Architecture](docs/ARCHITECTURE.md), and [Roadmap](docs/ROADMAP.md). Codex instructions are in [AGENTS.md](AGENTS.md).
+Start with the [documentation index](docs/README.md). Permanent development rules are in [AGENTS.md](AGENTS.md); scope and approval belong in the [milestone specifications](docs/milestones/README.md), [decision log](docs/DECISIONS.md), and [project status](docs/STATUS.md). Use the [handoff guide](docs/HANDOFF.md) to continue work.
 
-## Milestone 0 development
+## Development
 
 This scaffold provides typed contracts and module interfaces only. There are no
 live collectors, AI calls, storage backends, approval workflows or publishers.
-See [Foundation proposal and contracts](docs/FOUNDATION.md) for boundaries,
+See [Foundation contracts](docs/FOUNDATION.md) for boundaries,
 failure semantics, unresolved decisions, expected costs and the phased plan.
 
 With Python 3.11+ and [uv](https://docs.astral.sh/uv/) 0.13.6 installed:

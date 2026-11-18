@@ -1,7 +1,7 @@
 # Codex instructions — Ghana CTI Pipeline
 
 ## Mission
-Build a modular, low-cost, public-facing cyber threat intelligence (CTI) pipeline that turns credible information into reviewed, actionable intelligence relevant to Ghanaian organizations. Read `docs/PROJECT_VISION.md`, `docs/REQUIREMENTS.md`, and `docs/ARCHITECTURE.md` before implementation.
+Build a modular, low-cost, public-facing cyber threat intelligence (CTI) pipeline that turns credible information into reviewed, actionable intelligence relevant to Ghanaian organizations. This is not a DNS-only, Microsoft-only, or CIIS-only project. Follow the reading order in [docs/README.md](docs/README.md), including the vision, requirements, architecture, workflow, status, decisions, and applicable milestone specification before implementation.
 
 ## Non-negotiable engineering rules
 - Commit author and committer names must always be `ih4c`, using `144531642+ih4c@users.noreply.github.com` for both emails. Never use a personal name or personal email in commit metadata, messages, PR text, or examples. Never add co-author lines, model lines, or session links.
@@ -19,8 +19,14 @@ Build a modular, low-cost, public-facing cyber threat intelligence (CTI) pipelin
 - Respect licenses, terms of service, rate limits, privacy, and safe handling of malicious URLs and samples. Avoid storing malware binaries in this repository.
 - Keep costs bounded: prefer free/low-cost services, configurable schedules, caching, and explicit LLM budgets.
 
-## First task
-Review the docs, propose a phased MVP plan, and scaffold only the minimal project structure, schemas, tests, and CI needed for the first source ingestion milestone. Do not start broad scraping or deploy/publish without an approved plan.
+## Working on any milestone
+- Verify the remote, working-tree state, latest `origin/main`, and open work before choosing a new feature branch. Preserve unrelated work; never resurrect superseded history.
+- Read [STATUS.md](docs/STATUS.md), [DECISIONS.md](docs/DECISIONS.md), and the versioned specification under [docs/milestones/](docs/milestones/README.md). Use [HANDOFF.md](docs/HANDOFF.md) when resuming or handing over work.
+- Implement only the scope explicitly approved by the project owner. A draft specification, roadmap entry, or documentation merge does not itself approve implementation, source activation, spending, deployment, or publication. Record the approved specification version and scope in the decision log/status document with a durable approval reference; never invent approval.
+- When approval is absent, research, propose, and prepare reviewable documentation; do not implement collectors or later milestone features. Bounded feasibility checks may inspect public documentation/endpoints when requested, but must not become recurring ingestion, broad scraping, or a public data store.
+- Review source access terms and redistribution rights before onboarding. Never treat accessible content as permission to republish it.
+- Keep specifications, current status, decisions, and handoff information aligned with each PR. Historical documents under `docs/archive/` describe past tasks and do not authorize current work.
+- Stop at the authorized boundary. Do not merge your own PR, bypass branch protections, deploy, or publish without explicit authorization.
 
 ## Definition of done for each PR
-Tests pass; source/data contracts are documented; no secrets or sensitive data; failure modes and retries considered; changes are modular; operational and security implications are noted.
+Tests pass; source/data contracts are documented; no secrets or sensitive data; failure modes and retries considered; changes are modular; operational and security implications are noted. Validate documentation links and status/approval consistency for documentation changes. Report checks and known limitations, confirm commit author/committer identity, and leave the PR for human review.
