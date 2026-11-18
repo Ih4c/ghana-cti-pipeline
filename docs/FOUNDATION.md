@@ -53,6 +53,12 @@ even for shallow copies. Pydantic's unchecked `model_construct` is not an
 ingestion API. Breaking changes need a new schema version and an
 explicit migration, never a silent reinterpretation of old evidence.
 
+The proposed [hybrid M1 extension](milestones/M1_EVIDENCE.md) does not change these
+V1 rules. Metadata-only items with no permitted excerpt cannot become V1
+SourceItem/EvidenceRecord. A separate EvidenceRevisionV2 and version-aware lookup
+are proposed for a later increment; they do not exist yet. Response hashes are
+distinct from retained-content hashes and do not imply archived raw bytes.
+
 | Contract | Meaning and preserved information |
 | --- | --- |
 | `SourceItem` | Exact untrusted excerpt, title, source ID, publisher, original URL, optional canonical URL and source-native ID, optional publication/observation dates, required retrieval time, source TLP |

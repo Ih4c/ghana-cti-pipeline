@@ -1,201 +1,156 @@
 # M1 implementation readiness and PR execution plan
 
-Review version: **1.0**, 2026-11-18. Target: **M1 specification v1.1, proposed**.
-Verified main: `50224b35c1b27bbaca0fb1551bdf4b8205cb7de8`, the merge of
-[PR #4](https://github.com/Ih4c/ghana-cti-pipeline/pull/4). No subsequent main
-commits or open PRs were found at review start. The working tree was clean.
+Review version **1.1**, 2026-11-18. Target: **M1 v1.2, proposed technical design**.
+Verified main: `1e5c2bca28077406acae576b88e77114f1288450`, the merge of
+[PR #5](https://github.com/Ih4c/ghana-cti-pipeline/pull/5). PR #4 and #5 merges
+were verified in Git and GitHub; no later main commit or open PR existed at this
+review's start, and the working tree was clean. Neither merge approved code.
 No source endpoints or vendor content were fetched during this review.
 
-**Verdict:** the foundation can support a small offline contract increment once
-explicitly approved. M1 as a whole is not implementation-approved or ready for
-live operation. PR #4 accepted the documentation coordination baseline, not D004–D008
-or collector implementation. Proposed corrections below require owner review.
+**Verdict:** the owner's hybrid strategy is accepted (D018); the technical design
+and all implementation increments still require approval. The first small offline
+retrieval/observation increment remains appropriate, with receipt descriptors that
+do not imply raw retention. See [M1_EVIDENCE.md](M1_EVIDENCE.md) for the proposed
+source policies, V2 representation, conditional requests and reporting assessment.
 
-## Decision review and precise corrections
+## Corrections to the v1.1 proposal
 
-| Finding in v1.0 | Proposed correction and impact | Decision / gate |
+| Prior assumption / gap | Proposed correction | Decision |
 | --- | --- | --- |
-| D004: vendor summaries may be retained while complete RSS bodies are snapshotted; a feed can embed full articles | Keep vendor sources disabled unless permission covers the entire retained representation and backup lifetime. Otherwise propose a metadata-only contract separately; do not strip a feed and call it exact evidence or invent an excerpt. Synthetic development does not depend on vendor rights. | D017; before vendor verification/activation |
-| D005: replacing FetchedDocument or adding fields to strict V1 records would break callers/serialized data | Add independent versioned retrieval/observation contracts; keep every existing V1 shape and protocol signature unchanged in the first PR. Introduce a new fetch-result interface only in a later reviewed adapter integration. | D011; first PR |
-| A 304 has no new body, yet the plan requires body metadata and observations | Model 304 separately, linking directly to a committed 200 response for the same source/representation. Record a check, not fresh per-item observations or fabricated publication/retrieval content. | D011; first PR plus storage tests |
-| Content-derived IDs exclude retrieval time, but immutable SourceItem embeds retrieved_at | Keep the originally committed V1 evidence snapshot on an unchanged revision. Store subsequent retrieval times/locators in separate observations; never submit a different snapshot under the old evidence ID. | D012; identity/storage |
-| A→B→A content reuse plus predecessor links inside immutable evidence can conflict or create cycles | Reuse content revision A and append a chronological observation. Leave parent_evidence_ids for genuine derivation, not temporal succession. History is ordered observations, not a mutable predecessor graph. | D012; identity/storage |
-| Separate snapshot files and SQLite need a two-resource recovery protocol | For this bounded MVP, propose snapshot BLOBs in the same private SQLite database, keyed by digest. Commit snapshots/evidence/observations/checkpoint in one transaction. Defer external snapshot files and orphan reconciliation. This explicitly revises D005's separate-directory proposal. | D013; storage approval |
-| Partial feed acceptance can advance validators past rejected entries; reprocessing/304 behavior is unclear | Reject the entire source batch on any invalid entry, retain the previous processing checkpoint, record safe failure metadata, and continue other sources. No item quarantine/replay subsystem in M1. | D015; parser/runner |
-| D008 offers DNS pinning or egress filtering, but no selected connection/proxy behavior | Propose direct-only transport on a separately approved host: connect to validated resolved IP while retaining original TLS hostname/SNI, no automatic redirects, disable inherited proxies, revalidate every hop/retry. If the chosen client cannot prove this, transport is not ready. No proxy fallback or bypass of the current environment's restrictions. | D014; transport implementation design and live gate |
-| D008 leaves total retry timing, encodings, depth and header limits open | Set a 180-second per-source wall budget including backoff/redirects/fallback, three top-level attempts maximum, within the 10-minute run budget. Propose UTF-8 only, maximum nesting depth 64, and response headers ≤32 KiB. Retain byte/item/text caps from M1. | D015; transport/parser |
-| D006/Gate B requires runtime checks before any live run, while the pilot is needed to obtain them | Separate B1 authorized bounded verification from B2 approved manual collection. Both need explicit source-specific approval; Gate C separately enables recurrence. Offline contracts/storage need neither a production host nor source access. | D016; approval sequencing |
-| D007's 365-day retention, 2 GiB cap and seven backups lack a capacity/rights reconciliation | Keep the cap as a stop condition, not a promise of year-long capacity. At 12 MiB of changed snapshots/day, 365 days exceeds 4 GiB before indexes. Measure the approved pilot, choose storage/retention with rights, and stop before limits rather than auto-delete cited data. Include backups in expiry/deletion policy. | D017; before live collection |
+| Every 200 has a SnapshotRef that appears to imply archiving | Use a response-body descriptor for observed size/media/digest; retention association is separate and occurs only at validated commit. | D011/D019 |
+| Vendor retention requires complete feed archival permission or deferral | Accepted metadata-first direction; require permissions for bounded transient parsing and specifically retained fields. No raw vendor archive by default; metadata is not automatically exempt. | D018 accepted; D017/D020 proposed |
+| V1 mandates an exact excerpt | Keep V1 unchanged. Add a distinct versioned V2 evidence representation later; absent excerpt is honest and valid only there. | D019 |
+| 304 requires a retained raw snapshot for all sources | Require the committed 200 processing manifest and retained projections; require a raw artifact only for raw-backed mode. A 304 never reprocesses unretained bytes or renews rights. | D019 |
+| Full-response identity suggests full article change tracking | Item identity uses allowed retained projection/profile; track response digests separately. Metadata equality cannot establish article equality. | D012 |
+| One retention period / seven backups seems sufficient | Require per-source/per-class deadlines including hashes, policy metadata and backups; verify deletion outside active SQLite rows and isolate restores. | D017/D020 |
+| Metadata supplies report-ready evidence | Metadata supports discovery/citation and limited listing facts. Article-level claims need human verification and permitted support/corroboration. The authoritative template remains unchanged; actual template is not in the checkout. | D018/D021 |
 
-D004–D008 remain proposed, with these refinements; no earlier decision is silently
-marked accepted. D009's TLP inheritance xfail remains an explicit exporter blocker.
-Do not combine F5-wide validation hardening, F6 type-checker adoption, reporting
-limits, or unrelated cleanup with the first increment.
+Keep the v1.1 improvements: immutable observations, A→B→A reuse, source-batch
+atomicity, SQLite BLOBs for permitted raw acquisitions, direct-only validated-IP
+transport, safe parsing limits, source budgets and separate approval gates.
+Do not bundle F5-wide V1 validation changes, F6 tooling, TLP inheritance resolution,
+reporting implementation or unrelated cleanup into the first increment.
 
-## First PR specification: M1-01, core metadata contracts only
+## M1-01: offline retrieval and observation descriptors only
 
-Suggested title: **Add versioned retrieval and observation contracts with synthetic fixtures**.
-Prerequisite: explicit approval of **M1-01 under M1 v1.1 and D011**. No approval
-for SQLite, HTTP, parsers or adapters is implied by approving this increment.
+Prerequisite: explicit owner approval of **M1-01 under M1 v1.2 / D011 and the
+retrieval/observation portion of D019**. No V2 evidence implementation, storage,
+network or parser approval is implied. Suggested title: **Add retention-neutral
+retrieval and observation contracts with synthetic fixtures**.
 
-Scope: one additive module under `core/`, synthetic JSON fixtures and focused
-tests, plus contract/status documentation. Use existing Pydantic and the standard
-library only; no dependency, workflow, CLI, network or filesystem behavior changes.
-The existing `models.py`, Collector/FetchedDocument/EvidenceRepository signatures
-and V1 fixtures remain compatible. New record types have their own `kind` and
-`schema_version: "1.0"`; the milestone document version is not a schema version.
+Scope: one additive module under `core/`, synthetic JSON fixtures, focused tests
+and contract/status documentation. Existing `models.py`, V1 fixtures and
+Collector/FetchedDocument/EvidenceRepository signatures stay unchanged. Existing
+Pydantic and standard library only; no dependencies, CLI, workflow or I/O changes.
+New record types use a distinct `kind` and their own `schema_version: "1.0"`;
+this is unrelated to the milestone version or later EvidenceRevisionV2.
 
-Proposed data-only types (names may be refined in review without broadening scope):
-
-| Type | Required information and invariants |
+| Proposed data-only type | Information and invariants |
 | --- | --- |
-| `SnapshotRef` | Lowercase 64-hex SHA-256 of exact HTTP entity bytes after Content-Encoding decoding, before text/XML/JSON decoding; strict integer byte count 0–8 MiB; bounded media type. Digest reference only, never raw bytes or a storage path. RSS's stricter 2 MiB policy is enforced at its future boundary. |
-| `ReceivedResponse` | Unique caller-supplied retrieval ID, source ID, exact requested/final HTTPS URLs, followed redirect destination tuple (max three), aware start/end times, status exactly 200, snapshot reference and optional returned ETag/Last-Modified strings. Transport success does not imply parsing success or checkpoint advancement. |
-| `NotModifiedResponse` | Same attempt metadata, status exactly 304, nonempty sent ETag or Last-Modified, and required `representation_retrieval_id` naming the committed 200 result. Optional returned validators. No snapshot/body field; unknown fields reject. Storage later validates same source, endpoint/representation and existing digest. |
-| `RetrievalFailure` | Retrieval/source/request identity, aware start/end times, optional received HTTP status (100–599), finite safe error code and retryability. Preserve a received 200/304 status when transport validation subsequently fails; `kind`, not status alone, distinguishes failure. No payload, raw exception text or success snapshot. Parser/storage failures are separate processing outcomes, not fabricated transport failures. |
-| `EvidenceObservation` | Caller-supplied observation ID, current 200 retrieval ID, existing/new evidence ID, nonempty source-item locator and adapter version. It links an actual parsed representation to evidence. No per-item observation is created from a 304; its link to the original representation answers which evidence was checked. |
+| `ResponseBodyMetadata` | Complete decoded-entity byte count and transferred byte count (strict integers 0–8 MiB), bounded media type/content encoding; `digest_state: computed/not_computed`. Computed requires lowercase 64-hex SHA-256 and domain `decoded-http-entity-v1`; not_computed requires digest null. No bytes, path, artifact ID or retention flag. RSS's tighter cap is enforced at its future boundary. |
+| `ReceivedResponse` | Caller-supplied UUID retrieval ID, source ID, exact requested/final HTTPS URLs, followed redirect destinations (max three), aware start/end times, status 200, body descriptor, optional returned ETag/Last-Modified and bounded Cache-Control/Vary metadata. Receipt does not mean valid parsing, retained body or successful checkpoint. |
+| `NotModifiedResponse` | Same attempt metadata, status 304, at least one nonempty sent ETag/Last-Modified, required direct `representation_retrieval_id` naming the processed 200; optional returned validators/Cache-Control/Vary. No body descriptor, new body digest, snapshot or artifact. Storage validates manifest/source/variant/mode/rights later. |
+| `RetrievalFailure` | Retrieval/source/request identity, aware start/end times, optional received HTTP status 100–599, finite safe code and strict boolean retryability. Preserve received 200/304 status if transport validation fails afterward. No body, partial-body digest or arbitrary exception text. Processing/storage failures remain separate. |
+| `EvidenceObservation` | Caller-supplied UUID observation ID, current parsed-200 retrieval ID, evidence ID plus kind/version (`v1`/`1.0` or `hybrid`/`2.0`), nonempty locator, adapter version, source policy ID/version. This describes a link, not validation of an evidence object's existence or rights. A 304 creates no per-item observation. |
 
-Shared metadata rules: IDs are UUIDs; source IDs 1–256 nonblank characters;
-URLs ≤4,096 characters, HTTPS only, no userinfo/fragment/control characters,
-preserved verbatim (syntax validation is not SSRF enforcement); validator strings
-≤1,024 characters and no CR/LF; media type ≤128, locator ≤4,096, adapter version
-≤128. New types are frozen, reject extras/unsupported versions and validate copy
-updates. Explicit-offset timestamps only; reject integer epochs and naive times;
-end must be at/after start. A redirected final URL equals the last followed
-destination; without redirects it equals the requested URL. Later transport must
-refuse unapproved redirect targets; this schema cannot prove network safety.
-No operation ID or timestamp is generated as a side effect of constructing these
-records. Unknown real publication dates never enter these transport records.
+Shared limits: source/policy IDs 1–256 nonblank characters; version strings 1–128;
+URLs ≤4,096, HTTPS, no credentials/fragments/control characters and preserved
+verbatim; locator 1–4,096; media type/content encoding 1–128. Optional validator,
+Cache-Control and Vary strings ≤1,024 and no control characters; absent values
+are null, present values nonblank. Only these named HTTP fields are retained,
+not arbitrary header maps, cookies, auth headers or raw header dumps. Runtime
+must also enforce the 32 KiB aggregate header limit from M1. Reference/article
+URL rules belong to the later evidence schema, not transport destination approval.
 
-Proposed failure codes: `timeout`, `connection_error`, `tls_error`, `unsafe_url`,
+Types are frozen, extra-forbid, reject unsupported kinds/versions and validate
+copy updates. UUIDs and times are caller-supplied; explicit-offset timestamps
+only, no numeric epochs/naive values; end ≥ start. Final URL equals last followed
+redirect or requested URL when no redirect occurred. URL validation is syntax,
+not SSRF protection. Standalone records cannot verify cross-record references,
+policy permission, digest computation, actual retention or network safety.
+
+Failure codes remain `timeout`, `connection_error`, `tls_error`, `unsafe_url`,
 `redirect_limit`, `proxy_disallowed`, `header_limit`, `body_limit`,
-`content_decoding_error`, `http_error`, and `protocol_error`. The first PR validates
-this vocabulary and a strict boolean retryability field; later transport decides
-retryability under D015. A 200 whose body exceeds the cap is a `body_limit` failure,
-not a complete ReceivedResponse. ReceivedResponse must be complete before parsing.
+`content_decoding_error`, `http_error`, `protocol_error`. Later transport applies
+retry policy; a capped 200 is a failure, not a complete ReceivedResponse.
+Use a discriminated union for 200/304/failure; no hash calculation is implemented.
 
-Use a discriminated union for the three retrieval outcomes. Cross-record
-references are deliberately **not** claimed validated by standalone schemas:
-transactional storage must enforce their existence, source/representation match,
-and a 200 result for observations/304 targets. A received 200 can still have a
-failed processing event; that must not become an eligible conditional checkpoint.
+Acceptance tests:
 
-Acceptance tests for M1-01:
+1. Existing V1 JSON shapes/defaults round-trip unchanged; missing/blank V1 excerpts
+   still reject. Baseline tests and the single tracked F4 xfail remain unchanged.
+2. Synthetic 200 descriptors with/without digest, 304, 429/503 and 200 body-limit
+   failures round-trip; observation links support both declared evidence versions.
+3. Reject contradictory digest states, invalid hex/domain, unknown fields/codes,
+   unsupported versions and raw body/path/artifact injection into any descriptor.
+4. Reject 304 without validator/reference or with body/digest; invalid kind/status,
+   mismatched evidence kind/version, bad UUIDs and malformed/credential URLs.
+5. At-limit values pass; over-limit strings/redirects/byte counts, boolean/negative
+   byte counts, control-character headers, numeric/naive/reversed times fail.
+6. Invalid shallow/deep copy updates fail; valid copies leave originals unchanged.
+   Core dependency checks and blocked-network tests remain green; no side effects.
 
-1. All existing V1 fixtures round-trip without changed shapes/defaults; existing
-   test outcomes remain green, including the single explicitly known F4 xfail.
-2. Synthetic 200/304/network-failure and observation JSON round-trip through their
-   discriminated types. HTTP 429/503 failures and a 200 body-limit failure preserve
-   safe status/code without body; unknown codes/statuses reject.
-3. Reject 304 without a validator/reference, a body on 304/failure, mismatched
-   kind/status, unsupported versions, unknown fields and invalid IDs/digests.
-4. Reject malformed/credential/control-character URLs, redirect/final mismatch,
-   naive/numeric or reversed times, booleans/negative byte counts, and values just
-   beyond each metadata limit; accept exact-boundary values. No URL is fetched.
-5. Invalid shallow/deep copy updates fail; valid copies preserve originals.
-6. Keep core independent of collectors/storage and import-time side effects;
-   all new tests run with the existing network block and use fabricated data only.
+Synthetic hashes/IDs are declared fixture values, not claims of actual retrieval.
+Do not add evidence V2, revision generation, policy enforcement, hash calculation,
+SQLite, checkpoint logic, DNS, transport, parser, adapter or retry behavior here.
 
-Do not implement revision generation, content hashing of fetched payloads,
-checkpoint mutation, body storage, DNS resolution, adapters or retry loops here.
-Snapshot digests and cross-record IDs in fixtures are synthetic test inputs, not
-claims that retrieval or storage happened. A storage backend remains substitutable.
+## Dependency-ordered implementation PRs
 
-## Identity and transaction rules for subsequent increments
+Execution-plan IDs are not GitHub PR numbers. Preserve the requested order;
+split old M1-02 into M1-02a evidence contracts and M1-02b pure identity so each is
+reviewable. No implementation exists for either old or new plans. Each row needs
+explicit Gate A approval covering its scope and listed decisions, in addition to
+merged dependencies. Approval may name several rows; a merge alone approves none.
 
-**D012, proposed identity profile v1:** distinguish operation IDs (caller-created
-UUIDs, reused on retry of the same storage operation) from source item/revision IDs.
-Freeze three UUIDv5 namespaces derived from UUID NAMESPACE_URL and repository
-identity URLs ending `/identity/v1/logical`, `/source-item`, and `/evidence`.
-Commit the exact namespace constants and test vectors in M1-02; never derive them
-from the current checkout/branch or mutable source endpoint. Logical keys encode
-`[source_id, native_id]` with no whitespace stripping/case folding; a missing GUID
-uses the exact original article URL. Missing both is invalid, not a random ID.
+**Common constraints for M1-01 through M1-10:** synthetic fixtures, blocked real
+network, private temporary test data, no production paths or source access, no
+paid services, deployment, scheduling, publication, reporting/template changes or
+later-stage behavior. Existing V1 compatibility and CI Ruff/pytest are required.
+Only transport/XML rows may propose minimal reviewed open-source dependencies.
+Source permissions stay unresolved until documented; no test source is a license.
+The per-row exclusions below add to these common exclusions.
 
-Revision digest input is canonical UTF-8 JSON: sorted object keys, compact
-separators, Unicode preserved, non-finite numbers forbidden, arrays in source
-order. Include a profile version plus the source-field projection (title, exact
-excerpt, publisher, original URL, original publication text/precision and relevant
-source metadata); exclude retrieval time/URL, array position/locator, cache headers
-and catalog release metadata. Each adapter must publish its exact field projection
-and golden vectors before integration. Source-item/evidence IDs derive from
-logical ID, profile version and revision digest using their distinct namespaces.
-Parser changes that change meaning require a new profile, not mutation of old rows.
+| Increment / components | Dependencies and owner approval | Scope and acceptance tests | Security/rights constraint and exclusions |
+| --- | --- | --- | --- |
+| M1-01 Core descriptors; `core/`, fixture/tests, contract docs | Gate A: revised D011 and descriptor portion of D019 | Types/tests above, explicitly no retention claim | No V1 changes, new dependencies, V2 evidence or I/O |
+| M1-02a Hybrid evidence; `core/`, synthetic fixtures/tests | M1-01; Gate A: D019 evidence design and D020 policy-reference semantics | Add V2 modes/provenance, optional permitted excerpt object and policy/manifest/availability contracts. Test absent excerpt valid only for V2, mode/artifact contradictions, date precision, bounded allowlisted fields, unknown defaults and version dispatch. | No inferred permissions, catch-all vendor fields, V1 migration, backend or hashing helpers |
+| M1-02b Identity; `core/`, tests/vectors | M1-02a; Gate A: revised D012 | Pure canonical projections/UUID namespaces and digest helpers. Freeze exact namespace constants and vectors. Source/key-kind/profile separation, key ordering, changed retained fields, A→B→A, ignored article-body changes and policy-renewal stability. | No cross-source merging, article equality claims, tombstone resurrection or I/O |
+| M1-03 SQLite; `storage/`, protocols, temporary-store tests | M1-02b; Gate A: revised D005/D013/D019 | Both transaction shapes, manifest/checkpoint eligibility, versioned lookup, typed writes; 304 succeeds for valid metadata-only state without raw body, fails for missing required raw backing; replay/conflict/rollback/FK tests. | Metadata-only API rejects raw bytes/artifact association and policy mismatch. No production DB, CLI, live data or raw vendor retention |
+| M1-04 Recovery/lifecycle; `storage/`, tests, runbook docs | M1-03; Gate A: D017/D020 and concrete purge/restore design | COMMIT crash/disk-full/read-only/schema tests; consistent backups; isolated restore; expiry/deletion invalidates references/checkpoints; permitted tombstones; synthetic marker absent from metadata DB/WAL/backups; corruption and locking. | No operational backup job; no secure-erasure claim from SQL DELETE; real-host purge verification remains B1/B2 gate |
+| M1-05 HTTPS; `collectors/` transport helpers, tests | M1-01; Gate A: D008/D014/D015 transport/client design | Fake resolver/socket/clock: IP pinning with original-host TLS, DNS rebinding, all redirects/retries, mixed special IPs, proxy rejection, byte/header/time budgets, conditionals and no disk cache/spool. | No real endpoint requests, implicit proxy fallback or debug body capture; at most one justified HTTP client dependency |
+| M1-06 Safe parsing; `collectors/` pure parser helpers, tests | M1-02a; Gate A: D015/D019 projection rules | Synthetic JSON/RSS entity/DTD/depth/encoding/size/item tests; full content:encoded/description discarded by default; permitted exact excerpt selection, invalid dates flagged, forbidden marker never returned in projection/error. | Transient bounded buffers only, no I/O, storage/transport imports or HTML execution; at most one hardened XML dependency |
+| M1-07 CISA adapter; separate collector module/tests | M1-02b, M1-05/06; Gate A: D004 CISA mapping | Synthetic catalog counts/duplicates/reordering/changed fields, original dates/fields, raw-backed locators and digest linkage; fetch/parse independently injected | CC0 basis applies to catalog only; no linked downloads, request, or activation |
+| M1-08 Microsoft adapter; separate collector module/tests | M1-02b, M1-05/06; Gate A: D004 vendor mapping/D017 | Synthetic GUID/URL fallback, missing summary/date, metadata-only output, optional policy-permitted exact excerpt, source projection vectors, full article marker excluded on success/error | Disabled pending rights; no real vendor fixtures, raw storage or article requests |
+| M1-09 Google adapter; separate collector module/tests | M1-02b, M1-05/06; Gate A: D004 vendor mapping/D017 | Independent synthetic mapping, publisher/final/article URLs, verified extension handling, same absent-excerpt/leak tests as Microsoft | Disabled; no guessed original links, tracking requests, premium API or raw archive |
+| M1-10 Manual CLI; composition/CLI, offline integration tests | M1-04, M1-07/08/09; Gate A: D006/D015/D019/D020 | Static composition, two modes end-to-end, one source failure isolation, 304/restart/expiry, source budgets, safe diagnostics; injected secret/forbidden-content canaries absent from DB/backups/logs; default live mode disabled | Narrow import-boundary exception only for composition; no acquisition through CLI until B2, no timer or external messages |
+| M1-11 Verification and manual pilot; source-policy/runbook/feasibility docs | M1-10; separate B1 per-source verification approval, then B2 activation; D004/D007/D017/D020 | CISA first; bounded approved requests verify TLS/redirects/cache/fields/limits/robots. Verify permitted data, host dump/swap/backup/purge behavior, then manual pilot and repeat/304 per cleared source. Document counts/growth and gaps privately. | Vendor transient-processing/metadata/excerpt rights basis required before requests. No raw vendor evidence upload, article scrape, automatic activation or schedule. Three-source completion requires all three or explicit revised scope |
+| M1-12 Scheduling; operator runbook and separately reviewed timer | Approved successful manual pilot; Gate C/D006/D007 | No overlap, one missed-run catch-up, expiry/stale-source pause, safe shutdown/restore, capacity/operator checks | Existing approved private host/budget only; no source expansion, paid services or publication |
 
-On a repeated revision, retrieve and reuse its existing immutable evidence,
-including first committed retrieved_at; add the new observation/locator only.
-On A→B→A, reuse A and append the observation without editing A's parent IDs.
-Do not infer a retraction from a rolling RSS window. No automatic cross-source
-merging or CVE-level attribution. This is normalization identity, not analyst work.
+D012 namespace design: derive fixed UUIDv5 namespaces from NAMESPACE_URL and
+repository identity URLs with versioned logical/source-item/evidence suffixes;
+commit exact constants/vectors in M1-02b, never derive from branch or checkout.
+Use canonical UTF-8 JSON, sorted keys, compact separators, preserved Unicode and
+array order, no non-finite numbers. Exact retained-field projections and null/absent
+semantics must be frozen per adapter/profile. See [hybrid identity rules](M1_EVIDENCE.md).
 
-**D013, proposed storage:** use SQLite snapshot BLOBs to remove the filesystem/DB
-commit split. Compute/check the digest before inserting; unique digest/content
-must agree. Parse and validate the complete bounded source batch before the write
-transaction. With foreign keys on and explicit durable commits, atomically write
-snapshot, retrieval metadata, new revisions, observations, processing-success
-event and next conditional checkpoint. Do not hold the transaction during network
-I/O. A failure rolls back that batch; a separate small failure event may commit
-without advancing its checkpoint. A crash before that event is allowed to leave
-no event, but never a success checkpoint. Only one writer/run may operate at once.
+## Remaining decisions and exact next approval
 
-A 304 may advance last-successful-check/returned validators only when the saved
-200 representation was fully processed, still exists and matches the source and
-request variant. Do not chain 304s as representation references. If its snapshot
-is missing/corrupt, invalidate the conditional and consume a remaining attempt
-on one unconditional fetch; no remaining budget means defer. An unsolicited 304
-is a protocol failure. Checkpoints are scoped to endpoint and fixed request
-representation headers; unexpected Vary fields disable conditional caching until
-explicitly supported. No body parsing or new evidence on a valid 304.
+D011/D019 descriptor details need owner approval for M1-01. Later gates include
+V2/projection and identity semantics, SQLite protocols and purge/restore procedure,
+HTTP client/IP binding, source-specific transient/retained rights and deadlines,
+private host/operator, memory/dump controls, backups and measured capacity. D021's
+template artifact/license and claim-level verification gaps block later report
+tooling, not synthetic M1-01. D009 TLP inheritance still blocks any exporter.
 
-Disk-full, constraint failure and injected crashes before/after COMMIT must
-produce all-or-none source state. Retrying a committed operation ID is a no-op;
-reuse with different contents rejects. Backups use a transactionally consistent
-SQLite backup, not a blind copy of a live database file; restore verifies foreign
-keys, snapshot hashes and checkpoint references. Schema version/migrations must
-fail closed on unsupported versions; no destructive automatic downgrade.
+Requested scope, **not approval already given**:
 
-## Ordered, independently reviewable PRs
+> Approve M1-01 only under M1 v1.2, revised D011 and the retrieval/observation
+> descriptor portion of D019: additive core metadata contracts, synthetic fixtures,
+> focused offline validation tests and related contract/status documentation.
+> Preserve existing V1 shapes/protocols; add no dependencies. Exclude V2 evidence
+> implementation, persistence, hashing behavior, transport, parsers, adapters,
+> live requests, deployment, scheduling, paid services and reporting/publication.
 
-Keep the requested stage order; split storage, transport/parsing and adapters
-into smaller PRs. IDs below are execution-plan IDs, not preallocated GitHub PR numbers.
-Each row requires explicit implementation approval covering it and its prerequisites;
-a dependency being merged is not authorization to start the next row.
-
-| Increment | Dependencies | Narrow deliverable and acceptance tests |
-| --- | --- | --- |
-| M1-01 Core metadata | Gate A limited to this row / D011 | Types and synthetic fixtures above; reject invalid combinations and preserve V1. No new dependencies. |
-| M1-02 Identity profile | M1-01, approval of D012 | Pure identity helpers/sidecar linkage contracts and frozen vectors. Same content with later retrieval/reordered object keys retains IDs; title/excerpt changes create revisions; sources/profile versions separate; A→B→A reuses A without cycles. No backend. |
-| M1-03 SQLite atomic storage | M1-02, D013 approval | Temporary-database backend, BLOB snapshots, transactional batches/checkpoints. Replay no-op, content conflicts, foreign keys, invalid 304 reference, incomplete batch rollback; no live data or default production path. Standard-library SQLite only. |
-| M1-04 Recovery and backups | M1-03 | Failure injection around COMMIT, full disk/read-only paths, unsupported schema, consistent backup/restore, corrupted/missing snapshot and 304 recovery signals, exclusive run lock. No timer or operational backup job. |
-| M1-05 HTTPS transport | M1-01, D014/D015 design approval | Injected resolver/connection/clock; prove DNS-to-socket binding, TLS hostname checking, redirects, mixed/special IP ranges, proxy rejection, header/byte/deadline limits and conditional outcomes using fakes. Pin one chosen client only if needed. No public endpoint calls. |
-| M1-06 Safe parsing | M1-01, D015 approval | Pure bounded JSON/RSS parsing helpers and at most one hardened XML dependency. Synthetic entity/DTD/depth/encoding/oversize/empty/malformed tests; HTML remains inert; no storage or transport imports. |
-| M1-07 CISA adapter | M1-02, M1-05/06 | Synthetic catalog/schema fixtures; CVE identity, date-only precision, optional fields, duplicates, count mismatch, reordered entries and changed descriptions. Test injected fetch/parse independently; no KEV requests. |
-| M1-08 Microsoft adapter | M1-02, M1-05/06 | Synthetic RSS GUID/URL fallback, missing summary/date, literal HTML, exact attribution and source projection vectors. Rights unresolved means disabled; no vendor fetch/fixtures. |
-| M1-09 Google adapter | M1-02, M1-05/06 | Independent synthetic mapping for publisher/entry links and possible tracking/original-link extensions; absent/unverified extensions do not trigger fetches or guessed URLs. Disabled; no vendor content. |
-| M1-10 Manual CLI / offline integration | M1-04, M1-07/08/09, D015 | Static composition, source budgets, safe diagnostics, injected end-to-end fetch→store tests, one failing source leaves others successful, no checkpoint on invalid batch, 304/restart paths, redacted logs and disabled-by-default live mode. Narrow composition-layer import exception. |
-| M1-11 Source verification / manual activation | M1-10 plus separate B1/B2 approvals and D017 | CISA first, only once authorized; vendor content requires prior collection/retention basis. Source-specific requests/byte budget, private operator/host, robots/TLS/redirect/cache evidence, recovery/backup and permissions review. No automation; three-source completion still requires all three or an approved scope revision. |
-| M1-12 Recurring scheduling | Successful approved manual pilot, Gate C | Separately reviewed timer/runbook, no overlap, one missed-run catch-up, stale-source and disable/restore tests, operator/capacity/backup checks. No schedule is created by earlier increments. |
-
-For all implementation increments: Ruff check/format and offline pytest must pass
-on supported CI versions; preserve the F4 xfail until an explicitly approved fix.
-No later-stage behavior, paid services, live access or permanent data is part of
-M1-01 through M1-10. Test databases contain only synthetic records and are temporary.
-
-## Approval request and stopping point
-
-Recommended exact first approval:
-
-> Approve M1-01 only under M1 specification v1.1 and proposed D011: additive,
-> versioned retrieval/observation metadata contracts, synthetic fixtures, focused
-> offline validation tests, and related contract/status documentation. Preserve
-> existing V1 contracts and protocol signatures. No collectors, persistence,
-> transport, parsing implementation, live requests, scheduling, deployment,
-> new dependencies, or paid services are authorized by this approval.
-
-This is requested wording, **not an approval already given**. Record the owner's
-actual approval and reference before writing application code. D012–D017 and
-D004–D008's operational choices remain proposed/open for their later increments.
-Private host/operator, rights-dependent retention (including backups), network
-path/client choice, parser budgets and capacity are unresolved for live readiness.
-No vendor content may be fetched or archived now. The handoff remains
-[STATUS.md](../STATUS.md) plus the permanent [HANDOFF.md](../HANDOFF.md) procedure.
+Record actual owner approval before code. Until then, only documentation review
+is authorized. The permanent [handoff procedure](../HANDOFF.md) remains reusable;
+[STATUS.md](../STATUS.md) carries current work and blockers.

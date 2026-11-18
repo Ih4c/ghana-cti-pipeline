@@ -40,3 +40,10 @@ and source-specific checks remain gates. Final scope requires owner approval;
 if a candidate fails, propose a revision instead of silently substituting it.
 Keep Ghana CSA/CERT-GH and sector coverage in the backlog: global source coverage
 must not be described as evidence of Ghana-specific targeting.
+
+The owner has accepted the hybrid strategy (D018): retain permitted CISA catalog
+data/snapshots; collect Microsoft and Google metadata first, with excerpts only
+under a documented permission. The [source-specific policy and evidence design](milestones/M1_EVIDENCE.md)
+is still a technical proposal. Metadata/transient parsing permissions remain
+unresolved for vendors. No default raw feed archive, article crawling or automatic
+link following; source listing and RSS availability are not redistribution rights.

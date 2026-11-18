@@ -23,9 +23,10 @@ Source adapters (independent)
 - `storage/`: repository interfaces; SQLite may suit local MVP, with later migration path.
 
 ## Deployment options and current proposal
-GitHub hosts code/PRs and fixture CI. The [M1 proposal](milestones/M1_COLLECTION.md)
-uses an approved private host, SQLite/snapshots and manual execution first, with
-an optional local timer after explicit activation. Hosted Actions ingestion is
+GitHub hosts code/PRs and fixture CI. The [M1 plan](milestones/M1_COLLECTION.md)
+proposes an approved private host, SQLite retained metadata and optional permitted
+raw snapshots, with manual execution first and an optional local timer after
+explicit activation. Hosted Actions ingestion is
 deferred until private durable storage and operational controls are designed.
 GitHub Pages remains an option for later approved public Markdown output; no
 publisher or hosting choice is authorized here. **Do not use public GitHub
@@ -38,6 +39,15 @@ The versioned `SourceItem`, `EvidenceRecord`, `Indicator`, `Assessment`,
 [FOUNDATION.md](FOUNDATION.md). Preserve source-level identifiers, raw reference
 links, confidence, TLP markings, and lineage. New transport/observation contracts
 need reviewed versions and migrations. Never let an adapter directly publish.
+
+The owner's accepted hybrid direction preserves permitted CISA catalog data and
+uses metadata-first vendor RSS. Its [technical design](milestones/M1_EVIDENCE.md)
+remains proposed: response descriptors do not imply archiving, and additive V2
+evidence can omit excerpts without weakening V1. Only approved raw-backed sources
+have snapshot artifacts; metadata-only sources use retained projections and
+processing manifests. Both preserve provenance while exposing verification limits.
+No hybrid contracts or storage are implemented, and later reporting must retain
+the existing template and human review requirements.
 
 ## Security and resilience
 Untrusted source text cannot issue instructions to agents; least privilege; no secret commits; request timeouts; bounded retries; input validation; no malware execution; human publication gate; structured logs without sensitive payloads.
