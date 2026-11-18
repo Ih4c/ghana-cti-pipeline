@@ -19,7 +19,7 @@ Delivered foundation and follow-up review are recorded in the
 - Normalize records, store provenance, deduplicate, isolate failures.
 - Fixture tests and source-specific operational notes.
 
-The [M1 v1.0 collection plan](milestones/M1_COLLECTION.md) proposes the three
+The [current M1 collection plan](milestones/M1_COLLECTION.md) proposes the three
 named candidates, private storage and operational controls. It remains unapproved.
 
 ## Milestone 2 — Ghana-relevance triage

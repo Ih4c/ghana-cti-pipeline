@@ -7,7 +7,7 @@ Read in this order when starting or resuming work:
 2. [Vision](PROJECT_VISION.md), [requirements](REQUIREMENTS.md), [five-stage workflow](CTI_WORKFLOW.md) and [reporting standards](REPORTING_STANDARDS.md): what the project serves and the human/AI boundaries.
 3. [Architecture](ARCHITECTURE.md) and [foundation contracts](FOUNDATION.md): boundaries, implemented interfaces and limitations.
 4. [Status](STATUS.md) and [decisions](DECISIONS.md): what exists, what is approved and what is unresolved.
-5. [Roadmap](ROADMAP.md), [milestone specifications](milestones/README.md), and the applicable versioned specification: allowed scope and acceptance criteria.
+5. [Roadmap](ROADMAP.md), [milestone specifications](milestones/README.md), and the applicable versioned specification/readiness plan: scope, approval boundaries, dependencies and acceptance criteria.
 6. [Source register](INTELLIGENCE_SOURCES.md) and [Milestone 1 feasibility evidence](milestones/M1_SOURCE_FEASIBILITY.md) when planning collection.
 7. [Handoff](HANDOFF.md): repeatable continuation and review procedure.
 

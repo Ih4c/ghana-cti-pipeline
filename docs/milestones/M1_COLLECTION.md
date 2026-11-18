@@ -1,11 +1,22 @@
 # M1 — Minimal intelligence collection plan
 
-- Specification version: **1.0**
-- State: **proposed — collector implementation is not approved**
+- Specification version: **1.1**
+- State: **proposed — no implementation increment is approved**
 - Updated: 2026-11-18
-- Planning baseline: main `8d3dff3cea24b7b9007cf2f5824824da773bcc85`
+- Planning baseline: main `50224b35c1b27bbaca0fb1551bdf4b8205cb7de8`
 - Approval: pending owner review; record exact version/scope in [DECISIONS.md](../DECISIONS.md).
 - Supporting evidence: [source feasibility, 2026-11-18](M1_SOURCE_FEASIBILITY.md).
+
+## Revision and readiness record
+
+Version 1.0 was proposed in merged PR #4. Version 1.1 explicitly proposes
+corrections D011–D017; none is accepted by this document alone. The
+[readiness review and PR execution plan](M1_READINESS.md) records contradictions,
+their corrections, exact first-increment scope and acceptance tests. Key changes:
+additive V1-compatible metadata, bodyless 304 references, stable revision reuse,
+SQLite BLOB snapshots instead of a separate directory, source-batch atomicity,
+direct-only transport, bounded parser/retry policy, and separate verification and
+activation gates. The prior proposal remains available in Git history.
 
 ## Outcome, scope and approval gates
 
@@ -16,13 +27,15 @@ evidence privately, deduplicate repeat observations, retain revisions, and let
 one source fail without losing others. These sources support vulnerability and
 research coverage for Ghanaian defenders; they are not proof of local targeting.
 
-This PR contains documentation only. **Gate A:** owner approves this version's
-implementation scope before any collector, backend, orchestration or related
-code is written. **Gate B:** before any live run, each source must pass the
-rights/runtime checks in the feasibility document and the operator must approve
-the host/storage configuration. **Gate C:** recurring scheduling needs explicit
-activation after a successful manual run. None of these approvals is recorded.
-The owner can approve offline implementation while retaining B/C as blockers.
+This readiness PR contains documentation only. **Gate A:** owner approves a
+named increment/version before related application code is written. Approval of
+M1-01 alone is not approval of storage, transport or adapters. **Gate B1:** separate
+source-specific approval permits bounded live verification, with a rights basis
+covering the bytes received/retained and an approved private host. **Gate B2:**
+after verification passes, separate approval permits manual source collection.
+**Gate C:** recurring scheduling requires explicit activation after an approved
+manual pilot. No Gate A/B1/B2/C approval is recorded. Offline synthetic increments
+do not require a production host or vendor rights, but still require Gate A.
 
 Exclude full article scraping, historical vendor backfills, paid APIs, new source
 substitution, triage/ranking, LLM calls, IOC extraction, attribution, analyst UX,
@@ -45,10 +58,12 @@ Public availability and CC0 do not automatically set TLP:CLEAR; retain supplied
 TLP if present, otherwise null and private handling. Confidence stays unknown;
 no Ghana relevance claim is produced by collection.
 
-Vendor summary retention is conditional on rights clearance. No full `content:encoded`
-archive is proposed by default. If retaining a raw RSS body would exceed approved
-rights, disable the source until a reviewed metadata-only design can preserve
-honest provenance. Never silently truncate/rewrite evidence to satisfy a field.
+Vendor summary retention is conditional on rights clearance. A raw RSS snapshot
+may include full `content:encoded` articles even if only summaries are normalized.
+Rights must cover the complete snapshot and backup
+lifetime before any vendor fetch/retention. Otherwise disable the source until
+a separately reviewed metadata-only design can preserve honest provenance.
+Never silently truncate/rewrite evidence to satisfy a field.
 
 ## Architecture and contract evolution
 
@@ -61,7 +76,7 @@ manual CLI / optional local timer
   -> explicit static adapter registry and per-source runner
   -> bounded HTTPS transport -> independent fetch/parse adapter
   -> normalization + revision identity -> storage interfaces
-  -> private SQLite metadata + permitted content-addressed snapshots
+  -> private SQLite metadata + permitted content-addressed snapshot BLOBs
 ```
 
 | Component | Proposed responsibility / test boundary |
@@ -79,52 +94,63 @@ client selection must demonstrate the SSRF controls below; a client library alon
 does not supply them. Avoid a broker, microservices, browser automation or dynamic
 plugin imports at this scale.
 
-`FetchedDocument` currently lacks status/headers/final URL and conditional-fetch
-outcomes. Propose an explicit versioned retrieval result with success/not-modified/
-failure variants, transport metadata and snapshot reference; keep `parse` pure.
-Add a retrieval record linking configured URL, actual final URL, redirect chain,
-UTC retrieval time, status, permitted cache headers, body digest and parser version
-to each evidence record and its locator. Do not put operational state or mutable
-last-seen fields into immutable evidence. Review contract changes/migration before
-implementing them; breaking V1 changes require a new version, never silently
-changing `schema_version: 1.0`. No contract changes are made in this plan.
+`FetchedDocument` currently lacks HTTP outcomes and transport metadata. Add
+independent versioned retrieval/observation types as specified in
+[M1_READINESS.md](M1_READINESS.md), without changing existing V1 models or
+Collector/FetchedDocument/EvidenceRepository signatures in M1-01. New type versions
+are separate from this milestone's version. Later fetch-interface changes need a
+reviewed integration; old serialized V1 data must still validate unchanged.
 
-Stable identity: use a fixed, documented UUIDv5 namespace and `(source_id,
-source_native_id)` as logical item key; use the exact original URL only as a
-fallback where GUID is absent. Revision identity combines that key with a digest
-of defined source fields, excluding retrieval time. Separate namespaces identify
-source-item snapshots and evidence records. Preserve the hash algorithm/version
-and test field ordering/canonical serialization. Exact excerpt SHA-256 retains
-its existing narrow meaning; add full response SHA-256 in the retrieval ledger.
+Distinguish 200 transport success, 304 not-modified and transport failure from
+parsing/storage success. A 200 references a bounded snapshot; a 304 has no body
+and names the committed, fully processed 200 representation. Storage validates
+cross-record references. A 304 records a successful check without new per-item
+observations or evidence. A parser failure cannot become a successful checkpoint.
 
-Repeated unchanged fetches add observations, not duplicate evidence. Changed
-source content creates a new immutable revision linked to its predecessor.
-Keep one source's evidence distinct from another's even when URLs or CVEs match.
-Canonicalization never overwrites the original reference. Do not drop arbitrary
-query strings or treat fetched links as network targets. CISA entries absent from
-a later snapshot are marked no-longer-present, not deleted; a rolling RSS window
-does not imply retraction. No cross-source claim deduplication in M1.
+D012's proposed identity profile separates operation IDs, logical source keys,
+content revision IDs and chronological observations. Deterministic revision IDs
+exclude retrieval time. Reuse an existing revision's complete immutable evidence
+(including its original retrieved_at) and add observations rather than overwriting
+that evidence. A→B→A reuses A without cyclic predecessor links. parent_evidence_ids
+remain for genuine derivation; temporal history belongs to observations. The
+readiness review defines canonicalization and vector requirements for M1-02.
+
+Preserve original references and full snapshot digest independently from the
+existing excerpt hash. Never silently canonicalize away meaningful URL queries,
+fetch referenced links or merge distinct sources. CISA disappearance is a
+source-presence event, not deletion; a rolling RSS window does not prove retraction.
 
 ## Private persistence, retention and recovery
 
-Propose one SQLite database with foreign keys and transactions plus a private
-content-addressed directory for permitted response bytes. Logical tables cover
-retrievals, immutable evidence revisions, per-item observations, source state,
+D013 proposes one private SQLite database with foreign keys and transactions,
+including content-addressed BLOBs for permitted response bytes. This revises the
+v1.0 separate-directory proposal to remove a two-resource commit/recovery protocol.
+Logical tables cover retrievals, immutable evidence revisions, per-item observations, source state,
 runs and safe error events. Index source/native identity and revision digest;
 enforce same-ID/same-content no-op and same-ID/different-content rejection.
-File paths derive only from digests, never from untrusted titles or URLs.
+Snapshot keys are SHA-256 digests, never untrusted paths. No external snapshot
+files or orphan-file collector are needed for this bounded M1 backend.
 
 Use a dedicated least-privilege account, owner-only files/directories and encrypted
 host storage. SQLite is not encrypted by default. Store outside the checkout,
 public web roots, synced public folders and Actions artifacts/caches. M1 accepts
 only approved public endpoints; if restricted markings unexpectedly appear,
-stop/quarantine privately for review, never downgrade them or export the payload.
+stop that source and record a safe failure for private review. Discard the rejected
+payload unless separately approved retention covers it; never downgrade or export
+it. M1 does not add a quarantine subsystem.
 
-Write snapshots atomically, then commit evidence/observations and the successful
-checkpoint transactionally. Do not advance ETag/Last-Modified until processing
-commits. If disk is full or a transaction fails, keep the previous checkpoint;
-restart must retry without losing or duplicating evidence. Reconcile orphaned
-snapshot files safely after interrupted writes. Allow only one active writer/run.
+Validate the complete source batch before opening the write transaction.
+Atomically commit snapshot BLOB, retrieval/processing metadata, immutable evidence,
+observations and conditional checkpoint in one transaction; perform no network
+I/O while holding it. Failure rolls back the source batch. A separately recorded
+safe failure event never advances a checkpoint. Reuse of an operation ID is a
+no-op only if its contents match. Allow only one writer/run. Test interrupted
+commits, disk-full, conflicting IDs and unsupported schema versions. Use a
+consistent SQLite backup and verify hashes, foreign keys and checkpoints on
+restore; never blindly copy a live database file or downgrade newer data.
+The operational runbook must stop collection by disabling the source/timer while
+preserving evidence and checkpoints. Revert code only with compatible schema and
+backup recovery, never by deleting evidence or blindly rolling back newer records.
 
 Proposed retention: unreferenced raw responses 30 days; evidence, referenced
 snapshots and audit/observation metadata at least 365 days, subject to source
@@ -139,6 +165,12 @@ new collection at capacity, and do not auto-purge cited evidence or buy storage.
 Daily encrypted backups to an approved private location (seven daily restore
 points) are proposed; account for copies separately. Test restore plus referential
 integrity before scheduling. Backup location, key handling and operator are pending.
+Retention/permission expiry applies to every backup, not only the live store.
+At the daily 12 MiB
+payload maximum, 365 days of changed snapshots exceeds 4 GiB before indexes;
+2 GiB is a stop limit, not a guarantee of a year of coverage. Review measured
+pilot growth and rights before selecting capacity or revised retention. No
+permission-independent 365-day archival promise or automatic destructive purge.
 
 ## Scheduling, retries and observability
 
@@ -148,28 +180,37 @@ with up to five minutes of jitter and a no-overlap lock. A missed run performs o
 catch-up, not a burst. A laptop that is off does not provide continuous coverage;
 do not call a transient development environment a production host.
 
-Poll each approved endpoint once per run, sequentially. Use ETag/Last-Modified
-conditionals only when the endpoint supplies them. A 304 records a successful
-check with no new payload. If the checkpoint exists without its backing snapshot,
-discard the conditional and make one bounded full request. Initial CISA fetch
-is the whole catalog; vendor feeds cover their current window only. No deep
-pagination or automatic backfill. Check source policy/robots at onboarding and
-at least weekly or on redirects/terms changes; uncertainty pauses the source.
+Poll each approved endpoint once per run, sequentially. Conditional headers are
+scoped to the same source, endpoint and fixed request representation headers;
+unsupported Vary behavior disables conditionals. Only a fully processed committed
+200 response with a verified retained snapshot can be a conditional checkpoint.
+A valid 304 may update check time/returned validators, but must reference that 200
+directly, never another 304. No item parsing or new evidence occurs. Missing or
+corrupt backing data invalidates the conditional and consumes a remaining attempt
+on one unconditional fetch; no remaining budget means defer. An unsolicited 304
+is a protocol failure. These rules are tested with synthetic records, not live calls.
 
-Proposed budgets: 5-second connect timeout, 20-second read timeout, 60-second
-total attempt deadline, at most three attempts per source per run, and a
-10-minute whole-run deadline. Retry timeouts, transient network errors, 429 and
-5xx with exponential backoff/jitter; respect Retry-After. If it exceeds the run
-budget, record next-eligible time and defer. Do not repeatedly retry 401/403/404,
-schema errors, unsafe URLs or oversized input. Suspend a source after three
-consecutive failed runs pending operator review. All failures produce safe codes.
+Initial CISA fetch is the whole catalog; vendor feeds cover their current window
+only. No pagination or backfill. Source policy/robots checks remain part of B1
+and are refreshed at least weekly/when redirects or terms change after activation;
+uncertainty pauses that source. Checks do not authorize bypassing restrictions.
 
-An unexpected adapter error must still let other adapters run. Invalid individual
-feed entries may be quarantined with reason and locator while valid entries
-commit; a malformed whole feed or invalid KEV envelope rejects that source run.
-Partial acceptance must be explicit in counts and checkpoints, with enough
-retained data to reprocess rejected entries; never silently skip them. No process
-should claim a complete run when a source failed or is disabled.
+D015 proposes 5-second connect, 20-second read, 60-second total attempt deadlines,
+maximum three top-level attempts and **180 seconds total per source**, including
+backoff, redirects and unconditional recovery, within the 10-minute run deadline.
+Redirects are bounded within the attempt, not fresh retry allowances. Retry only
+transient network errors, 429 and 5xx with exponential backoff/jitter; honor
+Retry-After by recording next-eligible time if it does not fit the budget. 401/403/
+404, unsafe URLs, schema/parser/size errors do not retry. Suspend after three
+consecutive failed runs pending review; a disabled source does not block others.
+
+To keep M1 reviewable, reject the whole source batch on any invalid item, conflicting
+source-native IDs or malformed envelope. Keep previous validators/checkpoints.
+Log safe failure code/count/locator only; discard raw rejected bytes unless a
+separately approved retention policy permits them. Other sources still run.
+Per-item quarantine, partial checkpoints and replay tooling are deferred. A valid
+empty RSS channel is a successful empty observation set, not a retraction;
+malformed/empty bodies and an invalid KEV count/envelope fail explicitly.
 
 Private operational summaries contain source ID, run ID, attempt count,
 new/unchanged/revised/rejected counts, duration, bytes and safe error codes.
@@ -190,10 +231,15 @@ not to add a public database artifact. See [GitHub scheduling documentation](htt
 - Reject userinfo, unexpected schemes/ports, IP literals and ambiguous hosts.
   Resolve all A/AAAA records and reject loopback, private, link-local, multicast,
   unspecified and other non-global ranges, including cloud metadata and IPv4-mapped
-  IPv6. Validate every redirect (maximum three) and connection destination; pin
-  approved resolution for the connection or use controlled egress to prevent DNS
-  rebinding. Preserve TLS certificate/hostname verification. Explicitly configure
-  proxy use; do not inherit an unchecked proxy as an SSRF bypass.
+  IPv6. Validate every redirect (maximum three) and connection destination; bind
+  the connection to validated resolved IPs while preserving the original TLS
+  hostname/SNI; test DNS changes between validation and connect. Revalidate each
+  hop and retry. No automatic library redirects or second unchecked DNS lookup.
+  Preserve TLS certificate/hostname verification. D014 proposes direct-only mode
+  with inherited proxy environment disabled and explicit proxy configuration
+  rejected. Proxy support is deferred pending a
+  separately reviewed design. Use an approved host with permitted direct egress;
+  this is not authorization to bypass the current environment proxy.
 - Limit transferred and decompressed bytes independently: **8 MiB per KEV body**,
   **2 MiB per RSS body**, with bounded parser work and no automatic cap increase.
   The KEV exception revises the earlier blanket 2 MiB proposal to allow catalog
@@ -204,10 +250,13 @@ not to add a public database artifact. See [GitHub scheduling documentation](htt
   when they are URLs. Keep originals in a permitted bounded snapshot; reject
   oversize normalized fields instead of silently truncating evidence. Report-body
   limits remain a later-stage decision; no reporting implementation in M1.
-- Disable DTDs, entities and external resource loading; reject malformed or
-  deeply nested XML, decompression bombs, dangerous encodings and hostile HTML.
-  Retain a summary as inert source evidence; never render or execute scripts or
-  feed instructions. If a display is added later it needs separate escaping.
+- D015 proposes UTF-8 input only (optional UTF-8 BOM), maximum parser depth 64,
+  and response headers capped at 32 KiB. Unsupported encodings fail explicitly;
+  adapting to a verified vendor format requires review, not permissive fallback.
+  Disable DTDs, entities and external resource loading; reject malformed/deep
+  XML, decompression bombs and invalid JSON. Treat embedded HTML as inert text,
+  not as a reason to execute/fetch anything. Never render scripts or feed
+  instructions; any future display needs separate escaping.
 - Keep credentials absent for these public routes; any future secret requires
   separate approval, environment/secret-store injection and least privilege.
   Use synthetic public fixtures. No malware samples, sensitive source dumps,
@@ -221,7 +270,7 @@ not to add a public database artifact. See [GitHub scheduling documentation](htt
 | --- | --- |
 | Software, KEV/public RSS routes | $0 license/API charges proposed; no paid APIs, LLMs or purchases enabled |
 | Existing approved host | $0 incremental service spend; electricity, connectivity, operator time and existing hardware are not free and are not priced here |
-| Volume | Three endpoints × one daily run ≈ 90 primary fetches/month; up to 270 attempts with retries, plus bounded policy checks. At body caps, about 360 MiB/month without retries or 1,080 MiB with all attempts at cap, before headers/policy checks. |
+| Volume | Three endpoints × one daily run ≈ 90 primary fetches/month; up to 270 attempts with retries, plus bounded policy checks. At body caps, about 360 MiB/month without retries or 1,080 MiB with all attempts at cap, before bounded redirect/header/policy overhead. |
 | Private storage/backups | 2 GiB live cap; seven full backups could add up to 14 GiB. Provision only on existing approved encrypted storage; otherwise pause for a storage decision. |
 | GitHub CI | Standard public-repository runners are currently free; no ingestion artifacts, larger runners or new paid storage. [GitHub billing documentation](https://docs.github.com/en/billing/concepts/product-billing/github-actions) |
 | Future always-on hosting | Not selected or purchased. A $5–10/month planning allowance could be considered later, not a verified vendor quote or authorized spend. |
@@ -237,30 +286,29 @@ duration during the manual pilot; revisit assumptions before increasing cadence.
 | M1-AC1 | Approved scope and all three source onboarding records | Versioned approval plus per-source endpoint, terms/retention, robots and runtime evidence. If a source cannot be cleared, obtain an explicit revised scope; do not silently declare completion. |
 | M1-AC2 | Adapters independently replaceable | Fixture tests for each adapter and a narrow dependency test for the composition layer; no adapter-to-storage or cross-adapter concrete imports. |
 | M1-AC3 | Provenance survives persistence | Round-trip exact source text/URLs, native IDs, nullable dates/precision, retrieval/final URLs, hashes, source locator and parser version through SQLite and snapshots. Missing/date-only values never become fabricated timestamps. |
-| M1-AC4 | Idempotency and source changes | Replaying a response creates no duplicate evidence; altered entry creates a linked revision; reordering/304/restart does not change identity; conflicting IDs reject; RSS disappearance does not delete evidence. |
+| M1-AC4 | Idempotency and source changes | Replaying a response creates no duplicate evidence; altered entry creates a revision linked to the logical source key and observation history; A→B→A reuses A; reordering/304/restart does not change identity; conflicting IDs reject; RSS disappearance does not delete evidence. |
 | M1-AC5 | Failure isolation and bounded retries | Fake transport proves timeout/429/5xx budgets and Retry-After deferral; permanent errors do not loop; one source/parser failure leaves other sources successful; partial runs are reported honestly. |
 | M1-AC6 | Fetch and parser safety | Tests cover redirect-to-private hosts, DNS rebinding strategy, IPv4/IPv6 special ranges, TLS verification, unexpected proxies, DTD/entity input, malformed/deep XML, compression and every size boundary (at/above limit). No untrusted link is fetched. |
-| M1-AC7 | Safe durable state | Temporary-store integration tests for same-ID conflict, foreign keys, crash/disk-full rollback, checkpoint retry, orphan recovery, no-overlap lock and backup restore; no source content in logs or public artifacts. |
+| M1-AC7 | Safe durable state | Temporary-store integration tests for same-ID conflict, foreign keys, crash/disk-full rollback of BLOBs and checkpoints, idempotent operation retry, no-overlap lock and consistent backup restore; no source content in logs or public artifacts. |
 | M1-AC8 | Honest scope and human boundary | No LLM, enrichment, attribution, report generation or exporter; unknown confidence/Ghana relevance/TLP preserved; existing draft-only and human-role tests remain green. |
-| M1-AC9 | Operational pilot | After Gate B, one approved manual run per source plus repeat/conditional check, bounded and privately recorded. After Gate C only, validate timer, missed-run behavior, stale checks and disable/rollback procedure. |
+| M1-AC9 | Operational pilot | After explicit B1 verification approval and B2 manual activation, one approved manual run per source plus repeat/conditional check, bounded and privately recorded. After Gate C only, validate timer, missed-run behavior, stale checks and disable/rollback procedure. |
 | M1-AC10 | Reproducible review | Ruff check/format and pytest pass on CI Python versions; offline tests block real network; only the explicitly tracked F4 xfail remains unless separately resolved; update contracts, status, decisions and handoff with actual results. |
 
-## Implementation sequence after approval
+## Implementation sequence and approval request
 
-1. Confirm Gate A and resolve contract/host/rights decisions; recheck feasibility
-   through permitted tools. Document any source-specific restriction before coding.
-2. Add reviewed retrieval/identity/limit contracts and fixture tests, then private
-   storage/recovery behind interfaces. Keep existing V1 compatibility explicit.
-3. Add each adapter separately with shared bounded transport/parser tests; compose
-   a manual runner with static registration and failure isolation. Remain offline
-   until source-specific Gate B is satisfied.
-4. Execute the authorized manual pilot, review observed costs/coverage, then add
-   an operator runbook for enable/disable, backup/restore and optional Gate C timer.
-   Stop collection by disabling the timer/source; preserve evidence and checkpoints
-   for audit. Revert code only with compatible schema/backup recovery, never by
-   deleting evidence or rolling back blindly over newer records.
+The [ordered PR plan](M1_READINESS.md) follows contracts → identity → SQLite and
+recovery → transport/parsing → separate adapters → manual CLI/offline integration
+→ separately approved source verification/manual activation → separately approved
+scheduling. Each increment has dependencies and acceptance tests. Host/rights
+selection blocks live work, not approved synthetic core or temporary-store tests.
 
-Owner review is requested for D004–D008: source scope/rights process, contract
-extensions, SQLite/private snapshots, host/operator, daily schedule, limits,
-retention/backups and $0 incremental budget. Record conditional approvals
-explicitly. Until then, the next authorized work is plan revision only.
+**Recommended first approval is M1-01 only under v1.1/D011:** additive core
+retrieval/observation metadata contracts, synthetic fixtures, focused offline
+tests and related documentation; preserve existing V1 shapes/protocols and add
+no dependencies. This does not approve persistence, transport, parsing, adapters,
+live requests, deployment, scheduling, paid services or later increments.
+
+D004–D008 and new D011–D017 remain proposed. Review the explicit changes and record
+actual approval/version/scope in DECISIONS before writing code. Until then, the
+next authorized work is documentation revision only. No source content is fetched
+or archived during this readiness task.

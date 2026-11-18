@@ -1,6 +1,8 @@
 # M1 source feasibility — checked 2026-11-18
 
-Supports [M1 collection v1.0](M1_COLLECTION.md). These are bounded research
+Recorded for M1 v1.0; retained as historical evidence for the
+[current collection proposal](M1_COLLECTION.md). No source requests or updated
+payload verification occurred in the v1.1 readiness review. These are bounded research
 observations, not implemented collectors or operational onboarding approval.
 Only public documentation, schemas and catalog data were inspected; no article
 crawler, scheduled ingestion, database or intelligence publication was created.
