@@ -31,7 +31,10 @@ Pydantic/uv and the initial V1 shapes are proposed for approval in this PR.
 
 Components import shared `core` contracts rather than each other's concrete
 implementations. `core` has no knowledge of downstream packages. A dependency
-boundary test enforces this rule. Future orchestration should compose interfaces
+boundary test checks direct and package-root imports and disallows calls to
+`importlib.import_module`, including imported aliases and computed targets, so
+dependencies remain statically visible. This AST check is not a security sandbox.
+Future orchestration should compose interfaces
 outside these packages; it is not implemented now.
 
 ## V1 data contracts
@@ -40,8 +43,10 @@ All records have `schema_version: "1.0"`, reject extra fields and unsupported
 versions, and are frozen after validated construction. IDs are caller-supplied
 UUIDs; deterministic source identity/deduplication policy is deferred. Use
 `model_validate`/`model_validate_json` at trust boundaries and `model_dump_json`
-for serialization. Pydantic's unchecked `model_construct` and `model_copy(update=...)`
-are not ingestion APIs. Breaking changes need a new schema version and an
+for serialization. `Contract.model_copy(update=...)` reconstructs and validates
+the resulting record, including updates; nested records may be reconstructed
+even for shallow copies. Pydantic's unchecked `model_construct` is not an
+ingestion API. Breaking changes need a new schema version and an
 explicit migration, never a silent reinterpretation of old evidence.
 
 | Contract | Meaning and preserved information |
@@ -85,12 +90,24 @@ the exact reviewed revision; no such workflow or exporter exists here.
 
 ## Interfaces and failure semantics
 
-`Collector.fetch()` returns one bounded `FetchedDocument` containing provenance,
+`Collector.fetch()` is intended to return one bounded `FetchedDocument` containing provenance,
 raw bytes and media type. `parse(document)` returns a tuple of normalized
 `SourceItem` records without I/O. Multi-page fetching/checkpoints can extend a
 future contract after source selection. Adapters must preserve source attribution
 and report source-local failures via `CollectorError` (source ID, safe code,
 retryability). Its exception message contains no source payload.
+
+**Open Milestone 1 decision — input size limits (F3):** no maximum is currently
+enforced for `Text` fields or `FetchedDocument.body`; “bounded” is an adapter
+requirement, not a guarantee of this scaffold. Before live ingestion, approve
+per-field character limits (identifiers, URLs, titles, excerpts, rationales and
+report bodies) and byte limits for fetched bodies, including decompressed data.
+Proposed starting caps for review: 512 characters for titles, 4,096 for URLs,
+256 for identifiers/publisher names, 65,536 for excerpts, 262,144 for report
+bodies, 8,192 for other text, and 2 MiB for fetched bodies. Source feasibility
+must confirm or revise these caps. Enforce body limits while streaming and after
+decompression, reject oversized input without silent truncation, and add tests
+at and above each limit before any collector is enabled.
 
 `EvidenceRepository.get(id)` returns a record or None. `add(record)` must be
 idempotent for identical ID/content and reject conflicting content with
@@ -123,6 +140,17 @@ updates should be reviewed in future PRs. Maintainers should require the CI
 checks through branch protection; this PR does not alter repository settings.
 
 ## Phased plan and decisions requiring review
+
+**Open decision — TLP inheritance (F4), required before any exporter:** a derived
+record must not be less restrictive than its sources. A TLP:CLEAR report citing
+TLP:RED evidence must be rejected; standalone schemas currently cannot enforce
+this because they do not resolve evidence IDs. Decide where evidence resolution
+and inheritance checks run, how mixed-source recipient restrictions combine, and
+how missing/unclassified evidence fails closed. Review official FIRST guidance
+before implementing these rules. The strict xfail test
+`test_clear_report_cannot_cite_red_evidence` records the intended rejection using
+a proposed evidence lookup context; it is not implemented enforcement or an
+approved validation API. Resolve this expected failure before adding an exporter.
 
 1. **Milestone 0 (this PR):** approve package boundaries, provisional V1 contracts,
    dependency/tooling choices, and the offline test baseline.

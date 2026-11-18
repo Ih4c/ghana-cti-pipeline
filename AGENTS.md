@@ -4,6 +4,8 @@
 Build a modular, low-cost, public-facing cyber threat intelligence (CTI) pipeline that turns credible information into reviewed, actionable intelligence relevant to Ghanaian organizations. Read `docs/PROJECT_VISION.md`, `docs/REQUIREMENTS.md`, and `docs/ARCHITECTURE.md` before implementation.
 
 ## Non-negotiable engineering rules
+- Commit author and committer names must always be `ih4c`, using `144531642+ih4c@users.noreply.github.com` for both emails. Never use a personal name or personal email in commit metadata, messages, PR text, or examples. Never add co-author lines, model lines, or session links.
+- Before every commit, explicitly set `GIT_AUTHOR_NAME`, `GIT_COMMITTER_NAME`, `GIT_AUTHOR_EMAIL`, and `GIT_COMMITTER_EMAIL` to that identity; environment defaults can override Git configuration. Verify both identities in the resulting commit before pushing. Keep this rule in future checkouts and sessions.
 - Develop on feature branches; propose pull requests. Do not push directly to `main` or bypass branch rules.
 - Work in small, reviewable increments with tests and documentation.
 - Design collectors and processing stages as independently replaceable modules with explicit interfaces and versioned data contracts. One source failure must not stop other collectors.

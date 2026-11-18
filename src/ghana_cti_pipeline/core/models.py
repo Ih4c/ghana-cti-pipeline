@@ -1,8 +1,10 @@
 """V1 contracts only. These models neither collect nor publish intelligence."""
 
+from collections.abc import Mapping
+from copy import deepcopy
 from enum import StrEnum
 from hashlib import sha256
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal, Self
 from uuid import UUID
 
 from pydantic import (
@@ -27,6 +29,13 @@ class Contract(BaseModel):
 
     model_config = ConfigDict(frozen=True, extra="forbid")
     schema_version: Literal["1.0"] = "1.0"
+
+    def model_copy(self, *, update: Mapping[str, Any] | None = None, deep: bool = False) -> Self:
+        """Reconstruct and validate copies, including updates, without mutating the original."""
+        data = self.model_dump(round_trip=True)
+        if update is not None:
+            data.update(update)
+        return type(self).model_validate(deepcopy(data) if deep else data)
 
 
 class TLP(StrEnum):
