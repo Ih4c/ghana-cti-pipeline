@@ -1,6 +1,10 @@
 # Candidate intelligence sources — research backlog
 
-These are candidate sources, **not yet integrated or individually verified for API access, redistribution rights, or current availability**. Prefer official feeds/APIs/RSS where permitted.
+These are candidate sources, **none integrated or enabled**. Bounded checks of
+the three M1 candidates are recorded in the dated [source feasibility document](milestones/M1_SOURCE_FEASIBILITY.md);
+it distinguishes verified facts from unresolved access and rights. The remaining
+backlog has not been individually verified. Prefer official feeds/APIs/RSS where
+permitted; no source listing grants collection or redistribution permission.
 
 ## Ghana priority
 - Ghana Cyber Security Authority / CERT-GH: https://www.csa.gov.gh/ — official advisories and Ghana relevance.
@@ -29,4 +33,10 @@ These are candidate sources, **not yet integrated or individually verified for A
 6. Safe storage and TLP implications considered.
 
 ## Initial MVP candidates
-Start with 2–3 sources that offer documented, permitted machine-readable access. Final selection requires a short feasibility spike, not assumption.
+The [M1 v1.0 proposal](milestones/M1_COLLECTION.md) names CISA KEV, Microsoft
+Security Blog, and the official Google Threat Intelligence/Mandiant feed.
+Candidate selection is not activation approval: runtime access, rights, retention
+and source-specific checks remain gates. Final scope requires owner approval;
+if a candidate fails, propose a revision instead of silently substituting it.
+Keep Ghana CSA/CERT-GH and sector coverage in the backlog: global source coverage
+must not be described as evidence of Ghana-specific targeting.
