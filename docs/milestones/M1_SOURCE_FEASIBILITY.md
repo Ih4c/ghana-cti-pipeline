@@ -2,11 +2,17 @@
 
 Recorded for M1 v1.0; retained as historical evidence for the
 [current collection proposal](M1_COLLECTION.md). No source requests or updated
-payload verification occurred in the v1.1 readiness review. These are bounded research
+payload verification occurred in the v1.1 readiness or v1.2 hybrid review. These are bounded research
 observations, not implemented collectors or operational onboarding approval.
 Only public documentation, schemas and catalog data were inspected; no article
 crawler, scheduled ingestion, database or intelligence publication was created.
 No source payload is committed. Recheck mutable endpoints and terms before use.
+
+The current [hybrid source policy](M1_EVIDENCE.md) changes the proposed retention
+design, not these observations: permitted CISA catalog snapshots, metadata-first
+vendor feeds with no default raw archive and optional specifically permitted
+excerpts. This is not a new permission finding. Vendor transient processing,
+metadata/excerpt retention and operational checks remain open before any requests.
 
 ## Verification method and limits
 

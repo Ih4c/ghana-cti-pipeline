@@ -33,6 +33,8 @@ Copy the following fields into the task's PR description or a dated status updat
 - Changed files and resulting behavior:
 - Checks run and outcomes; expected failures and their reasons:
 - Source feasibility evidence and remaining uncertainties:
+- Collection representation, policy/retention version, backing availability and verification limits:
+- Authoritative report-template reference and any unresolved artifact/license check:
 - Decisions accepted/proposed/open (stable IDs):
 - Operational state: enabled sources, scheduler, storage, spend, deployments:
 - Next authorized action and explicit stopping point:
