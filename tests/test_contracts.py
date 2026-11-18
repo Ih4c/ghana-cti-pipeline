@@ -171,3 +171,36 @@ def test_review_is_revision_bound_and_does_not_publish(records):
     assert report.status == "draft"
     with pytest.raises(ValidationError):
         ReviewDecision.model_validate(records["review_decision"] | {"subject_revision": 0})
+
+
+@pytest.mark.parametrize("deep", [False, True])
+@pytest.mark.parametrize(
+    "update", [{"status": "published"}, {"schema_version": "2.0"}, {"unexpected": "field"}]
+)
+def test_model_copy_revalidates_updates(records, update, deep):
+    report = Report.model_validate(records["report"])
+    with pytest.raises(ValidationError):
+        report.model_copy(update=update, deep=deep)
+    assert report.status == "draft"
+
+
+@pytest.mark.parametrize("deep", [False, True])
+def test_model_copy_accepts_valid_updates_without_mutating_original(records, deep):
+    report = Report.model_validate(records["report"])
+    copied = report.model_copy(update={"revision": 2}, deep=deep)
+    assert copied.revision == 2
+    assert report.revision == 1
+    assert copied.status == "draft"
+    assert report.model_copy(deep=deep) == report
+
+
+@pytest.mark.xfail(
+    strict=True, reason="F4: TLP inheritance needs evidence resolution before export"
+)
+def test_clear_report_cannot_cite_red_evidence(records, evidence_data):
+    evidence_data["source_item"]["tlp"] = TLP.RED
+    evidence = EvidenceRecord.model_validate(evidence_data)
+    data = records["report"] | {"tlp": TLP.CLEAR, "evidence_ids": [evidence.id]}
+    # Intended validation context: resolve cited records before checking source restrictions.
+    with pytest.raises(ValidationError, match="TLP"):
+        Report.model_validate(data, context={"evidence_by_id": {evidence.id: evidence}})
