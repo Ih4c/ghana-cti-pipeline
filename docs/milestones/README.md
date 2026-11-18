@@ -16,7 +16,8 @@ while leaving live activation blocked; state this explicitly.
 | Specification | State | Purpose |
 | --- | --- | --- |
 | [M0 foundation](M0_FOUNDATION.md), v1.0 retrospective | Completed | Records the delivered foundation and remaining limits |
-| [M1 collection](M1_COLLECTION.md), v1.0 | Proposed, awaiting owner approval | Candidate-source adapters, private evidence storage and bounded execution |
+| [M1 collection](M1_COLLECTION.md), v1.1 | Proposed, no implementation approved | Candidate sources and explicit readiness corrections to v1.0 |
+| [M1 readiness / PR plan](M1_READINESS.md), review v1.0 | Proposed, awaiting scoped approval | Technical findings, M1-01 specification, dependencies and acceptance tests for subsequent increments |
 | [M1 source feasibility](M1_SOURCE_FEASIBILITY.md) | Dated supporting evidence | Separates verified access facts from remaining checks |
 | [Template](TEMPLATE.md) | Reusable | Starting point for later milestone specifications |
 

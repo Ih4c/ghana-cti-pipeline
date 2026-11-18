@@ -33,7 +33,7 @@ permitted; no source listing grants collection or redistribution permission.
 6. Safe storage and TLP implications considered.
 
 ## Initial MVP candidates
-The [M1 v1.0 proposal](milestones/M1_COLLECTION.md) names CISA KEV, Microsoft
+The [current M1 proposal](milestones/M1_COLLECTION.md) names CISA KEV, Microsoft
 Security Blog, and the official Google Threat Intelligence/Mandiant feed.
 Candidate selection is not activation approval: runtime access, rights, retention
 and source-specific checks remain gates. Final scope requires owner approval;
