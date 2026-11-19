@@ -41,9 +41,12 @@ if a candidate fails, propose a revision instead of silently substituting it.
 Keep Ghana CSA/CERT-GH and sector coverage in the backlog: global source coverage
 must not be described as evidence of Ghana-specific targeting.
 
-The owner has accepted the hybrid strategy (D018): retain permitted CISA catalog
-data/snapshots; collect Microsoft and Google metadata first, with excerpts only
-under a documented permission. The [source-specific policy and evidence design](milestones/M1_EVIDENCE.md)
-is still a technical proposal. Metadata/transient parsing permissions remain
-unresolved for vendors. No default raw feed archive, article crawling or automatic
-link following; source listing and RSS availability are not redistribution rights.
+The owner has accepted full-text direction D022, superseding D018's metadata-first
+vendor target: complete permitted CISA entries and full articles supplied in
+Microsoft RSS content:encoded / Google RSS description. The vendor fields are
+owner-reported observations dated 2026-11-18, pending independent B1 confirmation.
+The [source policy/evidence design](milestones/M1_EVIDENCE.md) remains proposed.
+Full-text access/retention/derivation/backup rights are unresolved; risk acceptance
+and feed availability are not licenses. Block unresolved modes; no metadata-only
+substitution, article-page crawler, embedded-link requests, backfill or paid API.
+Existing endpoint candidates remain unchanged, with no network checks in this task.

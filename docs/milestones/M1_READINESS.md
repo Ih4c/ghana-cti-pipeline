@@ -1,39 +1,38 @@
 # M1 implementation readiness and PR execution plan
 
-Review version **1.1**, 2026-11-18. Target: **M1 v1.2, proposed technical design**.
-Verified main: `1e5c2bca28077406acae576b88e77114f1288450`, the merge of
-[PR #5](https://github.com/Ih4c/ghana-cti-pipeline/pull/5). PR #4 and #5 merges
-were verified in Git and GitHub; no later main commit or open PR existed at this
-review's start, and the working tree was clean. Neither merge approved code.
-No source endpoints or vendor content were fetched during this review.
+Review **1.2**, 2026-11-19. Target: **M1 v1.3 full-text proposal**.
+Verified main `ccd81278472c7847287ffcf20988629435f2c999` is PR #6's merge.
+No later main commit or open PR existed at this task's start. An unfinished local
+v1.2 M1-01 draft was preserved separately; it is not delivered on main, included
+in this documentation branch, or authorized to continue under this v1.3 task.
+No source requests or new runtime/terms verification occurred.
 
-**Verdict:** the owner's hybrid strategy is accepted (D018); the technical design
-and all implementation increments still require approval. The first small offline
-retrieval/observation increment remains appropriate, with receipt descriptors that
-do not imply raw retention. See [M1_EVIDENCE.md](M1_EVIDENCE.md) for the proposed
-source policies, V2 representation, conditional requests and reporting assessment.
+D022 accepts full-text collection as the strategy, superseding D018's vendor
+metadata-first target. D023 records owner-reported rights concerns/risk acceptance;
+rights clearance and all implementation/operational gates remain unresolved.
+The owner will record any M1-01 approval separately in a GitHub PR comment.
 
-## Corrections to the v1.1 proposal
+## Changes affecting readiness
 
-| Prior assumption / gap | Proposed correction | Decision |
-| --- | --- | --- |
-| Every 200 has a SnapshotRef that appears to imply archiving | Use a response-body descriptor for observed size/media/digest; retention association is separate and occurs only at validated commit. | D011/D019 |
-| Vendor retention requires complete feed archival permission or deferral | Accepted metadata-first direction; require permissions for bounded transient parsing and specifically retained fields. No raw vendor archive by default; metadata is not automatically exempt. | D018 accepted; D017/D020 proposed |
-| V1 mandates an exact excerpt | Keep V1 unchanged. Add a distinct versioned V2 evidence representation later; absent excerpt is honest and valid only there. | D019 |
-| 304 requires a retained raw snapshot for all sources | Require the committed 200 processing manifest and retained projections; require a raw artifact only for raw-backed mode. A 304 never reprocesses unretained bytes or renews rights. | D019 |
-| Full-response identity suggests full article change tracking | Item identity uses allowed retained projection/profile; track response digests separately. Metadata equality cannot establish article equality. | D012 |
-| One retention period / seven backups seems sufficient | Require per-source/per-class deadlines including hashes, policy metadata and backups; verify deletion outside active SQLite rows and isolate restores. | D017/D020 |
-| Metadata supplies report-ready evidence | Metadata supports discovery/citation and limited listing facts. Article-level claims need human verification and permitted support/corroboration. The authoritative template remains unchanged; actual template is not in the checkout. | D018/D021 |
+| v1.2 assumption | v1.3 proposal / consequence |
+| --- | --- |
+| Vendor metadata is the intended deliverable | Complete Microsoft content:encoded and Google description bodies, as owner-reported on 2026-11-18; independent B1 confirmation and lawful basis required. Missing/truncated fields block full-text completion, not a silent fallback. |
+| Raw vendor bytes cannot enter persistent storage | Authorized full-text originals and derivatives belong in the approved private store; public/log/CI leakage remains forbidden. Source permissions, encryption and deletion controls govern every copy. |
+| Metadata-only 304 can omit raw backing | Current full-text target requires intact permitted original/derived artifacts and manifest. Corruption invalidates checkpoint; rights expiry pauses, without automatic re-fetch. |
+| Article changes may be invisible to metadata identity | Original selected body participates in source revision identity. Sanitizer changes create linked immutable derivatives; do not overwrite originals or historical transforms. |
+| No HTML transformation capability needed | Separate pure sanitization/text-extraction increment, D024. Retain original feed field, sanitized HTML and plain text with independent hashes/parents/versions. No rendering, resource loads or article crawling. |
+| Storage volume is mostly CISA plus metadata | Full-text/derived budget up to 32 MiB/day before overhead, versus unchanged 2 GiB cap. Capacity/retention choice is a live gate, never implicit expansion. |
+| Daily polling versus retry/recovery unclear | One automatic cycle per source/24 hours; attempts, redirects, restart and recovery share persisted budgets. Publisher limits can be stricter; 403 pauses, 429 defers. |
 
-Keep the v1.1 improvements: immutable observations, A→B→A reuse, source-batch
-atomicity, SQLite BLOBs for permitted raw acquisitions, direct-only validated-IP
-transport, safe parsing limits, source budgets and separate approval gates.
-Do not bundle F5-wide V1 validation changes, F6 tooling, TLP inheritance resolution,
-reporting implementation or unrelated cleanup into the first increment.
+The [evidence/rights design](M1_EVIDENCE.md) supplies precise proposed fields,
+transforms, hashes, retention and 304 rules. Keep modularity, V1 compatibility,
+source isolation, SSRF/TLS/proxy rules and human reporting controls. D009 TLP
+inheritance remains open. No F5-wide cleanup, F6 tooling or report implementation.
 
 ## M1-01: offline retrieval and observation descriptors only
 
-Prerequisite: explicit owner approval of **M1-01 under M1 v1.2 / D011 and the
+State: **unapproved**. Prerequisite: explicit owner approval in a GitHub PR comment
+of **M1-01 under M1 v1.3 / D011 and the
 retrieval/observation portion of D019**. No V2 evidence implementation, storage,
 network or parser approval is implied. Suggested title: **Add retention-neutral
 retrieval and observation contracts with synthetic fixtures**.
@@ -94,63 +93,55 @@ Synthetic hashes/IDs are declared fixture values, not claims of actual retrieval
 Do not add evidence V2, revision generation, policy enforcement, hash calculation,
 SQLite, checkpoint logic, DNS, transport, parser, adapter or retry behavior here.
 
-## Dependency-ordered implementation PRs
+## Revised dependency-ordered PRs
 
-Execution-plan IDs are not GitHub PR numbers. Preserve the requested order;
-split old M1-02 into M1-02a evidence contracts and M1-02b pure identity so each is
-reviewable. No implementation exists for either old or new plans. Each row needs
-explicit Gate A approval covering its scope and listed decisions, in addition to
-merged dependencies. Approval may name several rows; a merge alone approves none.
+Every increment requires separately recorded owner approval naming its version
+and scope; dependency merges alone grant none. M1-01 remains a small offline
+contract PR. No implementation is included here. M1-02a is the next contract
+design only after M1-01 is approved/delivered; it does not imply source rights.
 
-**Common constraints for M1-01 through M1-10:** synthetic fixtures, blocked real
-network, private temporary test data, no production paths or source access, no
-paid services, deployment, scheduling, publication, reporting/template changes or
-later-stage behavior. Existing V1 compatibility and CI Ruff/pytest are required.
-Only transport/XML rows may propose minimal reviewed open-source dependencies.
-Source permissions stay unresolved until documented; no test source is a license.
-The per-row exclusions below add to these common exclusions.
+Common constraints for M1-01 through M1-10: synthetic fixtures, blocked real
+network, temporary test stores only, no real source bodies or production paths,
+no paid services/deployment/scheduling/publication, no template/report changes,
+and unchanged V1/protocol compatibility. CI Ruff/format/pytest remain required.
+Later HTTP/XML/HTML dependencies must be minimal, open source, reviewed and pinned.
+Each row lists additional scope/tests/exclusions; all approvals currently pending.
 
-| Increment / components | Dependencies and owner approval | Scope and acceptance tests | Security/rights constraint and exclusions |
+| Increment / components | Prerequisites / approval | Scope and acceptance tests | Additional exclusions / rights boundary |
 | --- | --- | --- | --- |
-| M1-01 Core descriptors; `core/`, fixture/tests, contract docs | Gate A: revised D011 and descriptor portion of D019 | Types/tests above, explicitly no retention claim | No V1 changes, new dependencies, V2 evidence or I/O |
-| M1-02a Hybrid evidence; `core/`, synthetic fixtures/tests | M1-01; Gate A: D019 evidence design and D020 policy-reference semantics | Add V2 modes/provenance, optional permitted excerpt object and policy/manifest/availability contracts. Test absent excerpt valid only for V2, mode/artifact contradictions, date precision, bounded allowlisted fields, unknown defaults and version dispatch. | No inferred permissions, catch-all vendor fields, V1 migration, backend or hashing helpers |
-| M1-02b Identity; `core/`, tests/vectors | M1-02a; Gate A: revised D012 | Pure canonical projections/UUID namespaces and digest helpers. Freeze exact namespace constants and vectors. Source/key-kind/profile separation, key ordering, changed retained fields, A→B→A, ignored article-body changes and policy-renewal stability. | No cross-source merging, article equality claims, tombstone resurrection or I/O |
-| M1-03 SQLite; `storage/`, protocols, temporary-store tests | M1-02b; Gate A: revised D005/D013/D019 | Both transaction shapes, manifest/checkpoint eligibility, versioned lookup, typed writes; 304 succeeds for valid metadata-only state without raw body, fails for missing required raw backing; replay/conflict/rollback/FK tests. | Metadata-only API rejects raw bytes/artifact association and policy mismatch. No production DB, CLI, live data or raw vendor retention |
-| M1-04 Recovery/lifecycle; `storage/`, tests, runbook docs | M1-03; Gate A: D017/D020 and concrete purge/restore design | COMMIT crash/disk-full/read-only/schema tests; consistent backups; isolated restore; expiry/deletion invalidates references/checkpoints; permitted tombstones; synthetic marker absent from metadata DB/WAL/backups; corruption and locking. | No operational backup job; no secure-erasure claim from SQL DELETE; real-host purge verification remains B1/B2 gate |
-| M1-05 HTTPS; `collectors/` transport helpers, tests | M1-01; Gate A: D008/D014/D015 transport/client design | Fake resolver/socket/clock: IP pinning with original-host TLS, DNS rebinding, all redirects/retries, mixed special IPs, proxy rejection, byte/header/time budgets, conditionals and no disk cache/spool. | No real endpoint requests, implicit proxy fallback or debug body capture; at most one justified HTTP client dependency |
-| M1-06 Safe parsing; `collectors/` pure parser helpers, tests | M1-02a; Gate A: D015/D019 projection rules | Synthetic JSON/RSS entity/DTD/depth/encoding/size/item tests; full content:encoded/description discarded by default; permitted exact excerpt selection, invalid dates flagged, forbidden marker never returned in projection/error. | Transient bounded buffers only, no I/O, storage/transport imports or HTML execution; at most one hardened XML dependency |
-| M1-07 CISA adapter; separate collector module/tests | M1-02b, M1-05/06; Gate A: D004 CISA mapping | Synthetic catalog counts/duplicates/reordering/changed fields, original dates/fields, raw-backed locators and digest linkage; fetch/parse independently injected | CC0 basis applies to catalog only; no linked downloads, request, or activation |
-| M1-08 Microsoft adapter; separate collector module/tests | M1-02b, M1-05/06; Gate A: D004 vendor mapping/D017 | Synthetic GUID/URL fallback, missing summary/date, metadata-only output, optional policy-permitted exact excerpt, source projection vectors, full article marker excluded on success/error | Disabled pending rights; no real vendor fixtures, raw storage or article requests |
-| M1-09 Google adapter; separate collector module/tests | M1-02b, M1-05/06; Gate A: D004 vendor mapping/D017 | Independent synthetic mapping, publisher/final/article URLs, verified extension handling, same absent-excerpt/leak tests as Microsoft | Disabled; no guessed original links, tracking requests, premium API or raw archive |
-| M1-10 Manual CLI; composition/CLI, offline integration tests | M1-04, M1-07/08/09; Gate A: D006/D015/D019/D020 | Static composition, two modes end-to-end, one source failure isolation, 304/restart/expiry, source budgets, safe diagnostics; injected secret/forbidden-content canaries absent from DB/backups/logs; default live mode disabled | Narrow import-boundary exception only for composition; no acquisition through CLI until B2, no timer or external messages |
-| M1-11 Verification and manual pilot; source-policy/runbook/feasibility docs | M1-10; separate B1 per-source verification approval, then B2 activation; D004/D007/D017/D020 | CISA first; bounded approved requests verify TLS/redirects/cache/fields/limits/robots. Verify permitted data, host dump/swap/backup/purge behavior, then manual pilot and repeat/304 per cleared source. Document counts/growth and gaps privately. | Vendor transient-processing/metadata/excerpt rights basis required before requests. No raw vendor evidence upload, article scrape, automatic activation or schedule. Three-source completion requires all three or explicit revised scope |
-| M1-12 Scheduling; operator runbook and separately reviewed timer | Approved successful manual pilot; Gate C/D006/D007 | No overlap, one missed-run catch-up, expiry/stale-source pause, safe shutdown/restore, capacity/operator checks | Existing approved private host/budget only; no source expansion, paid services or publication |
+| M1-01 descriptors; core/fixtures/tests/docs | Gate A, v1.3 D011 and D019 descriptors via owner PR comment | Types and tests above; unchanged V1, immutable copies and digest-state discrimination | No dependencies, V2, hashing behavior or I/O |
+| M1-02a full-text contracts; core/tests | M1-01; D019/D024 artifact/derivation design approval | Proposed catalog_entry/feed_full_text V2, policy/availability/manifest and original/derived references; provenance, version/mode mismatch, missing full-text backing, dates and size bounds | No backend, transforms, hash computation or metadata-only completion |
+| M1-02b identities/digests; core/vectors | M1-02a; D012/D024 approval | Fixed namespaces, canonical profiles and independent response/original/derived digest helpers; body changes, reordering, A→B→A, same sanitized output with changed original, transform-version changes | No cross-source merge, overwritten originals, deleted-record resurrection or I/O |
+| M1-03 SQLite; storage/protocols/tests | M1-02b; D005/D013/D019 approval | Atomic response/item/derived/manifest/observation/checkpoint store; policy-bound BLOB associations, conflicts/FKs/replay and rollback; valid 304 needs all required backing | Synthetic temporary DB only; no production paths or actual content |
+| M1-04 recovery/lifecycle; storage/tests/runbook | M1-03; D017/D020 and concrete purge/restore design approval | Crash/disk-full/read-only/schema/locking tests, 2 GiB accounting/headroom, consistent backup, WAL/purge/expiry/revocation and isolated restore; all derived copies included | No operational backup job; no claim SQL DELETE proves erasure; real-host validation before B2 |
+| M1-05 HTTPS; collectors transport/tests | M1-01; D008/D014/D015 approval | Injected resolver/socket/clock proves IP pinning/TLS, rebinding, redirects, proxy rejection, headers/byte/time limits, descriptive UA, conditionals, 403 no-retry and Retry-After | No live HTTP, proxy bypass or automatic links; minimum approved client only |
+| M1-06a parsing; collectors pure parser/tests | M1-02a; D015/D024 approval | Safe XML/JSON, UTF-8/conflicting encodings, DTD/entity/depth/count/size tests; exact complete source-field extraction, missing/truncated body failure and original response/field distinction | No HTML execution, storage/transport imports, live feeds or article requests |
+| M1-06b transformations; collectors pure helpers/tests | M1-02b, M1-06a; D024 policy/library approval | Synthetic full HTML to separate original/sanitized/plain representations; independent hashes/parents/versions; active tags/attributes/resources, malformed/mutation-XSS, encoding/entity, node/attribute/aggregate limits, deterministic text and failure tests | No viewer/browser, rendering, embedded-resource fetch, AI summary or replacement of original; reviewed sanitizer/parser dependencies only |
+| M1-07 CISA adapter; own module/tests | M1-02b, M1-05/06a; D004 mapping approval | Complete synthetic entry fields/catalog count/date precision, duplicate/conflict/reordering/change tests, locators and raw associations; no invented HTML representation | Catalog license scope only; no linked material or real requests |
+| M1-08 Microsoft adapter; own module/tests | M1-02b, M1-05/06a/06b; D004/D024 mapping approval | Synthetic content:encoded namespace/full body, missing/truncated field fail, GUID/URL fallback, original/sanitized/plain association, dates/versions/provenance and failure isolation | Disabled until rights and B1/B2; no real fixtures, article crawler or metadata fallback |
+| M1-09 Google adapter; own module/tests | Same as M1-08; independent D004 mapping approval | Synthetic description full body, source/publisher/final/original URL mapping and verified extension handling; same full-text/transform tests independently | No guessed URLs, tracking fetch, paid API, real content or fallback |
+| M1-10 CLI/offline orchestration; composition/tests | M1-04, M1-07/08/09; D006/D015/D019/D020 approval | Static composition, full-source transactions, transform failure isolation, 304/reprocessing/restart, one cycle/24h with persisted shared budgets and stricter publisher rules; synthetic body canaries absent from logs/CI outputs | Only approved private storage may contain synthetic bodies; no live CLI use, default activation, timer or external messages; narrow tested import exception |
+| M1-11 B1 verification then B2 manual pilot; policies/feasibility/runbook | M1-10; separate source-specific B1 and B2 approval, D017/D023 rights resolution, capacity/host sign-off | CISA first candidate; independently reconfirm reported feed fields/completeness, access/robots/UA/validators/limits and full-text rights. Verify host encryption/backup/purge, private artifact integrity and measured growth | Bound each approved request; prohibited/unresolved source mode blocked; no metadata substitution or public bodies. No recurring schedule |
+| M1-12 scheduling; timer/runbook | Approved manual pilot; separate Gate C, D006/D007 | One automatic cycle per source/24h, no overlap/burst, persisted budgets, Retry-After/403 handling, expiry/stale checks, shutdown/restore/capacity/operator checks | Existing approved host/budget only; no source expansion, publication or paid services |
 
-D012 namespace design: derive fixed UUIDv5 namespaces from NAMESPACE_URL and
-repository identity URLs with versioned logical/source-item/evidence suffixes;
-commit exact constants/vectors in M1-02b, never derive from branch or checkout.
-Use canonical UTF-8 JSON, sorted keys, compact separators, preserved Unicode and
-array order, no non-finite numbers. Exact retained-field projections and null/absent
-semantics must be frozen per adapter/profile. See [hybrid identity rules](M1_EVIDENCE.md).
+Exact UUID namespace constants and source/transform profile vectors must be frozen
+before identity implementation: canonical UTF-8 JSON, sorted keys, preserved
+Unicode/array order, explicit null/absent semantics, no non-finite numbers. IDs
+must never depend on checkout/branch or mutable retrieval times. Source revision
+and transformation lineage are distinct, as specified in M1_EVIDENCE.md.
 
-## Remaining decisions and exact next approval
+## Blockers and stopping point
 
-D011/D019 descriptor details need owner approval for M1-01. Later gates include
-V2/projection and identity semantics, SQLite protocols and purge/restore procedure,
-HTTP client/IP binding, source-specific transient/retained rights and deadlines,
-private host/operator, memory/dump controls, backups and measured capacity. D021's
-template artifact/license and claim-level verification gaps block later report
-tooling, not synthetic M1-01. D009 TLP inheritance still blocks any exporter.
+Full-text access/retention/derivation/backup rights and the reported RSS fields
+remain unverified. Owner risk acceptance does not clear them. Source policies,
+HTTP/sanitizer choices, transform budget feasibility, 2 GiB capacity/retention,
+private host/operator, keys, purge/backup/restore and report-level rights need
+review at their respective gates. Template artifact/license, evidence sufficiency
+and D009 inheritance remain later reporting blockers.
 
-Requested scope, **not approval already given**:
-
-> Approve M1-01 only under M1 v1.2, revised D011 and the retrieval/observation
-> descriptor portion of D019: additive core metadata contracts, synthetic fixtures,
-> focused offline validation tests and related contract/status documentation.
-> Preserve existing V1 shapes/protocols; add no dependencies. Exclude V2 evidence
-> implementation, persistence, hashing behavior, transport, parsers, adapters,
-> live requests, deployment, scheduling, paid services and reporting/publication.
-
-Record actual owner approval before code. Until then, only documentation review
-is authorized. The permanent [handoff procedure](../HANDOFF.md) remains reusable;
-[STATUS.md](../STATUS.md) carries current work and blockers.
+**M1-01 is unapproved under v1.3.** The owner will record any approval separately
+in a GitHub PR comment, naming the offline retrieval/observation scope. Do not
+carry an earlier v1.2 approval or unfinished draft forward as authorization.
+Current scope ends with this documentation PR. No source requests, code, storage,
+transport, parsers, collectors, schedule, deployment or publication are authorized.
+Use the permanent [handoff procedure](../HANDOFF.md) and [STATUS.md](../STATUS.md).

@@ -2,17 +2,36 @@
 
 Recorded for M1 v1.0; retained as historical evidence for the
 [current collection proposal](M1_COLLECTION.md). No source requests or updated
-payload verification occurred in the v1.1 readiness or v1.2 hybrid review. These are bounded research
+payload verification occurred in the v1.1/v1.2 reviews or the 2026-11-19 v1.3
+revision. These are bounded historical research
 observations, not implemented collectors or operational onboarding approval.
 Only public documentation, schemas and catalog data were inspected; no article
 crawler, scheduled ingestion, database or intelligence publication was created.
 No source payload is committed. Recheck mutable endpoints and terms before use.
 
-The current [hybrid source policy](M1_EVIDENCE.md) changes the proposed retention
-design, not these observations: permitted CISA catalog snapshots, metadata-first
-vendor feeds with no default raw archive and optional specifically permitted
-excerpts. This is not a new permission finding. Vendor transient processing,
-metadata/excerpt retention and operational checks remain open before any requests.
+## Current scope versus historical findings
+
+The current [v1.3 full-text design](M1_EVIDENCE.md) supersedes earlier metadata-first
+planning, not the historical verification evidence below. All source tables and
+“Proposed scope” rows below record the original research context; they do not
+approve current access or describe current v1.3 scope. No endpoints, content or
+terms were fetched to prepare v1.3.
+
+**Owner-reported observations, not independent verification:** the owner reports
+observing complete Microsoft articles in RSS `content:encoded` and complete Google
+Threat Intelligence/Mandiant articles in RSS `description` on **2026-11-18**.
+B1 must independently reconfirm namespace/fields, completeness, encoding, sizes,
+item counts, status/redirects/cache behavior and applicable access restrictions.
+Missing or truncated full-text fields block acceptance; no crawler or metadata-only
+fallback is authorized.
+
+**Owner-reported terms/risk position:** Microsoft restrictions on copying,
+distribution/publication and possible use limits were reported; applicable Google
+terms and robots require review. The owner accepts identified private-research
+operational/legal risk, but this is not a legal conclusion, license or exception.
+D023/[rights questions and routes](M1_EVIDENCE.md) keep access, full-text retention,
+derivation, backups and later publication permissions unresolved. No activation
+based solely on technical accessibility or risk acknowledgement.
 
 ## Verification method and limits
 
@@ -30,7 +49,7 @@ complete feed was parsed or its status/fields validated. Before activation, an
 approved runtime must record status, final URL and redirects, Content-Type,
 transferred/decompressed bytes, ETag/Last-Modified, item counts, date/GUID/summary
 coverage, parsing results and robots/terms decisions. Do not attach raw vendor
-payloads to this public repository; use synthetic fixtures unless rights allow it.
+payloads to this public repository; current v1.3 development uses synthetic fixtures only.
 
 ## CISA KEV
 
@@ -64,11 +83,14 @@ federal remediation deadlines labeled as source data, not Ghanaian legal duties.
 | Credentials / limits | No credential prompt observed by web lookup, but anonymous runtime GET and any numerical rate limit remain unverified. No paid integration proposed. |
 | Readiness | Candidate endpoint identified; payload parsing and collection/retention rights are unresolved; disabled until cleared |
 
-Do not assume the feed is threat-intelligence-only, a complete archive, or a full
-article source. Retain supplied category metadata if present without treating it
-as a Ghana relevance score. If summaries are absent or their retention is not
-permitted, require an approved metadata-only contract or defer this adapter;
-do not fabricate the nonempty `SourceItem.excerpt` required by V1.
+The following **historical v1.0 normalization guidance is superseded** by the
+full-text target and permission gates above; it is preserved only for traceability:
+
+> Do not assume the feed is threat-intelligence-only, a complete archive, or a full
+> article source. Retain supplied category metadata if present without treating it
+> as a Ghana relevance score. If summaries are absent or their retention is not
+> permitted, require an approved metadata-only contract or defer this adapter;
+> do not fabricate the nonempty `SourceItem.excerpt` required by V1.
 
 ## Google Threat Intelligence / Mandiant
 

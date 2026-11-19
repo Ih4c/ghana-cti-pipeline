@@ -1,217 +1,270 @@
-# M1 hybrid evidence and source-retention design
+# M1 full-text evidence, permissions and retention design
 
-Design version **1.0**, 2026-11-18; companion to [M1 v1.2](M1_COLLECTION.md).
-D018 records the owner's accepted strategic direction. D011–D017 refinements and
-D019–D021 below are proposed/open, not implementation or source-access approval.
-No source content was fetched to prepare this design.
+Design **1.1**, 2026-11-19; companion to [M1 v1.3](M1_COLLECTION.md).
+D022 accepts full-text collection as the strategic target, superseding D018's
+metadata-first vendor target. D023 records owner-reported terms findings and risk
+acceptance, not legal clearance. The technical design remains proposed. No source
+requests, terms lookups or live verification were performed for this revision.
 
-## Source-specific policy
+## Source coverage and rights gates
 
-| Source | Intended representation | Retain only after source approval | Excluded / unresolved |
-| --- | --- | --- | --- |
-| CISA KEV official catalog | Raw-snapshot-backed | Licensed catalog's original fields, bounded complete response, source provenance and normalized records; checked database CC0 basis in the feasibility log | Recheck applicable endpoint/access conditions. CC0 does not cover linked third-party material, logos or endorsement. No following links. Runtime checks/activation still pending. |
-| Microsoft Security Blog RSS | Metadata-only by default | Approved title, publisher/byline, original URL, GUID, publication date/precision, approved categories and retrieval metadata; optional exact excerpt only under an explicit field/length/use permission | Metadata/transient processing rights are unresolved, not presumed exempt. No raw feed archive, full article, automatic article request, default description or content:encoded retention. |
-| Google Threat Intelligence/Mandiant RSS | Metadata-only by default | Same allowlisted fields, with configured feed, final transport URL and publisher article URL distinguished; only verified original-link extensions | Same rights gates; FeedBurner access/redirect terms also need checking. No paid portal/API, tracking-link crawl or full feed archive. |
+| Source | Required source content | Evidence basis and unresolved activation conditions |
+| --- | --- | --- |
+| CISA KEV | Complete permitted catalog entries, original fields and provenance | Historical catalog/schema/CC0 checks remain in the feasibility log. Reconfirm endpoint/access policy and license scope before activation; linked third-party material, logos and endorsement are not covered. |
+| Microsoft Security Blog RSS | Complete article HTML supplied in RSS `content:encoded` | Owner reports observing this structure on 2026-11-18. Independently reconfirm field, namespace, completeness and limits during approved B1. Owner reports copying/distribution/publication restrictions and possible use limits; lawful collection, transformations, private retention and backups remain unresolved. |
+| Google Threat Intelligence/Mandiant RSS | Complete article HTML supplied in RSS `description` | Owner reports observing this structure on 2026-11-18. Independently reconfirm completeness and limits during approved B1. Applicable Google/service/regional terms and FeedBurner/redirect-host robots/access requirements must be reviewed; lawful collection/retention remains unresolved. |
 
-A source policy record must identify a stable policy ID/version, source and exact
-endpoints, authority/terms references and review date, permitted transient
-processing, retained fields, excerpt selector and maximum length (default off),
-allowed uses/sharing, raw-retention mode, retention deadlines per data class,
-backup treatment, operator approval and next review/expiry. Unknown permission
-means disabled, not an implicit default. Record the policy version on each
-processing manifest/observation and evidence's creation provenance. This log is
-not a legal determination or redistribution license. The owner must resolve any
-uncertain rights basis before B1 verification, including receiving embedded articles.
+These vendor field observations are **owner-supplied**, not newly verified runtime
+findings. A populated field or accessible feed does not prove a complete article
+or permission to retain it. Missing/truncated required content fails full-text
+acceptance; block the source and seek a scope/permission resolution. Do not replace
+it with metadata-only collection, follow article links, backfill historical pages,
+or buy API access. A permitted CISA-only pilot is not three-source M1 completion.
 
-Full `content:encoded` and even `description` may contain articles. The parser
-must not persist these fields simply because the feed calls them a summary.
-Default excerpt is absent. An approved excerpt must be an exact bounded selection
-from an explicitly allowed decoded source field, with field/selection locator,
-permission reference and its own UTF-8 digest. Never summarize, replace with a
-title, manufacture placeholder text, or silently truncate an over-limit field.
-An over-limit approved field rejects the source batch; ignored fields are still
-subject to total response and parsing-work caps. No HTML rendering or URL fetching.
+The owner accepts the identified operational/legal risk of the proposed private
+research workflow. This is not a license, copyright exception, legal conclusion,
+or permission to ignore terms/robots/access restrictions. Prohibited full-text use,
+or a mode without an established lawful basis, cannot be activated merely because
+it is technically possible. Commercial use or public republication requires a
+separate permissions review and any necessary written authorization.
 
-## Representations and V1 compatibility (D011/D019)
+Before B1, document a lawful basis for its exact bounded access/processing scope;
+before B2, clear the proposed persistent full-text workflow. Open questions are:
 
-V1 SourceItem requires a nonblank excerpt, and EvidenceRecord validates its exact
-excerpt hash. Keep those schemas, fixtures, validated copies and existing
-Collector/FetchedDocument/EvidenceRepository signatures unchanged. Metadata-only
-items must never be coerced into V1 with empty, invented or substituted excerpts.
+- Which operator/entity, jurisdiction and research purpose do the applicable terms
+  cover? Do automated feed access, internal copying and retention have permission?
+- Does that basis cover complete feed responses, embedded articles/third-party
+  content, sanitization/plain-text derivation, internal analysis and backups?
+- What attribution, access controls, user-agent, frequency, robots, deletion,
+  revocation and maximum-retention conditions apply to each representation?
+- What separate restrictions govern short quotations, extracted facts/IOCs/TTPs,
+  original analysis, external sharing, commercial use and public publication?
 
-Propose a separate core `EvidenceRevisionV2` (`schema_version: "2.0"`, distinct
-kind), with a discriminated representation. This is a later M1-02a contract PR,
-not part of M1-01. Both representations use one common provenance envelope:
+Possible routes are explicit written publisher authorization, an applicable
+license grant covering the intended uses, or other legally supported grounds
+assessed for the actual circumstances. Record the supporting scope and reasoning;
+do not presume an exception or treat risk acceptance as that assessment. If the
+basis cannot be established, mark full-text activation **blocked**. A terms
+conflict is not resolved by slower polling or calling the store private.
 
-| Field group | Proposed semantics |
+Each versioned source policy records exact endpoints, operator/purpose, terms and
+permission references/review date, authorized processing/representations/uses,
+per-class deadlines, transformations, backup/deletion conditions, access/sharing
+restrictions, user-agent/quotas and approval/expiry. Policy IDs/versions accompany
+acquisitions and observations. Endpoint availability is separate from rights.
+
+## Representation and provenance (D019/D024)
+
+Keep V1 SourceItem/EvidenceRecord, their required nonblank excerpt and exact
+excerpt hash, and Collector/FetchedDocument/EvidenceRepository unchanged. Propose
+additive `EvidenceRevisionV2` later, never silently reinterpret V1 schema 1.0 or
+stuff a full article into its excerpt. M1-01 remains data-only retrieval/observation
+descriptors with no body bytes or retention claim; V2 is outside that increment.
+
+V2 target modes are `catalog_entry` and `feed_full_text`, both backed by permitted
+retained source representations. Metadata-only is no longer a target completion
+mode. Any future legacy metadata record must keep its historical limitations;
+never relabel a hash/reference as a retained full article.
+
+| Provenance group | Required meaning |
 | --- | --- |
-| Identity | Evidence UUID, logical item UUID, source ID, exact source-native ID when supplied; exact original URL fallback with explicit key type when native ID absent |
-| Attribution | Publisher, exact title, original article/advisory URL; separately recorded configured/final feed URLs via the retrieval reference; no guessed author or canonical URL |
-| Dates | Original publication text when permitted, precision `unknown/date/timestamp`, parsed date or aware timestamp only if supported by the source; parse outcome `missing/valid/invalid`. Invalid/missing remains unknown; retrieval time is separate. CISA dateAdded/dueDate stay labeled catalog fields. |
-| Lineage | First-observed 200 retrieval ID/time, source-item locator, adapter version, identity-profile version, parent derivation IDs (not temporal predecessors), creation policy reference and declared schema version |
-| Evidence limits | Confidence unknown and TLP null unless supplied; no automatic Ghana relevance, targeting or attribution. Optional permitted excerpt is a separate object with its own hash and permission/selection reference. |
-| Integrity | Retained-content SHA-256 over the documented canonical retained field projection; optional response digest reached through the retrieval record. These two digests have different meanings. |
-| `raw_snapshot` branch | Required association to a permitted complete response artifact and digest at initial commit; original catalog fields preserved, with entry locator. Current availability is checked separately, never inferred forever from the historical association. |
-| `metadata_only` branch | Only the policy's allowlisted retained fields and optional permitted excerpt; no raw artifact ID/path/BLOB, original-body field or catch-all source metadata dictionary. Explicit `raw_retained: false` for this acquisition. |
+| Source | Configured source ID, publisher/byline as supplied or configured with origin identified, GUID/native ID or explicitly typed exact original-URL fallback |
+| URLs | Configured feed/catalog URL, actual final URL and redirects, original article/advisory URL retained separately; no guessed URL or automatic link following |
+| Dates | Supplied publication text, precision `unknown/date/timestamp`, date or aware timestamp only where justified; missing/invalid dates remain unknown with parse outcome. Separate retrieval start/end timestamps; CISA dateAdded/dueDate remain catalog dates, not publication/targeting claims. |
+| HTTP | Retrieval ID, status, sent/returned ETag/Last-Modified, permitted cache headers and fixed request-variant identity; allowlisted bounded fields only, no credentials/cookies/raw header dump |
+| Versions/policy | Adapter, parser, evidence schema, identity profile and transformation versions/configuration IDs; source-policy ID/version and rights basis; first acquisition and later observation links |
+| Integrity/history | Separate response, original item, sanitized and plain-text hashes; logical item and immutable revision IDs; explicit derivation parents/locators and chronological observations |
+| Availability | Original/derived artifact association, retention deadline and current `available/expired/deleted/unavailable` state resolved through a separate lifecycle ledger; historical association does not promise perpetual availability |
+| Analytical limits | Confidence unknown and TLP null unless supplied; no automatic credibility, attribution or Ghana targeting. All content remains untrusted and private. |
 
-The raw artifact stores the exact complete entity bytes **after Content-Encoding
-decoding but before character/XML/JSON parsing**. Label this digest domain
-`decoded-http-entity-v1`; it is not a wire-byte hash. Keep media type, encoding and
-byte count. Required SHA-256 verifies a retained artifact. A metadata-only fetch
-may compute the same digest in bounded memory and discard bytes; the nullable
-response digest then describes an observation, never an archive location. Record
-`not_computed` explicitly if absent; never hash a partial failed body as complete.
-M1-01 models these descriptors only, without hashing or fetching behavior.
+For each authorized vendor article retain three associated representations:
 
-The retained-content digest instead covers versioned canonical UTF-8 JSON of the
-**retained item fields**, not the original response. Document the exact projection,
-key ordering, decoded-text handling and null/absent rules; no non-finite numbers.
-Do not label reconstructed JSON an original publication or exact response.
-A local hash detects changes against a known record; it is not a publisher
-signature, proof of authenticity, or proof of an article's unretained contents.
-Weak ETags are opaque cache validators, not content digests. A 304 computes no
-new response digest and does not claim byte equality verified by the collector.
+1. **Original article HTML:** the complete selected XML field's decoded character
+   content, serialized to UTF-8, before HTML parsing/sanitization. Preserve the
+   complete response separately with an item/field locator. XML line-ending/entity
+   decoding means this is not a byte-for-byte substring of the HTTP response.
+2. **Sanitized HTML:** a separately stored deterministic transformation with parent
+   original-body digest, sanitizer/parser version, policy/configuration digest and
+   its own output hash. Never overwrite the original or call sanitized text exact.
+3. **Plain text:** a separately stored deterministic extraction from sanitized HTML,
+   with that parent's digest, extraction version/configuration and independent hash.
+   Preserve meaning; normalization is declared, not an analyst summary or new fact.
 
-Separate records carry availability/deletion history; immutable evidence is not
-silently edited to imply it still has raw backing. A resolver must return the
-record kind/version and `available/expired/deleted/unavailable` backing state.
-Later repository protocols may return V1 or V2 through an explicit tagged union;
-existing V1 EvidenceRepository remains V1. Reports' UUID references alone do not
-implement that resolver. No automatic V1 migration or evidence-strength upgrade.
+The complete HTTP entity is retained after Content-Encoding decoding and before
+character/XML/JSON decoding, hashed in domain `decoded-http-entity-v1`; it is not
+a wire-byte hash. Original HTML uses domain `feed-field-html-utf8-v1`; sanitized
+and plain-text outputs use distinct versioned UTF-8 domains. Canonical retained
+metadata/manifest digests are separate again. A digest proves integrity against a
+known record, not publisher authenticity, legal rights or truth. A digest without
+bytes cannot reproduce missing content. Weak ETags are opaque cache validators.
 
-## Identity, observations and processing manifests (D012/D019)
+CISA retains the complete catalog response plus original structured entry fields
+and locators. Its entry projection has a versioned canonical JSON digest, not an
+invented HTML body. The vendor three-representation transformation requirement does
+not force CISA into HTML. Original values, source context and date precision survive.
 
-Logical keys are `[source_id, native-key-kind, exact-native-ID-or-original-URL]`.
-Including `native-key-kind` prevents a GUID that resembles a fallback URL from
-colliding with it. Do not strip meaningful URL queries or merge sources.
-Use fixed versioned UUIDv5 namespaces and golden vectors as proposed in the PR
-plan. Revision identity includes logical identity, representation/identity profile
-and the digest of allowed retained fields, including any permitted excerpt and
-publication precision. Exclude retrieval time, item position, cache headers and
-administrative policy renewal dates. A change of retention mode/field projection
-requires a new profile and revision; a renewal with identical permissions does not.
+## Safe parsing and transformations (D008/D015/D024)
 
-Repeated unchanged retained content reuses the immutable revision and adds an
-observation for each parsed 200. A→B→A reuses still-available A without modifying
-its parents. Do not reuse a deleted/tombstoned revision to restore removed fields;
-re-acquisition requires explicit policy review and a reviewed identity rule.
-Metadata unchanged means **retained metadata unchanged**, not article unchanged.
-An unretained description/article change can change the response digest without
-changing any item revision; capture the response observation, not invented detail.
+All transformations are proposed deterministic source processing, not AI analysis.
+Use maintained, pinned open-source XML/HTML parsing and sanitization components,
+selected in a separately reviewed implementation. Do not use regex as an HTML
+sanitizer or run a browser. Existing XML rules stay: UTF-8 only (optional BOM),
+reject conflicting/unsupported encoding declarations, DTDs, custom entities and
+external resources; predefined XML entities/CDATA are decoded by the safe parser.
+Preserve original bytes so decoding/normalization is auditable. No double-unescape
+pass after sanitization. Invalid or over-budget source batches fail atomically.
 
-A successful source batch commits a processing manifest containing retrieval ID,
-source/endpoint/request-variant identity, adapter/schema/profile versions, policy
-ID/version, mode, exact observed item-to-revision/retained-digest set (possibly
-empty), optional raw artifact reference, and a digest of that canonical manifest.
-This supports completeness checks without keeping vendor XML. Observations link
-the parsed 200, evidence kind/version/ID, locator and policy. A 304 creates a
-retrieval check referencing the manifest's original 200, never per-item observations.
+Proposed HTML policy: allow inert structural tags only (`p`, `br`, headings,
+lists, blockquote, pre/code, strong/em and basic table structure); remove all
+attributes, including event handlers, styles, IDs and resource-bearing URLs.
+Unwrap anchors to visible text; retain original article URL only as provenance.
+Drop script/style, iframe/object/embed, forms/controls, media/image, SVG/MathML,
+base/meta/link elements and their active subtrees, comments and processing
+instructions. Unknown inert wrappers may be unwrapped after safe parsing.
+Define/test exact allowlist and serialization in the approved sanitizer PR.
+Never execute HTML, load remote fonts/images/scripts, resolve embedded links,
+or treat sanitization as permission to publish or a complete viewer security model.
 
-## Conditional requests without raw retention (D019)
+Plain-text extraction walks the sanitized tree: preserve text order and Unicode;
+use explicit versioned separators for paragraphs/lists/line breaks/table cells,
+normalize line endings deterministically, and record those transformations.
+No paraphrasing, IOC enrichment, attribution or Ghana relevance generation.
+Original HTML is never rendered directly. A future analyst viewer needs separate
+review and output escaping/isolation; no viewer is introduced by M1.
 
-A checkpoint is eligible only after a complete 200 batch and its manifest have
-committed. Scope it to source, approved configured/final endpoint, fixed request
-representation headers and supported Vary fields. Record sent/returned validators
-and the stable 200 representation reference. No 304-to-304 chains.
+Keep complete response caps: 8 MiB KEV and 2 MiB per RSS, independently enforced
+on transferred and decompressed entity bytes; 10,000 KEV/500 RSS items; depth 64,
+32 KiB headers, existing metadata/URL limits. D024 additionally **proposes**:
+1 MiB UTF-8 per vendor original/sanitized/plain-text item, 2 MiB aggregate per
+representation per vendor response, 50,000 HTML nodes per source batch, depth 64
+and 32 input attributes per element with values ≤4,096 characters. CISA retained
+entry projections total ≤8 MiB per catalog. These are bounds, not measured feed
+sizes or automatic permission to raise limits. Processing shares the source/run
+deadline; exceeding any cap rejects the batch, never truncates full-text evidence.
+The old 65,536-character excerpt limit remains for optional short excerpt fields;
+it is not silently reused as a full-article limit. General 8,192-character metadata
+limits do not apply to the separately bounded full-text artifacts.
 
-| Prior state | Valid 304 behavior |
-| --- | --- |
-| Raw-backed, policy current, complete manifest and verified artifact/records available | Record successful check, update returned validators/check time; do not parse, recreate evidence or claim new article verification. |
-| Metadata-only, policy current, complete manifest and retained projections/digests available | Same behavior **without any raw snapshot**. Intentional non-retention is valid, not corruption. A stored response hash is optional and is not the checkpoint's proof of completeness. |
-| Missing/corrupt required records/manifest (or required raw artifact), changed parser/profile/endpoint/request variant | Invalidate conditional state. If rights remain valid, one unconditional fetch may use the remaining attempt budget; otherwise defer. No reconstruction of missing items from a hash. |
-| Expired/revoked rights, deletion required, or unsupported policy transition | Pause; do not extend retention, restore deleted records or automatically re-fetch. Permission renewal is a separate decision. |
-| Unsolicited 304, changed redirect target, mismatched source/variant or incompatible validators | Protocol failure; no successful checkpoint. Validate each redirect and do not forward old conditionals to an unapproved/different representation. |
+## Identity, atomic commits and conditional requests (D012/D013/D019)
 
-Unexpected Vary fields (including `*`) disable conditional reuse. Unsupported
-Cache-Control directives that prohibit storage cause a fail-closed policy review;
-HTTP caching directives are not a copyright license. A 304 cannot replay newly
-approved parser fields: without original bytes a separately authorized full 200
-is required. It cannot renew a rights deadline or prove the original article URL
-is unchanged/reachable. Tests must cover both valid metadata-only 304 and invalid
-raw-backed 304 with a missing required artifact.
+Logical keys use source ID, native-key-kind and exact GUID/native ID or original
+URL fallback. Fixed versioned UUID namespaces and canonical JSON vectors remain
+required. Source revisions depend on original selected content and approved
+source fields/publication precision, excluding retrieval time, item order and
+catalog release metadata. Reordered feed items do not change item identity.
+A→B→A reuses still-available A and adds an observation, without mutable predecessor
+links. A changed original article creates a revision even if sanitization yields
+the same text. Transform version/configuration changes create new immutable
+**derived** artifacts linked to the same original revision, not rewritten history.
+Policy renewals alone do not fabricate content changes; revoked/deleted material
+cannot be resurrected without a reviewed lawful re-acquisition/identity rule.
 
-## SQLite, transient data and retention (D013/D017/D020)
+A complete successful source transaction commits the permitted response artifact,
+original item revisions, required derived artifacts and associations, retrieval,
+observations, policy references, a manifest with item/artifact digests and all
+processing versions, and the conditional checkpoint. Validate/transform before
+opening the transaction; no network I/O while holding it. A required transformation
+failure rolls back the whole source batch; other sources continue. Failure events
+contain safe codes/counts only and never advance the successful checkpoint.
 
-Propose one private SQLite store: versioned evidence/retained projections,
-retrieval descriptors, manifests, observations, source checkpoints, policy
-references, safe failure events and availability/tombstones. Optional
-content-addressed BLOB artifacts are **only for approved raw-backed sources**.
-A metadata-only write API accepts typed allowlisted projections and descriptors,
-never a raw byte parameter. Reject mixed-mode artifacts/unknown fields and
-policy-mode mismatches; adapter flags alone are not authorization.
+An eligible conditional checkpoint requires the fully processed committed 200,
+intact manifest, available original response/item backing and required derived
+artifacts, current rights and matching endpoint/request/processing profile.
+Valid 304s refer directly to that 200, never another 304; update check time and
+returned validators only, with no new item observation/body hash/publication date.
+They do not prove article truth or byte equality independently checked by us.
 
-Validate the entire source batch, then atomically commit its permitted contents,
-manifest and checkpoint; no network I/O in the transaction. Foreign keys,
-operation idempotency, conflict rejection, one-writer/run, crash/disk-full rollback,
-schema compatibility and consistent SQLite backups remain required. A separate
-safe failure event never advances the successful checkpoint. Artifact ownership
-and deletion are policy-scoped; shared hashes must not accidentally extend one
-source's retention or grant another source access.
+- Missing/corrupt required state invalidates the checkpoint. Repair derived output
+  from intact permitted originals locally under a reviewed transform version;
+  otherwise one unconditional recovery fetch may consume a remaining attempt in
+  the same cycle. Rights must still permit it; no budget means defer to next cycle.
+- Changed parser/sanitizer/profile requires reviewed reprocessing of retained
+  originals and a newly validated manifest before reusing conditional state. No
+  fabricated network observation and no mutation of prior processing history.
+- Rights expiry/revocation pauses the source and invalidates affected checkpoints;
+  no automatic re-fetch to restore deleted material or extend rights on a 304.
+- Unsolicited 304, changed redirect representation or mismatched source/validators
+  fails; never forward old conditionals to a different representation. Unsupported
+  Vary (including `*`) disables conditionals; unsupported no-store restrictions
+  pause for policy review. HTTP cache metadata is not a license.
 
-Vendor response bytes exist only in bounded transport/parser memory, including
-failure paths. No HTTP disk cache, temporary body spool, raw exception/object
-repr, database payload column, WAL entry, debug dump, tracing attachment, LLM
-request, test recording, CI artifact or public fixture may contain them. Drop
-references promptly after projection/failure; Python does not guarantee secure
-memory erasure. Before live use, approve a host with core/crash dumps disabled,
-no unencrypted swap/hibernation, and backups that exclude process memory and
-temporary buffers. Prefer no swap for the collection process. Encryption alone
-does not authorize retention. Verify a synthetic distinctive forbidden marker is
-absent from DB/WAL, backups, logs, failure diagnostics and artifacts. Such tests
-do not prove host-level memory protection; the operator must verify it separately.
+The v1.2 metadata-only 304 exception is no longer the target collection rule.
+No source becomes complete merely because metadata or a response hash survives.
 
-No blanket vendor 365-day promise. Set source-specific maximum deadlines for
-metadata, excerpts, digests, retrieval/HTTP fields and audit records before B2;
-304s and repeated observations do not silently reset them. For permitted CISA
-raw snapshots/records, retain the proposed 365-day reporting target only within
-approved policy/capacity; unreferenced permitted artifacts may use a 30-day cap.
-Vendor raw storage has zero durable retention; transient-processing permission
-still needs review. Seven encrypted daily backups are a proposal, not a right
-to keep expired data seven extra days.
+## Storage, capacity and lifecycle (D005/D013/D017/D020)
 
-Deletion must inventory live rows, indexes, SQLite free pages/journals/WAL,
-replicas/exports and every backup. Before activation, approve/test a practical
-purge/compaction and backup expiry procedure with an operator and deadlines;
-SQLite DELETE alone is not verified erasure. Purge/replace or retire every
-containing backup by the source deadline, even when that reduces restore points.
-If that cannot be enforced, do not onboard the source. Restore in isolation and
-apply the current policy/deletion ledger before any access or checkpoint reuse.
-Tombstones retain only fields/digests independently permitted after deletion;
-otherwise keep a minimal permitted opaque audit event, not a permanent hash by
-assumption. Expiry/deletion invalidates affected conditional checkpoints and marks
-citations unavailable. Do not silently remove cited evidence for disk space or
-retain it against permissions; pause and obtain review of the resulting evidence gap.
+Propose one private SQLite database with foreign keys, typed artifact modes,
+policy-aware associations and content-addressed BLOBs for bounded response,
+original and derived artifacts. Shared digests do not share rights or extend
+retention. BLOBs simplify atomic commits and crash recovery but enlarge the DB,
+WAL, backups and purge work. Separate files could improve streaming/large-object
+management but require atomic staging, reference commits, orphan cleanup and
+coordinated backup/deletion. Defer that alternative until measured need and an
+explicit reviewed decision; no silent external-artifact backend or cap increase.
 
-## Reporting compatibility and evidence gaps (D018/D021)
+Keep the **2 GiB live-store cap** (warn at 80%), single writer/run and $0 incremental
+paid-service budget. Capacity accounting must include DB/WAL/temporary processing
+headroom; pause before writes cannot fit, not after exhausting the disk. At daily
+response caps, snapshots alone total 12 MiB/day (~4.28 GiB/year). With up to 8 MiB
+CISA entry projections plus three 2 MiB vendor representations per feed, the
+planning upper bound is **32 MiB/day (~11.4 GiB/year)** before metadata/indexes/WAL.
+A 2 GiB cap holds fewer than 64 such days after overhead; deduplication may help,
+but no retention guarantee follows. These are worst-case budget calculations,
+not measured source sizes. Measure an authorized pilot; resolve capacity/retention
+explicitly before activation. No automatic storage purchase or increase.
 
-The existing report-template choice remains authoritative and is not modified.
-[REPORTING_STANDARDS.md](../REPORTING_STANDARDS.md) points to the external CTI
-report template and explicitly says its contents are not reproduced in this
-repository. No template artifact exists in this checkout. This is therefore an
-assessment against the checked-in reporting requirements, **not** a verified
-field-by-field review of that external template. Obtain the authoritative version
-and review its license before later report tooling; no substitute is proposed.
-The Microsoft reference is for analytical depth, clarity and evidence quality,
-not a new reporting standard. No template, reporting code or publication changes.
+Store outside Git, web roots, public sync, CI artifacts/caches and PR attachments,
+under an approved least-privilege account with owner-only paths and encryption at
+rest; SQLite is not encrypted by default. Originals and derivatives are equally
+private. No bodies/HTML, snippets, titles or raw validation exceptions in logs,
+traces or crash dumps. Use safe error codes/counts/structural locators. Synthetic
+fixtures only, never record real feeds. Host swap/dump/temp-file and backup controls
+need operator verification; memory encryption alone does not grant retention rights.
 
-| Existing reporting requirement | Hybrid support and limitation / human action |
-| --- | --- |
-| Verifiable facts and evidence dates | CISA retained entries can be re-read and rehashed with catalog context. Vendor metadata supports facts about the feed listing only; an absent body/digest alone cannot substantiate article-level claims. |
-| Citations | Preserve publisher, original URL, supplied title/date precision, retrieval/check times, evidence ID and retention mode. Label link-only/unavailable backing; feed retrieval is not an article-access timestamp. |
-| Technical findings, IOCs and TTPs | KEV fields support catalog facts, not exploitation telemetry. Metadata-only titles are discovery leads. Analysts need permitted exact supporting evidence or corroboration before technical assertions; no blind indicator extraction/blocklists. |
-| Confidence, uncertainty and Ghana relevance | Keep unknown defaults. Analyst distinguishes source claims, corroborated facts, hypotheses and gaps; global coverage does not establish Ghana targeting. Local exposure/targeting needs evidence and rationale. |
-| Conclusions and defensive actions | Human judgment must explain evidence, applicability and uncertainty. Catalog requiredAction/dueDate are source fields, not automatically Ghanaian mandates. Vendor headlines cannot supply detailed recommendations alone. |
-| Review, TLP and publication | Maintain private handling and original markings. Resolve D009 inheritance, authenticated reviewers and exact-revision approval before any exporter. D018 keeps the existing template and human control; no automatic publication. |
+Before B2, specify source-specific maximum retention for response/original/derived
+bodies, metadata, digests, audit records and backups. The former 365-day reporting
+target is a planning aspiration subject to rights/capacity, not a minimum right to
+retain data. Seven encrypted daily backups may require up to 14 GiB separately;
+expiry may shorten restore-point history. Approve operator, key handling, storage
+and restore/purge procedure. A rights change pauses collection, identifies affected
+originals/derivatives/associations, invalidates checkpoints and enforces deletion
+within the required deadline. Do not preserve derivatives as a loophole.
 
-For a later human-led investigation, an analyst may independently open the cited
-original publication under applicable access terms, record actual access time,
-claim/section locator, source version and verification outcome, and link permitted
-supporting excerpts or independently corroborating material. This is a proposed
-later verification workflow, not an automated article fetch or implemented UI.
-Any lawfully retained new evidence is a new linked acquisition, never a retroactive
-claim that M1 archived the page. If a page changes/disappears and no permitted copy
-exists, the historical claim cannot be independently reproduced from a hash.
-Mark that gap, find independent corroboration, narrow the claim, or omit it.
-Analyst attestation alone does not recover missing material. Evidence sufficiency,
-claim-level linkage and authoritative template/license review remain open before
-report tooling; the M1 records are a foundation, not finished intelligence.
+Inventory live rows/indexes, free pages, journals/WAL, temporary files, replicas
+and every backup. SQLite DELETE alone is not verified erasure: test a practical
+purge/compaction/WAL and backup retirement/replacement procedure before activation.
+If deadlines cannot be met, block onboarding. Retain only independently permitted
+opaque tombstones/digests; mark citations unavailable. Restore in isolation using
+the current rights/deletion ledger before serving data or enabling checkpoints.
+Use consistent SQLite backups, not blind live-file copies; verify artifact hashes,
+derivation links, manifest completeness, foreign keys and schema versions. Test
+crash/disk-full rollback and idempotent operation retries; same ID/different content
+rejects. Do not blindly downgrade newer schemas or silently purge cited evidence
+for space. Mandatory deletion still takes precedence over retention aspirations.
+
+## Reporting compatibility and limits (D009/D021/D022/D023)
+
+The existing Ghana CTI template remains authoritative and unchanged. Its reference
+in [REPORTING_STANDARDS.md](../REPORTING_STANDARDS.md) is present, but the template
+artifact is not in this checkout. Version/license and field-level tooling review
+remain open. Microsoft research is an optional analytical-quality reference, not
+a replacement template. No report generator, viewer or publisher is implemented.
+
+Permitted full-text evidence improves reproducibility: analysts can inspect exact
+retained source fields, transformations, dates, citations and revisions. It does
+not validate publisher claims, turn feed retrieval into independent article-page
+verification, or establish Ghana targeting. Missing/truncated bodies and deleted
+backing remain explicit gaps; sanitization/text extraction may omit meaningful
+structure, so analysts must be able to compare with the private original safely.
+
+Future public output is original analyst-written assessments, supported technical
+findings, relevant facts/IOCs/techniques, qualified Ghana relevance and actionable
+defensive recommendations, with source names, original URLs and publication dates.
+Only short attributed quotations where legally permitted; no full articles,
+extensive vendor excerpts, raw HTML or private snapshots. Facts/indicators/
+techniques remain subject to applicable rights, confidentiality, source terms and
+publication restrictions, not presumed universally unrestricted. Commercial use
+or republication has its own permissions review. Retention permission does not
+authorize publication. Human final judgment, authenticated review, evidence/TLP
+inheritance, exact-revision approval and TLP:CLEAR remain required before export.
+AI remains limited to permitted Stage 1/2 assistance; this M1 design adds no AI.
