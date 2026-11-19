@@ -95,11 +95,10 @@ SQLite, checkpoint logic, DNS, transport, parser, adapter or retry behavior here
 
 ## M1-02a: full-text evidence contracts
 
-State: **approved data-only scope; implementation pending PR review**.
+State: **delivered by PR #9 (approved data-only scope)**.
 The owner comment above names M1 v1.3 and D019/D024. See the
 [contract reference](../M1_EVIDENCE_CONTRACTS.md) for concrete wire fields/limits,
-synthetic tests and remaining cross-record/rights boundaries. D025 records wire
-bindings for review; D026 records the source-revision/derivation identity gap
+synthetic tests and remaining cross-record/rights boundaries. D025 records wire bindings delivered by PR #9; D026 records the source-revision/derivation identity gap
 that M1-02b must resolve. M1-01/V1 serialized shapes remain unchanged.
 
 ## Revised dependency-ordered PRs
