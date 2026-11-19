@@ -1,8 +1,10 @@
 # Project status
 
 Last reviewed: **2026-11-19**. Repository: `Ih4c/ghana-cti-pipeline`.
-Delivered through [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) (M1-02a); no pull requests are open.
-Verified against GitHub on 2026-11-19: main was `aedf429` (the PR #9 merge). This
+Application contracts delivered through [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) (M1-02a);
+documentation follow-ups [PR #12](https://github.com/Ih4c/ghana-cti-pipeline/pull/12)
+and [PR #13](https://github.com/Ih4c/ghana-cti-pipeline/pull/13) are merged.
+Verified against GitHub on 2026-11-19: main was `2ee82d4` (the PR #13 merge). This
 is a dated snapshot, so always fetch current main on resumption and treat the PR
 list as the source of truth for what is delivered.
 
@@ -18,6 +20,8 @@ list as the source of truth for what is delivered.
 | M1 v1.3 technical design | PR #7 merged; **M1-01 and M1-02a contracts approved only**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
 | M1-01 implementation | Delivered by PR #8 | Five [retrieval/observation contracts](M1_RETRIEVAL_CONTRACTS.md), discriminated outcomes, synthetic fixtures/tests; no I/O |
 | M1-02a implementation | Delivered by [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) | [V2 evidence, artifact, policy and manifest contracts](M1_EVIDENCE_CONTRACTS.md); synthetic tests only |
+| Documentation consistency | PR #12 and PR #13 merged; Issue #11 closed | Current-state sync and permanent pre-PR SHA/PR-state/test-count checks delivered; historical milestone references preserved |
+| RSS size investigation | Documentation proposal; Issue #10 open, D027 proposed | [Limits, B1 measurement plan and decision matrix](milestones/M1_RSS_SIZE_INVESTIGATION.md); no new measurements, tests, caps or source approvals |
 | M2–M5 | Roadmap only | No implementation or publication approval |
 
 Main delivers the foundation, M1-01 and M1-02a (663 passed, one existing strict
@@ -64,10 +68,15 @@ exists. The unfinished v1.2 draft remains preserved in its original worktree.
    Original human analysis may cite permitted evidence, but full articles/raw
    HTML/extensive excerpts are not public output. Facts/IOCs/TTPs still face
    applicable rights/confidentiality/review/TLP constraints; no automatic publication.
-6. **Open issues.** [#10](https://github.com/Ih4c/ghana-cti-pipeline/issues/10): record real feed sizes against the
-   2 MiB feed-response cap during the separately approved B1 verification, record any
-   cap change in DECISIONS.md, and do not raise or truncate anything before that.
-   [#11](https://github.com/Ih4c/ghana-cti-pipeline/issues/11): keep status documents in sync with main after each merge.
+7. **RSS size uncertainty remains open.** [#10](https://github.com/Ih4c/ghana-cti-pipeline/issues/10)
+   needs actual transferred/decoded byte measurements over several days and an
+   owner-recorded decision. Reported truncated character counts establish no byte
+   headroom. D027 proposes retaining existing caps pending separately approved B1;
+   the [investigation](milestones/M1_RSS_SIZE_INVESTIGATION.md) distinguishes
+   contract declarations from runtime limits and proposes tests without adding code.
+   [#11](https://github.com/Ih4c/ghana-cti-pipeline/issues/11) is **closed** after
+   PR #13 completed the permanent documentation-consistency rule; PR #12 delivered
+   its preceding status sync. Continue that rule after every merge.
 
 B1 verification, B2 manual activation and C scheduling each require separate
 approval; none is granted. Three-source full-text completion requires all three
@@ -93,6 +102,12 @@ and format checks pass; explicit dependency tests: **15 passed**. All **133 loca
 Markdown links/anchors** and `git diff --check` pass. No source requests,
 real feed fixtures, storage, deployment, schedule, paid service, reporting or merge
 occurred. Commit author/committer must remain the required `ih4c` identity.
+
+Issue #10 documentation review on 2026-11-19 re-ran the unchanged main suite:
+**663 passed, one existing strict TLP xfail**, Ruff lint/format passed. No new test
+code or source requests were authorized or performed. The investigation preserves
+all byte caps, contracts, dependencies, report template and B1/B2/C boundaries;
+its proposed measurement procedure and regression cases are not implementations.
 
 Follow [HANDOFF.md](HANDOFF.md) and [DECISIONS.md](DECISIONS.md). Recommended next:
 **M1-02b identity and digest helpers**, after explicit scope approval and
