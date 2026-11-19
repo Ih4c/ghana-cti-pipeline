@@ -56,8 +56,9 @@ explicit migration, never a silent reinterpretation of old evidence.
 The proposed [full-text M1 extension](milestones/M1_EVIDENCE.md) does not change
 these V1 rules or force complete articles into V1 excerpts. Later additive V2
 would associate permitted original source content, sanitized/plain-text derivatives,
-independent digests and version-aware lookup; none is implemented. M1-01 remains
-unapproved under v1.3. Response hashes do not imply archived or lawful content.
+independent digests and version-aware lookup; none of that V2 behavior is implemented.
+The separately approved [M1-01 descriptors](M1_RETRIEVAL_CONTRACTS.md) are additive
+and pending PR review. Response hashes do not imply archived or lawful content.
 
 | Contract | Meaning and preserved information |
 | --- | --- |

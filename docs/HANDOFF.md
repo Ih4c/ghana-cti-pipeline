@@ -10,8 +10,11 @@ milestone. The current milestone and blockers live in [STATUS.md](STATUS.md).
    `origin/main`, active branches and related PRs. Preserve unrelated work.
 3. Read STATUS, DECISIONS and the applicable milestone specification/version.
    Separate delivered behavior from plans and known expected failures.
-4. Confirm explicit approval covers the intended work. If absent, prepare or
-   revise the plan only. Do not implement collectors, activate sources, incur
+4. Confirm explicit approval covers the intended work and specification version;
+   verify the author and exact scope of the linked owner comment. The current
+   [authorization record](DECISIONS.md)
+   and [implementation status](STATUS.md) distinguish approved work from later gates.
+   If absent, prepare or revise the plan only. Do not implement collectors, activate sources, incur
    costs, deploy or publish merely because a roadmap says they come next.
 5. Use a feature branch from verified current main, or the authorized existing
    PR branch. Do not reuse superseded commits or merge your own PR.
@@ -31,6 +34,7 @@ Copy the following fields into the task's PR description or a dated status updat
 - Milestone ID, specification version and lifecycle state:
 - Approval reference and exact scope; remaining approval gates:
 - Changed files and resulting behavior:
+- Implemented contract versions, compatibility checks and unresolved validation boundaries:
 - Checks run and outcomes; expected failures and their reasons:
 - Source feasibility evidence and remaining uncertainties:
 - Owner-reported observations versus independently verified findings and their dates:

@@ -37,8 +37,8 @@ storage, backups and costs before selecting or migrating to a small VPS.
 The versioned `SourceItem`, `EvidenceRecord`, `Indicator`, `Assessment`,
 `ReviewDecision`, and draft-only `Report` models exist; see
 [FOUNDATION.md](FOUNDATION.md). Preserve source-level identifiers, raw reference
-links, confidence, TLP markings, and lineage. New transport/observation contracts
-need reviewed versions and migrations. Never let an adapter directly publish.
+links, confidence, TLP markings, and lineage. The additive [retrieval/observation contracts](M1_RETRIEVAL_CONTRACTS.md)
+have their own versions; breaking changes require reviewed versions and migrations. Never let an adapter directly publish.
 
 The owner's accepted v1.3 direction (D022) targets complete permitted CISA catalog
 entries and vendor feed-supplied full articles. The [technical design](milestones/M1_EVIDENCE.md)
@@ -47,7 +47,8 @@ plain text distinct, with independent hashes/versions/lineage and explicit backi
 availability. Authorized originals and derivatives stay in private storage; raw
 bodies never belong in public Git, CI or logs. Full-text rights unresolved means
 activation blocked, not metadata substitution. V1 shapes/excerpt rules remain
-unchanged; later V2 is additive. M1-01 and all runtime/processing work are unapproved.
+unchanged; later V2 is additive. M1-01 descriptors alone are approved and
+implemented in the current review branch; all runtime/processing work remains unapproved.
 The existing report template and human review requirements remain authoritative.
 
 ## Security and resilience

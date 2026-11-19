@@ -1,7 +1,7 @@
 # M1 — Full-text intelligence collection plan
 
 - Specification version: **1.3**
-- State: **strategy accepted; technical design proposed; no implementation approved**
+- State: **strategy accepted; M1-01 approved only; remaining technical design proposed**
 - Updated: 2026-11-19
 - Verified planning baseline: main `ccd81278472c7847287ffcf20988629435f2c999`
 - Approval boundaries: [DECISIONS.md](../DECISIONS.md), D022–D024.
@@ -17,10 +17,12 @@ intelligence. Metadata-only vendor collection is not the intended final capabili
 If rights or completeness fail, block the source and resolve them; do not quietly
 substitute metadata, scrape article pages or claim three-source completion.
 
-This is documentation-only work. The accepted strategy is not permission to write
-code, fetch sources, operate storage, deploy, schedule or publish. M1-01 remains
-separate and **unapproved under v1.3**; the owner will record any implementation
-approval in a GitHub PR comment. Earlier v1.2 work is not authority to proceed.
+PR #7 merged this strategy without implementation authorization. Subsequent
+[owner approval on PR #7](https://github.com/Ih4c/ghana-cti-pipeline/pull/7#issuecomment-6996754396)
+authorizes **M1-01 under v1.3 only**, D011 and D019 retrieval/observation
+descriptors, synthetic tests and related documentation. All later implementation,
+source access and operational gates remain unapproved. Earlier v1.2 work is not
+authority to proceed.
 Historical versions remain in Git, not active scope. Existing V1 contracts,
 permanent guidance, authoritative report template and human workflow are preserved.
 
@@ -52,7 +54,8 @@ modes remain blocked. No terms or endpoints were fetched for this revision.
 ## Separate approval gates and exclusions
 
 - **Gate A:** explicit approval of a named implementation increment/version in a
-  GitHub PR comment. No increment is approved by this task or its documentation merge.
+  GitHub PR comment. M1-01 alone has the separate approval linked above; the
+  documentation merge itself grants none.
 - **Gate B1:** separate source-specific approval for bounded live verification,
   with an established basis for that access/processing scope, approved host and
   request/retention budget. Owner observations must be independently reconfirmed.
@@ -229,9 +232,10 @@ source restrictions can reduce these maxima. Measure before operational approval
 
 ## Implementation sequence and stopping point
 
-The [PR plan](M1_READINESS.md) keeps M1-01 descriptors first and unapproved, then
+The [PR plan](M1_READINESS.md) keeps the approved M1-01 descriptors first, then
 V2 full-text contracts, identities, SQLite/recovery, hardened transport, safe
 parsing/transforms, independent adapters and manual offline integration. B1/B2
 verification/activation and Gate C scheduling remain separately approved work.
-The owner will record any M1-01 approval in a GitHub PR comment. Until then, only
-documentation review is authorized; no source/network or implementation work.
+The M1-01 implementation PR stops at offline descriptors/tests/documentation.
+See [delivery status](../STATUS.md); M1-02a and all later increments need fresh
+scoped approval. The full-text strategic target and acceptance criteria are unchanged.
