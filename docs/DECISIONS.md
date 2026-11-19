@@ -33,6 +33,19 @@ approval against the specific milestone version and any conditions.
 | D024 | 2026-11-19, data contracts accepted only; transformation implementation proposed | Separate original feed HTML, sanitized HTML and plain text with independent hashes, parent links and transformation versions; explicit HTML/node/attribute/derived-byte caps | [Evidence design](milestones/M1_EVIDENCE.md) specifies inert allowlist, safe encoding/entities, no execution/resource loads, immutable transformations and bounded processing. CISA remains structured catalog content. M1-02a descriptor scope approved below; library/runtime policy/cap feasibility still needs review. No transformation code exists. |
 | D025 | 2026-11-19, proposed wire bindings; delivered within M1-02a (PR #9) | Freeze the data-only contract serialization, domain labels, helper versions and explicit supplementary bounds in [contract reference](M1_EVIDENCE_CONTRACTS.md) | Prose requirements lacked exact field/domain spellings and some list bounds. No canonicalization, ID generation, hash calculation or runtime rights claim. PR review must assess these bindings before later integrations. |
 | D026 | 2026-11-19, open before M1-02b | Separate immutable source revision identity from versioned derived-representation associations | Evidence bundles contain derived references, but transform changes must not change source revision identity. Exact canonical projections and durable association keys remain unspecified; do not key/overwrite a whole bundle solely by evidence_id. Resolve before identity/storage implementation. |
+| D027 | 2026-11-19, proposed; Issue #10 open | Retain existing RSS caps pending separately approved, byte-accurate B1 measurements; no new production cap selected | [Investigation and measurement plan](milestones/M1_RSS_SIZE_INVESTIGATION.md) distinguish transferred/decoded/field/derived/aggregate limits, censored measurements and runtime enforcement gaps. Character counts from truncated views do not establish byte size. Owner must approve measurement scope and any later cap/compatibility/capacity changes; no source activation, test-code or diagnostic-cap exception is granted here. |
+
+## Issue #10 investigation scope — 2026-11-19
+
+The owner task “Investigate Issue #10” authorizes documentation investigation and
+a documentation-only PR, including correction of stale PR #13/Issue #11 status.
+No separate authorization for new test code or live B1 measurements was supplied;
+the [synthetic regression cases and B1 procedure](milestones/M1_RSS_SIZE_INVESTIGATION.md)
+are proposals only. Existing tests may be run to verify the unchanged baseline.
+This records task scope, not a fabricated GitHub approval comment. Issue #10 remains
+open; PR #12 and PR #13 are merged and Issue #11 is closed. D027 does not alter
+D022's full-text direction, D026's separate identity work, existing contract/schema
+limits, rights requirements or B1/B2/C gates.
 
 ## Verified M1-01 authorization — 2026-11-19
 
