@@ -60,7 +60,7 @@ acquisitions and observations. Endpoint availability is separate from rights.
 
 Keep V1 SourceItem/EvidenceRecord, their required nonblank excerpt and exact
 excerpt hash, and Collector/FetchedDocument/EvidenceRepository unchanged. M1-02a
-implements additive `EvidenceRevisionV2` data contracts for review; never silently reinterpret V1 schema 1.0 or
+implements additive `EvidenceRevisionV2` data contracts, delivered by PR #9; never silently reinterpret V1 schema 1.0 or
 stuff a full article into its excerpt. M1-01 remains data-only retrieval/observation
 descriptors with no body bytes or retention claim; V2 is outside that increment.
 
