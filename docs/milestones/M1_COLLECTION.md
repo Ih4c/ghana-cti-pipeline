@@ -1,7 +1,7 @@
 # M1 — Full-text intelligence collection plan
 
 - Specification version: **1.3**
-- State: **strategy accepted; M1-01/M1-02a data contracts approved only; remaining technical design proposed**
+- State: **strategy accepted; M1-01/M1-02a contracts and M1-02b helpers approved only; remaining technical design proposed**
 - Updated: 2026-11-19
 - Verified planning baseline: main `ccd81278472c7847287ffcf20988629435f2c999`
 - Approval boundaries: [DECISIONS.md](../DECISIONS.md), D022–D024.
@@ -22,7 +22,9 @@ PR #7 merged this strategy without implementation authorization. Subsequent
 authorizes **M1-01 under v1.3 only**, D011 and D019 retrieval/observation
 descriptors, synthetic tests and related documentation. After PR #8 merged,
 [separate owner approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
-authorizes M1-02a D019/D024 data contracts only. M1-02b onward, source access and
+authorizes M1-02a D019/D024 data contracts only. After PR #9 merged,
+[M1-02b approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/9#issuecomment-6997682376)
+covers D012/D025/D026 identity/digest helpers. M1-03 onward, source access and
 operational gates remain unapproved. Earlier v1.2 work is not
 authority to proceed.
 Historical versions remain in Git, not active scope. Existing V1 contracts,
@@ -56,7 +58,7 @@ modes remain blocked. No terms or endpoints were fetched for this revision.
 ## Separate approval gates and exclusions
 
 - **Gate A:** explicit approval of a named implementation increment/version in a
-  GitHub PR comment. M1-01 and M1-02a have separate scoped approvals linked above; the
+  GitHub PR comment. M1-01, M1-02a and M1-02b have separate scoped approvals linked above; the
   documentation merge itself grants none.
 - **Gate B1:** separate source-specific approval for bounded live verification,
   with an established basis for that access/processing scope, approved host and
@@ -240,4 +242,4 @@ parsing/transforms, independent adapters and manual offline integration. B1/B2
 verification/activation and Gate C scheduling remain separately approved work.
 The M1-01 implementation PR stops at offline descriptors/tests/documentation.
 M1-02a is separately approved for data contracts and stops at its review PR.
-See [delivery status](../STATUS.md); M1-02b onward needs fresh scoped approval. The full-text strategic target and acceptance criteria are unchanged.
+See [delivery status](../STATUS.md); M1-02b helpers are separately approved; M1-03 onward needs fresh scoped approval. The full-text strategic target and acceptance criteria are unchanged.

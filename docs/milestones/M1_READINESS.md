@@ -10,7 +10,8 @@ D022 accepts full-text collection as the strategy; D023 records risk acceptance,
 not rights clearance. The [owner approval on PR #7](https://github.com/Ih4c/ghana-cti-pipeline/pull/7#issuecomment-6996754396) subsequently authorizes only
 M1-01 under v1.3. See [STATUS.md](../STATUS.md) for implementation review state.
 Subsequent [M1-02a approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
-covers D019/D024 data contracts only. M1-02b onward and operational gates remain pending.
+covers D019/D024 data contracts only. M1-02b now has [separate owner approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/9#issuecomment-6997682376)
+for identity/digest helpers and D026 resolution. M1-03 onward and operational gates remain pending.
 
 ## Changes affecting readiness
 
@@ -95,12 +96,20 @@ SQLite, checkpoint logic, DNS, transport, parser, adapter or retry behavior here
 
 ## M1-02a: full-text evidence contracts
 
-State: **approved data-only scope; implementation pending PR review**.
+State: **delivered by PR #9** at `aedf429fde5d27b6de22342e7f0ce8267daf2461`.
 The owner comment above names M1 v1.3 and D019/D024. See the
 [contract reference](../M1_EVIDENCE_CONTRACTS.md) for concrete wire fields/limits,
 synthetic tests and remaining cross-record/rights boundaries. D025 records wire
-bindings for review; D026 records the source-revision/derivation identity gap
-that M1-02b must resolve. M1-01/V1 serialized shapes remain unchanged.
+bindings; D026 is resolved by the approved [M1-02b profile](../M1_IDENTITY_PROFILES.md). M1-01/V1 serialized shapes remain unchanged.
+
+## M1-02b: deterministic identities and digest helpers
+
+State: **approved helper scope; implementation pending PR review**.
+D012/D025/D026 approval is linked above. [Identity profiles](../M1_IDENTITY_PROFILES.md)
+freeze exact projections, association keys, canonical encoding, seven namespaces
+and helpers for seven domain-qualified SHA-256 representations. Fixed synthetic vectors and pure
+helper tests cover A→B→A, source separation, version changes, Unicode/bounds and
+no I/O. Existing wire contracts remain unchanged. M1-03 requires fresh approval.
 
 ## Revised dependency-ordered PRs
 
@@ -115,7 +124,7 @@ network, temporary test stores only, no real source bodies or production paths,
 no paid services/deployment/scheduling/publication, no template/report changes,
 and unchanged V1/protocol compatibility. CI Ruff/format/pytest remain required.
 Later HTTP/XML/HTML dependencies must be minimal, open source, reviewed and pinned.
-Each row lists additional scope/tests/exclusions; only M1-01 and M1-02a data contracts are approved.
+Each row lists additional scope/tests/exclusions; M1-01/M1-02a data contracts and M1-02b helpers alone are approved.
 
 | Increment / components | Prerequisites / approval | Scope and acceptance tests | Additional exclusions / rights boundary |
 | --- | --- | --- | --- |
@@ -134,8 +143,8 @@ Each row lists additional scope/tests/exclusions; only M1-01 and M1-02a data con
 | M1-11 B1 verification then B2 manual pilot; policies/feasibility/runbook | M1-10; separate source-specific B1 and B2 approval, D017/D023 rights resolution, capacity/host sign-off | CISA first candidate; independently reconfirm reported feed fields/completeness, access/robots/UA/validators/limits and full-text rights. Verify host encryption/backup/purge, private artifact integrity and measured growth | Bound each approved request; prohibited/unresolved source mode blocked; no metadata substitution or public bodies. No recurring schedule |
 | M1-12 scheduling; timer/runbook | Approved manual pilot; separate Gate C, D006/D007 | One automatic cycle per source/24h, no overlap/burst, persisted budgets, Retry-After/403 handling, expiry/stale checks, shutdown/restore/capacity/operator checks | Existing approved host/budget only; no source expansion, publication or paid services |
 
-Exact UUID namespace constants and source/transform profile vectors must be frozen
-before identity implementation: canonical UTF-8 JSON, sorted keys, preserved
+Exact UUID namespace constants and source/transform vectors are frozen in
+[M1-02b profiles](../M1_IDENTITY_PROFILES.md), written before identity implementation: canonical UTF-8 JSON, sorted keys, preserved
 Unicode/array order, explicit null/absent semantics, no non-finite numbers. IDs
 must never depend on checkout/branch or mutable retrieval times. Source revision
 and transformation lineage are distinct, as specified in M1_EVIDENCE.md.
@@ -151,6 +160,7 @@ and D009 inheritance remain later reporting blockers.
 
 **M1-01 is delivered and M1-02a data contracts are separately approved under
 v1.3**. The M1-02a PR ends with offline contracts, synthetic fixtures/tests and
-docs. M1-02b requires its own approval and resolution of D026. No source requests, storage, transport, parsers, collectors,
+docs. M1-02b has separate approval for helpers/D026 resolution; its implementation
+PR stops for review. M1-03 needs its own approval. No source requests, storage, transport, parsers, collectors,
 schedule, deployment or publication are authorized.
 Use the permanent [handoff procedure](../HANDOFF.md) and [STATUS.md](../STATUS.md).

@@ -1,6 +1,6 @@
 # M1-02a full-text evidence contracts
 
-Implementation under M1 v1.3, pending independent PR review. The
+Delivered by [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) under M1 v1.3. The
 [owner approval on PR #8](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
 covers D019/D024 data-only evidence, artifact-reference, provenance, source-policy
 and processing-manifest contracts, synthetic tests and documentation.
@@ -91,8 +91,9 @@ claim that identical hashes share permission or acquisition history.
 `EvidenceMetadataDigest` uses `evidence-metadata-json-v1`;
 `ManifestDigest` uses `processing-manifest-json-v1`. These and the derived/catalog
 domain labels are explicit wire choices (D025), not implemented canonicalizers.
-M1-02b must freeze canonical field projections/vectors, excluding self-digests,
-and distinguish source identity from transformation identity before hashing.
+M1-02b freezes [canonical projections/vectors](M1_IDENTITY_PROFILES.md), excluding
+self-digests and separating source identity from transformations. These additive
+helpers do not change the descriptor wire formats.
 
 `ArtifactAvailability` is a separate dated record: artifact/policy reference,
 state `available/expired/deleted/unavailable`, recorded_at and retention_until.
@@ -149,13 +150,13 @@ They are implemented for review, not claims that runtime source feasibility has
 been measured. If an article yields an empty derivative, this contract cannot
 claim full-text completion; transformation behavior remains a later decision.
 
-D026 remains open: the prose requires immutable source revisions while allowing
-new transformations of the same original. This evidence bundle includes derived
-references, but source revision identity must exclude transformation changes.
-There is no approved durable key/association layout yet. Do not key/store/overwrite
-an entire bundle solely by evidence_id or infer a new source revision from a new
-transform. M1-02b must settle the versioned projections and association identity;
-M1-03 must enforce them. This increment supplies immutable data values only.
+D026 is resolved by the separately approved [M1-02b profile](M1_IDENTITY_PROFILES.md).
+The existing evidence_id is the immutable source revision grouping ID; complete
+bundles use a separate computed evidence-association UUID based on their metadata
+digest. Manifest items bind that digest and source revision; observations name the
+revision/retrieval, not an implied latest transformation. Derived identities bind
+source revision, parent and transform versions. Never overwrite bundles solely
+by evidence_id. No wire field changes; M1-03 must enforce the association keys.
 
 ## Validation and exclusions
 
@@ -165,7 +166,8 @@ contradictory provenance/derivations, exact and excessive byte/count/text limits
 date precision, policy/availability metadata, nested/shallow/deep copy validation,
 compatibility and blocked network. See [STATUS.md](STATUS.md) for results.
 
-No persistence, networking, source requests, feed parsing, sanitization, hash/ID
-generation, adapters, scheduling, deployment or reporting changes. Validation
+M1-02a itself adds no persistence, networking, source requests, parsing, transforms
+or hash/ID generation. Separately approved M1-02b adds pure hash/ID helpers only;
+adapters, scheduling, deployment and reporting remain unchanged. Validation
 errors may include rejected input; future logging must use safe codes, not raw
 ValidationError payloads. Rights and operational approval gates remain unchanged.

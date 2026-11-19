@@ -56,8 +56,9 @@ explicit migration, never a silent reinterpretation of old evidence.
 The proposed [full-text M1 extension](milestones/M1_EVIDENCE.md) does not change
 these V1 rules or force complete articles into V1 excerpts. Additive V2
 associates permitted original source content and sanitized/plain-text references.
-The approved [M1-02a data contracts](M1_EVIDENCE_CONTRACTS.md) are implemented for
-review; digest calculation, storage and version-aware lookup remain future work.
+The [M1-02a data contracts](M1_EVIDENCE_CONTRACTS.md) are delivered by PR #9.
+Separately approved [M1-02b helpers](M1_IDENTITY_PROFILES.md) compute identities
+and digests without changing models; storage and version-aware lookup remain future work.
 The additive [M1-01 descriptors](M1_RETRIEVAL_CONTRACTS.md) are delivered by PR #8.
 Response hashes do not imply archived or lawful content.
 

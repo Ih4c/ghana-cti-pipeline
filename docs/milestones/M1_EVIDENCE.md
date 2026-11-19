@@ -6,7 +6,8 @@ metadata-first vendor target. D023 records owner-reported terms findings and ris
 acceptance, not legal clearance. M1-01 and M1-02a data contracts have
 [scoped approvals](../DECISIONS.md); the remaining technical design stays proposed.
 The [contract reference](../M1_EVIDENCE_CONTRACTS.md) records implementation wire
-choices (D025) and the unresolved identity/association binding (D026). No source
+choices (D025); [M1-02b identity profiles](../M1_IDENTITY_PROFILES.md) resolve the
+source-revision/derivation association binding (D026) under separate approval. No source
 requests, terms lookups or live verification were performed for this revision.
 
 ## Source coverage and rights gates
