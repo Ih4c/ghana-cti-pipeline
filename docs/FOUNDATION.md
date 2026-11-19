@@ -53,11 +53,11 @@ even for shallow copies. Pydantic's unchecked `model_construct` is not an
 ingestion API. Breaking changes need a new schema version and an
 explicit migration, never a silent reinterpretation of old evidence.
 
-The proposed [hybrid M1 extension](milestones/M1_EVIDENCE.md) does not change these
-V1 rules. Metadata-only items with no permitted excerpt cannot become V1
-SourceItem/EvidenceRecord. A separate EvidenceRevisionV2 and version-aware lookup
-are proposed for a later increment; they do not exist yet. Response hashes are
-distinct from retained-content hashes and do not imply archived raw bytes.
+The proposed [full-text M1 extension](milestones/M1_EVIDENCE.md) does not change
+these V1 rules or force complete articles into V1 excerpts. Later additive V2
+would associate permitted original source content, sanitized/plain-text derivatives,
+independent digests and version-aware lookup; none is implemented. M1-01 remains
+unapproved under v1.3. Response hashes do not imply archived or lawful content.
 
 | Contract | Meaning and preserved information |
 | --- | --- |

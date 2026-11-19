@@ -1,320 +1,237 @@
-# M1 — Minimal intelligence collection plan
+# M1 — Full-text intelligence collection plan
 
-- Specification version: **1.2**
-- State: **proposed — no implementation increment is approved**
-- Updated: 2026-11-18
-- Planning baseline: main `1e5c2bca28077406acae576b88e77114f1288450`
-- Approval: pending owner review; record exact version/scope in [DECISIONS.md](../DECISIONS.md).
-- Supporting evidence: [source feasibility, 2026-11-18](M1_SOURCE_FEASIBILITY.md).
+- Specification version: **1.3**
+- State: **strategy accepted; technical design proposed; no implementation approved**
+- Updated: 2026-11-19
+- Verified planning baseline: main `ccd81278472c7847287ffcf20988629435f2c999`
+- Approval boundaries: [DECISIONS.md](../DECISIONS.md), D022–D024.
+- Evidence: [historical feasibility and owner-reported observations](M1_SOURCE_FEASIBILITY.md).
 
-## Revision and readiness record
+## Revision and intended outcome
 
-Versions 1.0 (PR #4) and 1.1 (PR #5) are merged planning history, not
-implementation approvals. Version 1.2 records the owner's accepted hybrid
-strategy (D018): permitted CISA catalog snapshots, metadata-first vendor RSS,
-optional permitted excerpts, and the existing report template retained unchanged.
-Technical refinements remain proposed/open: D011–D017 and D019–D021 distinguish
-response digests from retention, additive V2 evidence from V1, and metadata-only
-304 checkpoints from raw-backed checkpoints. See [hybrid evidence and retention](M1_EVIDENCE.md)
-and the [revised PR plan](M1_READINESS.md). Prior versions remain in Git history.
+PR #6 merged v1.2's hybrid plan; its metadata-first vendor direction (D018) is now
+superseded by the owner's v1.3 instruction, D022. Retain complete permitted CISA
+catalog entries and full article content supplied by the Microsoft and Google
+feeds, with attribution and immutable provenance, for future original Ghana-focused
+intelligence. Metadata-only vendor collection is not the intended final capability.
+If rights or completeness fail, block the source and resolve them; do not quietly
+substitute metadata, scrape article pages or claim three-source completion.
 
-## Outcome, scope and approval gates
+This is documentation-only work. The accepted strategy is not permission to write
+code, fetch sources, operate storage, deploy, schedule or publish. M1-01 remains
+separate and **unapproved under v1.3**; the owner will record any implementation
+approval in a GitHub PR comment. Earlier v1.2 work is not authority to proceed.
+Historical versions remain in Git, not active scope. Existing V1 contracts,
+permanent guidance, authoritative report template and human workflow are preserved.
 
-Collect source-attributed evidence from three independently replaceable candidate
-adapters: CISA KEV JSON, Microsoft Security Blog RSS, and the official Google
-Threat Intelligence/Mandiant RSS feed. Store normalized records and retrieval
-evidence privately, deduplicate repeat observations, retain revisions, and let
-one source fail without losing others. These sources support vulnerability and
-research coverage for Ghanaian defenders; they are not proof of local targeting.
+## Source mapping and permission boundaries
 
-This readiness PR contains documentation only. **Gate A:** owner approves a
-named increment/version before related application code is written. Approval of
-M1-01 alone is not approval of storage, transport or adapters. **Gate B1:** separate
-source-specific approval permits bounded live verification, with a rights basis
-covering the bytes received/retained and an approved private host. **Gate B2:**
-after verification passes, separate approval permits manual source collection.
-**Gate C:** recurring scheduling requires explicit activation after an approved
-manual pilot. No Gate A/B1/B2/C approval is recorded. Offline synthetic increments
-do not require a production host or vendor rights, but still require Gate A.
-
-Exclude full article scraping, historical vendor backfills, paid APIs, new source
-substitution, triage/ranking, LLM calls, IOC extraction, attribution, analyst UX,
-report generation, deployment and publication. Later stages remain human-led.
-No automatic email/Slack messages, website exports, or blocking actions.
-
-## Source decisions and mapping
-
-| Source ID | Proposed fetch / native identity | Normalization and limitations |
+| Source ID | Endpoint / native identity | Required content and verification state |
 | --- | --- | --- |
-| `cisa-kev` | Official CISA mirror JSON in the feasibility register; CVE ID | One item per catalog entry. Title from vulnerabilityName, exact excerpt from shortDescription. Keep the complete entry and catalog metadata in the raw snapshot, identified by JSON pointer and CVE. `published_at` stays null unless a genuine item publication timestamp is supplied; preserve dateAdded/dueDate as dates in source metadata. |
-| `microsoft-security-blog` | Registered RSS URL; GUID, otherwise original entry URL | Preserve approved feed title, link, GUID, publisher and date/precision; no summary by default. Optional exact excerpts require a specific permission. Store original publication text and parsed timezone when supplied; malformed dates are flagged, not guessed. GUID stability and description availability need payload verification. |
-| `google-threat-intelligence` | Publisher-linked FeedBurner RSS; GUID, otherwise original entry URL | Same metadata-first mapping, with distinct feed/final/article URLs and source attribution. Do not use the premium intelligence API. Validate any claimed original-link extension before using it. |
+| `cisa-kev` | Existing official mirror JSON in the source register; CVE ID | Complete permitted entry/original fields and catalog context. Historical JSON/schema/CC0 checks exist; runtime, robots/access and activation checks remain incomplete. dateAdded/dueDate are catalog dates, not publication or Ghanaian legal duties. |
+| `microsoft-security-blog` | Existing registered RSS endpoint; GUID, otherwise exact original article URL | Complete `content:encoded` article content. Owner reports observing this on 2026-11-18; field namespace, completeness, size and behavior require independent B1 confirmation. Full-text rights unresolved. |
+| `google-threat-intelligence` | Existing publisher-linked FeedBurner RSS endpoint; GUID, otherwise exact original article URL | Complete `description` article content. Owner reports observing this on 2026-11-18; complete-body mapping and behavior require independent B1 confirmation. Applicable terms/robots and full-text rights unresolved. |
 
-All source entries retain configured source ID, publisher, original URL,
-source-native ID, original date/precision when available, UTC retrieval time,
-adapter/parser version and evidence linkage. Missing publication dates remain
-unknown. CISA's catalog date is not copied onto every CVE as publication time.
-Public availability and CC0 do not automatically set TLP:CLEAR; retain supplied
-TLP if present, otherwise null and private handling. Confidence stays unknown;
-no Ghana relevance claim is produced by collection.
+Configured/final feed URLs and original article URL stay distinct. Preserve
+publisher, native ID, supplied publication date/precision, retrieval times,
+HTTP/validator metadata, adapter/parser/schema versions and policy ID/version.
+Missing dates stay unknown; no confidence, Ghana targeting or attribution is
+fabricated. Supplied TLP is preserved; absent marking is null, not TLP:CLEAR.
+These sources support Ghanaian defenders but do not themselves prove local targeting.
 
-Vendor summary retention is conditional on rights clearance. A raw RSS snapshot
-may include full `content:encoded` articles even if only summaries are normalized.
-Vendor processing must discard unapproved article fields after bounded in-memory
-parsing and retain only approved metadata. Excerpts default to absent and require
-field/length/use permission. No durable vendor raw snapshot is proposed. Metadata
-and transient processing still need a documented rights basis before source
-verification; accessibility is not a license. [Source policies](M1_EVIDENCE.md)
-define exact retained fields, rights records and deletion/backup requirements.
-Never silently truncate/rewrite evidence or fabricate V1's required excerpt.
+D023 records owner-reported Microsoft copying/distribution/publication restrictions,
+possible permitted-use limits, and the need to review applicable Google terms and
+robots. The owner accepts identified operational/legal risks for private research.
+That acceptance is not a license, copyright exception or authority to disregard
+restrictions. The [rights matrix](M1_EVIDENCE.md) specifies unresolved uses and
+routes: written permission, applicable grants or other legally supported grounds.
+Commercial use/public republication requires a separate review and any necessary
+written authorization. Technically accessible but prohibited/unresolved full-text
+modes remain blocked. No terms or endpoints were fetched for this revision.
 
-## Architecture and contract evolution
+## Separate approval gates and exclusions
 
-Keep one Python distribution. The existing core contracts and protocol boundaries
-remain the starting point; do not make adapters import concrete storage or each
-other. Proposed composition:
+- **Gate A:** explicit approval of a named implementation increment/version in a
+  GitHub PR comment. No increment is approved by this task or its documentation merge.
+- **Gate B1:** separate source-specific approval for bounded live verification,
+  with an established basis for that access/processing scope, approved host and
+  request/retention budget. Owner observations must be independently reconfirmed.
+- **Gate B2:** separate manual collection/activation approval after B1, established
+  full-text retention/derivation/backup rights, capacity and operator checks.
+- **Gate C:** recurring scheduling approval after a successful approved pilot.
+
+No network/source access is authorized here. Offline synthetic development still
+requires Gate A. No article-page crawler, embedded-link following, historical
+backfill, paid intelligence API, LLM calls, triage/ranking, IOC enrichment,
+attribution, report generation, deployment or publication belongs to this task.
+Later analytical judgments and publication remain human-controlled.
+
+## Modular architecture and contracts
 
 ```text
-manual CLI / optional local timer
-  -> explicit static adapter registry and per-source runner
-  -> bounded HTTPS transport -> independent fetch/parse adapter
-  -> normalization + revision identity -> storage interfaces
-  -> private SQLite retained metadata + optional permitted CISA snapshot BLOBs
+manual CLI / separately approved daily timer
+  -> static source registry and isolated source runner
+  -> bounded HTTPS transport -> independent source adapter / safe parsing
+  -> original content + deterministic sanitized HTML / plain text (vendor items)
+  -> immutable identity, artifact associations and processing manifest
+  -> private SQLite evidence/artifacts/observations/conditional checkpoint
 ```
 
-| Component | Proposed responsibility / test boundary |
+| Component | Proposed responsibility / boundary |
 | --- | --- |
-| `core/` | Existing V1 domain contracts unchanged; additive retrieval/observation descriptors and later V2 hybrid evidence, identifiers, limits and safe error codes. No network/database dependencies. |
-| `collectors/` | Separate CISA, Microsoft and Google adapters using fetch/parse separation. Shared injected HTTPS transport and RSS parser may remove duplication; source mapping/permissions remain separate. Parse functions never perform I/O. |
-| `storage/` | Keep V1 EvidenceRepository; add explicit versioned evidence/retrieval/state protocols for both representations with SQLite. Enforce immutable ID/content semantics and preserve source-local revisions. |
-| New `orchestration/` and CLI | Compose explicit adapters, transport and repositories, isolate failures, apply per-source budgets/checkpoints and return a run summary. This is a documented composition-layer exception to the current component dependency test, to be narrowly tested in the approved implementation. |
-| Later-stage packages | No change to triage, enrichment, analysis or reporting behavior. |
+| `core/` | Existing V1 unchanged; additive M1-01 metadata descriptors, later V2 source/derived artifact references, policy and manifest contracts. No network/storage implementation. |
+| `collectors/` | Independent CISA/Microsoft/Google mappings; injected shared transport, pure safe parsers and versioned deterministic HTML/text transforms. No concrete storage imports or cross-adapter imports. |
+| `storage/` | Separate reviewed protocols for V2/artifacts/state; implement existing V1 EvidenceRepository without changing its signature. Atomic source transactions and policy-aware retention. |
+| Future composition/CLI | Static registry, source budgets, failure isolation and diagnostics. Narrow tested import-boundary exception; no dynamic plugin loading or autonomous publication. |
+| Later-stage packages | No behavioral changes; human-led analysis/reporting and existing template authority preserved. |
 
-Use standard-library SQLite/UUID/hash tools, existing Pydantic contracts, a small
-maintained open-source HTTP client with streaming/timeouts, and a hardened XML
-parser (for example defusedxml). Pin and review any additions in uv.lock. HTTP
-client selection must demonstrate the SSRF controls below; a client library alone
-does not supply them. Avoid a broker, microservices, browser automation or dynamic
-plugin imports at this scale.
+Use existing Pydantic and standard-library SQLite/UUID/hash tools where suitable;
+review minimal pinned open-source HTTP/XML/HTML sanitization dependencies only in
+later approved increments. Avoid brokers, microservices and browser automation.
+No dependencies are added by this documentation revision.
 
-The [hybrid model](M1_EVIDENCE.md) defines common source/publisher/native identity,
-original URL and publication precision, retrieval/HTTP metadata, adapter/schema
-versions, policy references and revision lineage for both representations:
+[M1_EVIDENCE.md](M1_EVIDENCE.md) defines the proposed `catalog_entry` and
+`feed_full_text` modes, exact response versus extracted article distinctions,
+original/sanitized/plain-text digests, immutable revisions and availability. V1's
+required excerpt and narrow excerpt hash remain unchanged. Proposed V2 is additive;
+no metadata fallback, synthetic excerpt or silent migration. M1-01 still describes
+receipt/observations without bytes, retention claims or payload hashing behavior.
+A descriptor alone cannot validate permissions, source truth or cross-record state.
 
-- **Raw-snapshot-backed:** permitted complete CISA entity bytes, original fields,
-  response digest and exact source-item locators; backing availability is explicit.
-- **Metadata-only:** approved field projection plus optional permitted excerpt,
-  its retained-content digest and optional observed response digest. No raw artifact
-  association; a response hash is not an archived or independently reproducible body.
+## Storage, retention and capacity
 
-Keep existing V1 SourceItem/EvidenceRecord and Collector/FetchedDocument/
-EvidenceRepository shapes unchanged. V1's nonblank excerpt rule is not weakened.
-Propose additive EvidenceRevisionV2 in a later increment; never substitute a title,
-placeholder or generated summary as an excerpt. New retrieval descriptors in
-M1-01 record receipt, not storage; retention association occurs only after policy
-validation/commit. Schema versions are distinct from the milestone version.
+Propose SQLite content-addressed BLOBs for permitted complete responses, original
+items and required derivatives, alongside evidence, manifests, observations,
+policies, safe failures and checkpoints. Validate and transform the whole source
+batch before an atomic transaction; no network I/O within it. Failure does not
+advance validators. Same operation ID/content is a no-op; conflicts reject.
+Use foreign keys, single writer/run, explicit durable commits, schema checks,
+crash/disk-full tests and consistent backups. BLOB tradeoffs and the deferred
+separate-artifact alternative are explicit in [the storage design](M1_EVIDENCE.md).
 
-Distinguish complete 200 receipt, bodyless 304 checks and transport failures from
-successful processing/storage. An eligible 304 references the committed 200 and
-its valid processing manifest, not necessarily a retained raw body. No fresh
-per-item observation or publication date is created. D019 specifies both modes.
+All real source bodies remain in an approved private store outside Git, public
+web roots/sync, PR attachments, logs and CI artifacts. Owner-only paths, least
+privilege, encrypted host storage/backups and operator-controlled keys are required;
+SQLite itself is not encrypted by default. Log only safe codes/counts and bounded
+structural locators, not payload snippets or arbitrary exceptions. No real vendor
+fixtures. Unexpected restricted markings pause that source; no downgrade/export.
 
-D012 keeps immutable revision identity separate from retrieval observations.
-Repeated allowed retained content reuses an available revision; A→B→A adds history
-without editing parent links. Identity includes representation/profile and retained
-field digest, not retrieval time. Metadata equality does not prove article equality.
-Keep sources distinct; CISA absence is a presence event, RSS window absence is not
-retraction, and article/IOC URLs remain references that are never auto-fetched.
+Source-specific deadlines cover originals, derivatives, metadata, hashes, audit
+records and every backup. Revocation/expiry pauses acquisition, invalidates
+checkpoints and requires coordinated deletion; derivatives are not an escape from
+source restrictions. Verify purge/compaction of DB/free pages/WAL, temporary files,
+replicas and backup retirement; SQL DELETE alone is insufficient. Restore in
+isolation against current rights/deletion state. Cite unavailable evidence honestly.
+A proposed 365-day reporting target never overrides permissions or capacity.
 
-## Private persistence, retention and recovery
+Retain **2 GiB live-store cap**, warning at 80%, and **512 MiB/day transfer cap**;
+account for WAL/temporary write headroom and stop before exceeding capacity.
+At response maxima: 12 MiB/day of snapshots (~4.28 GiB/year). Including bounded
+original/derived item copies, the proposed upper budget is 32 MiB/day (~11.4
+GiB/year), before indexes/WAL. Thus 2 GiB cannot guarantee annual coverage and
+holds fewer than 64 maximum-budget days after overhead. Deduplication benefits
+must be measured, not promised. Capacity/retention conflicts require an explicit
+owner decision, never automatic expansion, purchase or silent evidence purge.
+Seven encrypted daily backups could add 14 GiB separately and must expire earlier
+when rights require. Host/operator, backup location and purge procedure remain open.
 
-D013/D019 propose one private SQLite database with foreign keys and atomic source
-batches: retained projections/evidence, retrieval descriptors, processing manifests,
-observations, source state, policy references and safe error/availability events.
-Only approved raw-backed acquisitions may store content-addressed BLOBs. Metadata-only
-writes accept typed projections, never vendor body bytes. Snapshots and records
-must share policy-aware ownership; a hash does not confer retention rights.
+## Polling, recovery and operational controls
 
-The [storage/lifecycle design](M1_EVIDENCE.md) specifies the two commit shapes,
-no I/O within transactions, operation idempotency, conflicting-ID rejection,
-crash/disk-full rollback, one writer/run, schema compatibility and consistent
-backup/restore. Do not use a second snapshot directory or orphan-file subsystem.
-A parser or storage failure never advances the successful checkpoint.
+Manual operation first after B2. After Gate C only, propose one scheduled cycle
+per source per day at 06:17 UTC (Ghana time), up to five minutes jitter, no overlap.
+A missed schedule produces at most one catch-up when eligible, not a burst. Persist
+the cycle/attempt budget across restarts: catch-up, restart and recovery must not
+create fresh allowances. Propose a minimum 24-hour interval between automatic
+cycle starts; a late catch-up can skip the next nominal tick. Manual/verification
+requests need their own explicit budget, not a loophole for repeated daily polling.
 
-Use a dedicated least-privilege account, owner-only files and encrypted host
-storage outside the checkout/web roots/public sync/Actions artifacts. SQLite is
-not encrypted by default. Vendor raw bytes stay in bounded memory only; prohibit
-spooling, caches, raw diagnostics and memory dumps. Validate the host's swap/dump
-and backup behavior before live use. Unexpected restricted markings stop that
-source with safe diagnostics; never downgrade, export or retain rejected raw
-vendor bytes for quarantine. See D020 for synthetic leak tests and host limits.
+One cycle normally makes one conditional GET using ETag/Last-Modified. A cycle is
+not one HTTP request: at most three top-level attempts include transient retries
+and at most one unconditional recovery request. Every redirect (max three) stays
+inside that attempt and the shared time/byte budget. No separate recovery cycle
+or extra immediate poll. The [checkpoint rules](M1_EVIDENCE.md) require intact,
+permitted full-text backing and manifest; a 304 creates only a check, not new
+content or per-item observations. Use retained originals for local reprocessing
+where possible. Changed rights pause, never trigger automatic re-acquisition.
 
-Retain the proposed CISA 365-day reporting target and 30-day unreferenced-artifact
-cap only within approved policy/capacity. Vendor metadata, excerpts, response hashes,
-HTTP metadata and audit records require their own maximum deadlines before B2;
-there is no inherited 365-day entitlement. No durable vendor raw retention.
-Rights changes/expiry apply to live rows, WAL/free pages and every backup. Preserve
-only independently permitted tombstones; invalidate affected checkpoints and mark
-citations unavailable. Approve/test deletion and isolated restore procedures before
-activation. A cited record does not override required deletion, and a 304 does not
-extend rights. Do not silently purge cited records just to create disk capacity.
+Keep 5-second connect, 20-second read, 60-second attempt and 180-second total source
+budgets including backoff, redirects, parsing/transforms and recovery; 10-minute
+run maximum. Retry only transient network errors, 429 and 5xx with exponential
+backoff/jitter. If Retry-After cannot fit, record next-eligible time and defer
+until both it and the next permitted cycle allow a request. 401/403/404, unsafe
+URLs and schema/parser/size errors do not retry; 403 pauses for access review,
+not repeated immediate retries. Suspend after three consecutive failed cycles.
+One source error leaves other sources runnable within their independent budgets.
 
-Keep the 2 GiB live-store cap, warning at 80%, 512 MiB/day transfer cap and proposed
-seven encrypted daily restore points at an approved private location. Stop before
-capacity instead of buying storage. CISA alone at 8 MiB/day of changed snapshots
-exceeds 2 GiB/year before records/indexes; metadata-first feeds reduce storage but
-not downloaded bytes. Measure pilot growth before selecting capacity/retention.
-Expiry may require retiring backups sooner than seven days. Operator, key handling,
-backup location and verifiable purge procedure are unresolved. Disable source/timer
-to stop collection; preserve still-permitted evidence and use compatible schemas/
-backups for code rollback, never blindly downgrade newer records.
+Use a descriptive versioned User-Agent such as `GhanaCTIPipeline/<version>` with a
+reviewed project contact URL, no personal identity or impersonation. Verify the
+exact UA/path and every redirect against applicable robots/access restrictions
+at onboarding and at least weekly or upon changes after activation. Policy checks
+also consume a separately bounded, approved request budget; uncertainty pauses.
+A publisher's stricter quota, no-automation rule or one-request limit overrides
+project maxima: reduce attempts/redirect/recovery or block activation, never infer
+permission from our default daily rule. No unauthorized proxy bypass.
 
-## Scheduling, retries and observability
+Private operational summaries: source/run/cycle ID, attempts, bytes, duration,
+new/unchanged/revised/rejected counts and safe error codes. Track last successful
+check separately from publication date; flag stale checks over 48 hours for human
+review without external messages. Actions remains offline lint/fixture CI, not
+scheduled ingestion or a public evidence archive. Disable source/timer to stop;
+preserve still-permitted evidence and use compatible schema/backups for rollback.
 
-Manual CLI is the first operating mode. After Gate C, propose a systemd timer on
-an existing approved private Linux host at **06:17 UTC daily** (06:17 Ghana time),
-with up to five minutes of jitter and a no-overlap lock. A missed run performs one
-catch-up, not a burst. A laptop that is off does not provide continuous coverage;
-do not call a transient development environment a production host.
+## Input and network security
 
-Poll approved endpoints sequentially once per run. D019's [conditional-request
-rules](M1_EVIDENCE.md) scope validators to the exact source/endpoint/request variant,
-supported Vary fields and unchanged processing profile. A fully committed 200
-manifest and intact retained records are required. Raw-backed mode also requires
-its verified artifact; metadata-only mode deliberately does not. A 304 records a
-check against that original 200, never another 304 or new item observations.
-Missing/corrupt required state allows one unconditional request within the remaining
-budget only if rights are still valid. Expired rights pause instead. No automatic
-re-fetch to restore deleted content. Unsupported Vary disables conditionals;
-unsupported no-store directives pause for policy review. No article-access or
-content-authenticity claim follows from an ETag, response hash or 304.
+- Exact approved HTTPS hosts/paths, port 443; no entry/IOC/HTML link requests.
+  Reject credentials, ambiguous hosts, IP literals and unapproved schemes/ports.
+- Resolve all A/AAAA and reject non-global/special ranges, metadata addresses and
+  IPv4-mapped IPv6. Bind to validated IPs with original hostname/SNI and verified
+  TLS certificate. Revalidate every redirect/retry; no second unchecked DNS lookup
+  or automatic redirects. Disable inherited proxies; reject explicit proxy mode
+  pending separate design. Use permitted direct egress, not environment bypass.
+- Independently cap wire-entity/decompressed bodies at 8 MiB KEV / 2 MiB RSS;
+  10,000 KEV / 500 feed items, UTF-8 only with optional BOM, depth 64, 32 KiB headers.
+  No DTDs/custom entities/external resources. Invalid/empty envelopes and duplicate
+  conflicting native IDs fail the whole batch. Empty valid RSS is not a retraction.
+- Preserve metadata caps: title 512, URL 4,096, identifier/publisher 256 (URL GUIDs
+  use URL cap), optional excerpt 65,536, other ingestion metadata 8,192 characters.
+  Separate proposed full-body/derived aggregate/node/attribute budgets and exact
+  safe transformation rules are in D024/[M1_EVIDENCE.md](M1_EVIDENCE.md). Reject
+  oversized full text, never truncate or silently switch representation.
+- HTML is inert, untrusted evidence. Sanitization never executes code, resolves
+  resources or grants publication rights; original and transformed content stay
+  distinct. No feed instructions can command the pipeline or an AI assistant.
+- No credentials for selected public routes, malware execution, raw errors in
+  logs or production fixtures. Keep source markings/private handling. Resolve
+  D009 inheritance and authenticated review before any exporter.
 
-Initial CISA fetch is the whole catalog; vendor feeds cover their current window
-only. No pagination or backfill. Source policy/robots checks remain part of B1
-and are refreshed at least weekly/when redirects or terms change after activation;
-uncertainty pauses that source. Checks do not authorize bypassing restrictions.
+## Costs and acceptance criteria
 
-D015 proposes 5-second connect, 20-second read, 60-second total attempt deadlines,
-maximum three top-level attempts and **180 seconds total per source**, including
-backoff, redirects and unconditional recovery, within the 10-minute run deadline.
-Redirects are bounded within the attempt, not fresh retry allowances. Retry only
-transient network errors, 429 and 5xx with exponential backoff/jitter; honor
-Retry-After by recording next-eligible time if it does not fit the budget. 401/403/
-404, unsafe URLs, schema/parser/size errors do not retry. Suspend after three
-consecutive failed runs pending review; a disabled source does not block others.
+Software/open public routes are proposed at $0 license/API charges; paid-service
+budget remains **$0**. Existing approved hardware still incurs electricity,
+connectivity and operator time. No host is purchased or selected here. At one
+cycle/day, about 90 primary GETs/month, ≤270 top-level attempts plus bounded
+redirect/policy requests; body maxima imply ~360 MiB/month primary or ~1,080 MiB
+with every attempt at cap, excluding headers/redirect/policy overhead. Stricter
+source restrictions can reduce these maxima. Measure before operational approval.
 
-To keep M1 reviewable, reject the whole source batch on any invalid item, conflicting
-source-native IDs or malformed envelope. Keep previous validators/checkpoints.
-Log safe failure code/count/locator only; locators must be bounded structural
-positions, not source text or raw exception messages. Discard rejected raw vendor
-bytes on every path. Only permitted raw-backed sources may retain rejected data
-under a separate policy. Other sources still run.
-Per-item quarantine, partial checkpoints and replay tooling are deferred. A valid
-empty RSS channel is a successful empty observation set, not a retraction;
-malformed/empty bodies and an invalid KEV count/envelope fail explicitly.
-
-Private operational summaries contain source ID, run ID, attempt count,
-new/unchanged/revised/rejected counts, duration, bytes and safe error codes.
-Exclude payloads, article titles, arbitrary exception text and credential URLs.
-Track last successful check separately from latest source publication; quiet
-feeds are not necessarily broken. Flag checks older than 48 hours for operator
-review, without automatically messaging external services.
-
-GitHub Actions stays lint/fixture CI. Hosted scheduled jobs can be delayed or
-dropped and public schedules can disable after inactivity; they also lack a
-chosen private durable evidence store. These are reasons to defer hosted ingestion,
-not to add a public database artifact. See [GitHub scheduling documentation](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
-
-## Security and input budgets (F3/F7)
-
-- Allowlist exact HTTPS endpoint hosts/paths from the approved source register,
-  port 443 only. Do not fetch links found in entries, IOCs, notes or HTML.
-- Reject userinfo, unexpected schemes/ports, IP literals and ambiguous hosts.
-  Resolve all A/AAAA records and reject loopback, private, link-local, multicast,
-  unspecified and other non-global ranges, including cloud metadata and IPv4-mapped
-  IPv6. Validate every redirect (maximum three) and connection destination; bind
-  the connection to validated resolved IPs while preserving the original TLS
-  hostname/SNI; test DNS changes between validation and connect. Revalidate each
-  hop and retry. No automatic library redirects or second unchecked DNS lookup.
-  Preserve TLS certificate/hostname verification. D014 proposes direct-only mode
-  with inherited proxy environment disabled and explicit proxy configuration
-  rejected. Proxy support is deferred pending a separately reviewed design.
-  Use an approved host with permitted direct egress;
-  this is not authorization to bypass the current environment proxy.
-- Limit transferred and decompressed bytes independently: **8 MiB per KEV body**,
-  **2 MiB per RSS body**, with bounded parser work and no automatic cap increase.
-  The KEV exception revises the earlier blanket 2 MiB proposal to allow catalog
-  growth; it is not a measurement of current wire size. Cap parsed items at 10,000
-  KEV entries and 500 feed entries per response; exceeding limits fails explicitly.
-- Proposed character limits: title 512, URL 4,096, identifier/publisher 256,
-  excerpt 65,536, other ingestion text 8,192. Source-native GUIDs use the URL cap
-  when they are URLs. Keep originals only when raw retention is approved; reject
-  oversize normalized fields instead of silently truncating evidence. Report-body
-  limits remain a later-stage decision; no reporting implementation in M1.
-- D015 proposes UTF-8 input only (optional UTF-8 BOM), maximum parser depth 64,
-  and response headers capped at 32 KiB. Unsupported encodings fail explicitly;
-  adapting to a verified vendor format requires review, not permissive fallback.
-  Disable DTDs, entities and external resource loading; reject malformed/deep
-  XML, decompression bombs and invalid JSON. Ignoring full-article fields never
-  bypasses byte/depth/item limits; default vendor projections omit them.
-  Treat embedded HTML as inert text, not as a reason to execute/fetch anything.
-  Never render scripts or feed
-  instructions; any future display needs separate escaping.
-- Keep credentials absent for these public routes; any future secret requires
-  separate approval, environment/secret-store injection and least privilege.
-  Use synthetic public fixtures. No malware samples, sensitive source dumps,
-  production snapshots or raw failures in Git or CI.
-- TLP metadata is not access control. Keep all M1 evidence private; F4 inheritance
-  and authenticated human publication approval must be resolved before an exporter.
-
-## Cost and capacity proposal
-
-| Item | Expected cost / ceiling |
+| ID | Full-text acceptance requirement / tests (not yet met) |
 | --- | --- |
-| Software, KEV/public RSS routes | $0 license/API charges proposed; no paid APIs, LLMs or purchases enabled |
-| Existing approved host | $0 incremental service spend; electricity, connectivity, operator time and existing hardware are not free and are not priced here |
-| Volume | Three endpoints × one daily run ≈ 90 primary fetches/month; up to 270 attempts with retries, plus bounded policy checks. At body caps, about 360 MiB/month without retries or 1,080 MiB with all attempts at cap, before bounded redirect/header/policy overhead. |
-| Private storage/backups | 2 GiB live cap; seven full backups could add up to 14 GiB. Provision only on existing approved encrypted storage; otherwise pause for a storage decision. |
-| GitHub CI | Standard public-repository runners are currently free; no ingestion artifacts, larger runners or new paid storage. [GitHub billing documentation](https://docs.github.com/en/billing/concepts/product-billing/github-actions) |
-| Future always-on hosting | Not selected or purchased. A $5–10/month planning allowance could be considered later, not a verified vendor quote or authorized spend. |
+| M1-AC1 | Three cleared source records with lawful full-text scope, approved policies/retention, B1 reconfirmation and B2 activation. Unresolved vendor rights or partial field content blocks completion; no metadata substitution. |
+| M1-AC2 | Independently replaceable adapters and pure transforms; dependency tests prohibit adapter-to-storage/cross-adapter imports. Composition exception narrow and reviewed. |
+| M1-AC3 | Round-trip all provenance and complete permitted source content; verify response/item/derived digests separately, date precision, transformation parents/versions and explicit availability. Original/sanitized/plain text never conflated. |
+| M1-AC4 | Repeat/reorder/restart idempotency; original-content changes create immutable revisions even with identical sanitized output; A→B→A reuses available A; transform upgrades append derivations; no retraction inferred from RSS window. |
+| M1-AC5 | Offline clocks prove one automatic cycle/24 hours, persisted retry budget, three-attempt maximum including recovery, Retry-After deferral, immediate 403 pause, publisher-stricter limits and source failure isolation. |
+| M1-AC6 | SSRF/DNS/TLS/redirect/proxy tests plus safe XML/HTML encoding/entity/depth/size/mutation-XSS tests; no active tags/attributes/resources in sanitized output and no link fetched. Exact/over-limit cases fail safely. |
+| M1-AC7 | Atomic source/derived artifacts and checkpoint rollback on crash/disk-full/transform failure; valid 304 requires all required backing; corruption, revocation, deletion, WAL/backup expiry and isolated restore tested. No bodies leak into logs/public artifacts. |
+| M1-AC8 | V1 contracts/excerpt rules and report template unchanged; no AI analysis, attribution, Ghana claims or publication. Original analyst output only after later rights/review/TLP gates; private full text never public output. |
+| M1-AC9 | Explicit capacity decision if rights/retention exceed 2 GiB; approved private-host/key/operator/backup checks and manual pilot before separately approved schedule. Stop/disable/recovery procedures verified. |
+| M1-AC10 | Ruff/format/offline pytest on supported CI versions, only tracked F4 xfail; synthetic fixtures and current status/decision/handoff records. No documentation merge implies implementation approval. |
 
-The proposed hard incremental paid-service budget is **$0** until the owner
-approves a different budget. Record actual request counts, disk usage and run
-duration during the manual pilot; revisit assumptions before increasing cadence.
+## Implementation sequence and stopping point
 
-## Acceptance criteria (not yet met)
-
-| ID | Requirement | Verification required in implementation PRs |
-| --- | --- | --- |
-| M1-AC1 | Approved scope and all three source onboarding records | Versioned approval plus per-source endpoint, terms/retention, robots and runtime evidence. If a source cannot be cleared, obtain an explicit revised scope; do not silently declare completion. |
-| M1-AC2 | Adapters independently replaceable | Fixture tests for each adapter and a narrow dependency test for the composition layer; no adapter-to-storage or cross-adapter concrete imports. |
-| M1-AC3 | Provenance survives persistence | Round-trip approved fields, source URLs/native IDs, date precision, retrieval/HTTP metadata, policy and adapter/schema versions for both representations. Verify raw and retained digests separately; metadata-only records never imply an archive. Missing dates remain unknown. |
-| M1-AC4 | Idempotency and source changes | Replaying a response creates no duplicate evidence; changed retained fields create a revision linked to the logical source key/history; A→B→A reuses available A; metadata equality never asserts article equality; reordering/304/restart does not change identity; conflicting IDs reject; RSS disappearance does not delete evidence. |
-| M1-AC5 | Failure isolation and bounded retries | Fake transport proves timeout/429/5xx budgets and Retry-After deferral; permanent errors do not loop; one source/parser failure leaves other sources successful; partial runs are reported honestly. |
-| M1-AC6 | Fetch and parser safety | Tests cover redirect-to-private hosts, DNS rebinding strategy, IPv4/IPv6 special ranges, TLS verification, unexpected proxies, DTD/entity input, malformed/deep XML, compression and every size boundary (at/above limit). No untrusted link is fetched. |
-| M1-AC7 | Safe durable state | Temporary-store tests for both commit shapes, same-ID conflict, foreign keys, crash/disk-full rollback, idempotent retry and locking; metadata-only 304 works without raw bytes, raw-backed 304 fails without required backing; no raw vendor content in DB/WAL/backup/log/artifact; source-specific expiry and isolated restore tested. |
-| M1-AC8 | Honest scope and human boundary | No LLM, enrichment, attribution, report generation or exporter; unknown confidence/Ghana relevance/TLP preserved; existing draft-only and human-role tests remain green. |
-| M1-AC9 | Operational pilot | After explicit B1 verification approval and B2 manual activation, one approved manual run per source plus repeat/conditional check, bounded and privately recorded. After Gate C only, validate timer, missed-run behavior, stale checks and disable/rollback procedure. |
-| M1-AC10 | Reproducible review | V1 shapes/excerpt validation remain unchanged; additive V2 supports absent excerpts. Ruff check/format and pytest pass on CI Python versions; offline tests block real network; only the explicitly tracked F4 xfail remains unless separately resolved; update contracts, status, decisions and handoff with actual results. |
-
-## Implementation sequence and approval request
-
-The [ordered PR plan](M1_READINESS.md) follows contracts → identity → SQLite and
-recovery → transport/parsing → separate adapters → manual CLI/offline integration
-→ separately approved source verification/manual activation → separately approved
-scheduling. Each increment has dependencies and acceptance tests. Host/rights
-selection blocks live work, not approved synthetic core or temporary-store tests.
-
-**Recommended first approval is M1-01 only under v1.2/D011 and the descriptor
-portion of D019:** additive core retrieval/observation metadata contracts,
-synthetic fixtures, focused offline
-tests and related documentation; preserve existing V1 shapes/protocols and add
-no dependencies. This does not approve V2 evidence implementation, hashing behavior,
-persistence, transport, parsing, adapters,
-live requests, deployment, scheduling, paid services or later increments.
-
-D018 accepts strategic direction only; D004–D008, D011–D017 and D019/D020 remain
-proposed; D021 is open. Review the explicit changes and record
-actual approval/version/scope in DECISIONS before writing code. Until then, the
-next authorized work is documentation revision only. No source content is fetched
-or archived during this readiness task.
+The [PR plan](M1_READINESS.md) keeps M1-01 descriptors first and unapproved, then
+V2 full-text contracts, identities, SQLite/recovery, hardened transport, safe
+parsing/transforms, independent adapters and manual offline integration. B1/B2
+verification/activation and Gate C scheduling remain separately approved work.
+The owner will record any M1-01 approval in a GitHub PR comment. Until then, only
+documentation review is authorized; no source/network or implementation work.
