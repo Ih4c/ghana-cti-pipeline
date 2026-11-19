@@ -3,7 +3,9 @@
 Design **1.1**, 2026-11-19; companion to [M1 v1.3](M1_COLLECTION.md).
 D022 accepts full-text collection as the strategic target, superseding D018's
 metadata-first vendor target. D023 records owner-reported terms findings and risk
-acceptance, not legal clearance. The technical design remains proposed. No source
+acceptance, not legal clearance. Only M1-01 retrieval/observation descriptors have
+[scoped approval](../DECISIONS.md#verified-m1-01-authorization--2026-11-19);
+the remaining technical design stays proposed. No source
 requests, terms lookups or live verification were performed for this revision.
 
 ## Source coverage and rights gates

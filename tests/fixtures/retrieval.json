@@ -1,0 +1,71 @@
+{
+  "description": "Fabricated M1-01 metadata only. Digests and IDs are synthetic declarations, not retrieved evidence.",
+  "received": {
+    "schema_version": "1.0",
+    "kind": "received_response",
+    "retrieval_id": "00000000-0000-4000-8000-000000000101",
+    "source_id": "synthetic-source",
+    "requested_url": "https://example.org/feed?b=2&a=%2f",
+    "final_url": "https://example.org/feed?b=2&a=%2f",
+    "redirect_urls": [],
+    "started_at": "2026-01-15T10:30:00Z",
+    "ended_at": "2026-01-15T10:30:01Z",
+    "status": 200,
+    "returned_etag": "\"synthetic-v1\"",
+    "returned_last_modified": "Thu, 15 Jan 2026 10:00:00 GMT",
+    "cache_control": "max-age=3600",
+    "vary": "Accept-Encoding",
+    "body_metadata": {
+      "schema_version": "1.0",
+      "kind": "response_body_metadata",
+      "decoded_bytes": 100,
+      "transferred_bytes": 80,
+      "media_type": "application/rss+xml",
+      "content_encoding": "gzip",
+      "digest": {
+        "schema_version": "1.0",
+        "digest_state": "computed",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "domain": "decoded-http-entity-v1"
+      }
+    }
+  },
+  "not_modified": {
+    "schema_version": "1.0",
+    "kind": "not_modified_response",
+    "retrieval_id": "00000000-0000-4000-8000-000000000102",
+    "source_id": "synthetic-source",
+    "requested_url": "https://example.org/feed?b=2&a=%2f",
+    "final_url": "https://example.org/feed?b=2&a=%2f",
+    "started_at": "2026-01-16T10:30:00Z",
+    "ended_at": "2026-01-16T10:30:01Z",
+    "status": 304,
+    "sent_etag": "\"synthetic-v1\"",
+    "representation_retrieval_id": "00000000-0000-4000-8000-000000000101"
+  },
+  "failure": {
+    "schema_version": "1.0",
+    "kind": "retrieval_failure",
+    "retrieval_id": "00000000-0000-4000-8000-000000000103",
+    "source_id": "synthetic-source",
+    "requested_url": "https://example.org/feed",
+    "started_at": "2026-01-17T10:30:00Z",
+    "ended_at": "2026-01-17T10:30:20Z",
+    "status": null,
+    "code": "timeout",
+    "retryable": true
+  },
+  "observation": {
+    "schema_version": "1.0",
+    "kind": "evidence_observation",
+    "observation_id": "00000000-0000-4000-8000-000000000104",
+    "retrieval_id": "00000000-0000-4000-8000-000000000101",
+    "evidence_id": "00000000-0000-4000-8000-000000000002",
+    "evidence_kind": "v1",
+    "evidence_schema_version": "1.0",
+    "locator": "/rss/channel/item[1]",
+    "adapter_version": "synthetic-1.0",
+    "source_policy_id": "synthetic-policy",
+    "source_policy_version": "1.0"
+  }
+}

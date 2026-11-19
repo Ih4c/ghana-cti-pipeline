@@ -1,16 +1,15 @@
 # M1 implementation readiness and PR execution plan
 
 Review **1.2**, 2026-11-19. Target: **M1 v1.3 full-text proposal**.
-Verified main `ccd81278472c7847287ffcf20988629435f2c999` is PR #6's merge.
-No later main commit or open PR existed at this task's start. An unfinished local
-v1.2 M1-01 draft was preserved separately; it is not delivered on main, included
-in this documentation branch, or authorized to continue under this v1.3 task.
+Planning baseline was PR #6's merge. PR #7 subsequently merged this review at
+`3c257a6f05ff5c5aaf7968aa8df50ca26f3349c7`, verified 2026-11-19.
+The older unfinished local v1.2 draft remains preserved separately.
 No source requests or new runtime/terms verification occurred.
 
-D022 accepts full-text collection as the strategy, superseding D018's vendor
-metadata-first target. D023 records owner-reported rights concerns/risk acceptance;
-rights clearance and all implementation/operational gates remain unresolved.
-The owner will record any M1-01 approval separately in a GitHub PR comment.
+D022 accepts full-text collection as the strategy; D023 records risk acceptance,
+not rights clearance. The [owner approval on PR #7](https://github.com/Ih4c/ghana-cti-pipeline/pull/7#issuecomment-6996754396) subsequently authorizes only
+M1-01 under v1.3. See [STATUS.md](../STATUS.md) for implementation review state.
+All later implementation and operational approvals remain pending.
 
 ## Changes affecting readiness
 
@@ -31,11 +30,11 @@ inheritance remains open. No F5-wide cleanup, F6 tooling or report implementatio
 
 ## M1-01: offline retrieval and observation descriptors only
 
-State: **unapproved**. Prerequisite: explicit owner approval in a GitHub PR comment
-of **M1-01 under M1 v1.3 / D011 and the
+State: **approved for implementation; implementation pending PR review**.
+The owner comment above approves **M1-01 under M1 v1.3 / D011 and the
 retrieval/observation portion of D019**. No V2 evidence implementation, storage,
-network or parser approval is implied. Suggested title: **Add retention-neutral
-retrieval and observation contracts with synthetic fixtures**.
+network or parser approval is implied. Implementation title: **Implement M1-01 retention-neutral retrieval and
+observation contracts**.
 
 Scope: one additive module under `core/`, synthetic JSON fixtures, focused tests
 and contract/status documentation. Existing `models.py`, V1 fixtures and
@@ -97,7 +96,8 @@ SQLite, checkpoint logic, DNS, transport, parser, adapter or retry behavior here
 
 Every increment requires separately recorded owner approval naming its version
 and scope; dependency merges alone grant none. M1-01 remains a small offline
-contract PR. No implementation is included here. M1-02a is the next contract
+contract PR; its [contract reference](../M1_RETRIEVAL_CONTRACTS.md) documents
+the implementation. M1-02a is the next contract
 design only after M1-01 is approved/delivered; it does not imply source rights.
 
 Common constraints for M1-01 through M1-10: synthetic fixtures, blocked real
@@ -105,7 +105,7 @@ network, temporary test stores only, no real source bodies or production paths,
 no paid services/deployment/scheduling/publication, no template/report changes,
 and unchanged V1/protocol compatibility. CI Ruff/format/pytest remain required.
 Later HTTP/XML/HTML dependencies must be minimal, open source, reviewed and pinned.
-Each row lists additional scope/tests/exclusions; all approvals currently pending.
+Each row lists additional scope/tests/exclusions; only M1-01 is approved.
 
 | Increment / components | Prerequisites / approval | Scope and acceptance tests | Additional exclusions / rights boundary |
 | --- | --- | --- | --- |
@@ -139,9 +139,9 @@ private host/operator, keys, purge/backup/restore and report-level rights need
 review at their respective gates. Template artifact/license, evidence sufficiency
 and D009 inheritance remain later reporting blockers.
 
-**M1-01 is unapproved under v1.3.** The owner will record any approval separately
-in a GitHub PR comment, naming the offline retrieval/observation scope. Do not
-carry an earlier v1.2 approval or unfinished draft forward as authorization.
-Current scope ends with this documentation PR. No source requests, code, storage,
-transport, parsers, collectors, schedule, deployment or publication are authorized.
+**M1-01 alone is approved under v1.3** by the linked owner comment. Its
+implementation PR ends with offline contracts, synthetic fixtures/tests and docs.
+M1-02a requires separate approval of D019/D024 full-text contracts after M1-01
+review/merge. No source requests, storage, transport, parsers, collectors,
+schedule, deployment or publication are authorized.
 Use the permanent [handoff procedure](../HANDOFF.md) and [STATUS.md](../STATUS.md).
