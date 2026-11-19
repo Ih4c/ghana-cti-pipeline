@@ -54,11 +54,12 @@ ingestion API. Breaking changes need a new schema version and an
 explicit migration, never a silent reinterpretation of old evidence.
 
 The proposed [full-text M1 extension](milestones/M1_EVIDENCE.md) does not change
-these V1 rules or force complete articles into V1 excerpts. Later additive V2
-would associate permitted original source content, sanitized/plain-text derivatives,
-independent digests and version-aware lookup; none of that V2 behavior is implemented.
-The separately approved [M1-01 descriptors](M1_RETRIEVAL_CONTRACTS.md) are additive
-and pending PR review. Response hashes do not imply archived or lawful content.
+these V1 rules or force complete articles into V1 excerpts. Additive V2
+associates permitted original source content and sanitized/plain-text references.
+The approved [M1-02a data contracts](M1_EVIDENCE_CONTRACTS.md) are implemented for
+review; digest calculation, storage and version-aware lookup remain future work.
+The additive [M1-01 descriptors](M1_RETRIEVAL_CONTRACTS.md) are delivered by PR #8.
+Response hashes do not imply archived or lawful content.
 
 | Contract | Meaning and preserved information |
 | --- | --- |

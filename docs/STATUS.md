@@ -1,8 +1,8 @@
 # Project status
 
 Last reviewed: **2026-11-19**. Repository: `Ih4c/ghana-cti-pipeline`.
-Verified main **3c257a6f05ff5c5aaf7968aa8df50ca26f3349c7** is
-[PR #7](https://github.com/Ih4c/ghana-cti-pipeline/pull/7)'s completed merge;
+Verified main **9e30ab5a3d88352f97fd7fa64ea2a676097e0e72** is
+[PR #8](https://github.com/Ih4c/ghana-cti-pipeline/pull/8)'s completed merge;
 Git and GitHub agree. No later main changes were present at this task's start.
 Always fetch current main on resumption; this is a dated snapshot.
 
@@ -15,26 +15,26 @@ Always fetch current main on resumption; this is a dated snapshot.
 | Readiness and hybrid documentation | Merged planning history | [PR #5](https://github.com/Ih4c/ghana-cti-pipeline/pull/5), [PR #6](https://github.com/Ih4c/ghana-cti-pipeline/pull/6); v1.2 metadata-first vendor strategy now superseded |
 | Full-text direction | Accepted strategy only, D022 | Complete permitted CISA fields and vendor RSS articles; report template/human workflow unchanged |
 | Owner risk acknowledgement | Recorded, D023; rights unresolved | Owner-reported terms findings and acceptance do not confer license, exception or permission to ignore restrictions |
-| M1 v1.3 technical design | PR #7 merged; **M1-01 approved only**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
-| M1-01 implementation | Feature branch `feat/m1-01-v1-3`, pending PR review/merge | Five [retrieval/observation contracts](M1_RETRIEVAL_CONTRACTS.md), discriminated outcomes, synthetic fixtures/tests; no I/O |
+| M1 v1.3 technical design | PR #7 merged; **M1-01 and M1-02a contracts approved only**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
+| M1-01 implementation | Delivered by PR #8 | Five [retrieval/observation contracts](M1_RETRIEVAL_CONTRACTS.md), discriminated outcomes, synthetic fixtures/tests; no I/O |
+| M1-02a implementation | Feature branch `feat/m1-02a-full-text-contracts`, pending PR review/merge | [V2 evidence, artifact, policy and manifest contracts](M1_EVIDENCE_CONTRACTS.md); synthetic tests only |
 | M2–M5 | Roadmap only | No implementation or publication approval |
 
-Verified main implements the foundation only: 73 passing tests and one strict
-TLP-inheritance xfail. This implementation branch adds offline M1-01 descriptors;
-it is not yet delivered on main. No V2 evidence, collectors, storage, HTTP/HTML
-processing, scheduler or publisher exists. The unfinished local v1.2 draft is
-preserved in its original worktree and must not be mistaken for delivered work.
+Verified main delivers the foundation and M1-01 (500 passed, one existing strict
+TLP xfail). This branch adds M1-02a data contracts and tests; it is not delivered
+on main yet. No collectors, storage, HTTP/HTML processing, scheduler or publisher
+exists. The unfinished v1.2 draft remains preserved in its original worktree.
 
 ## Blockers and decisions
 
-1. **M1-01 alone approved.** The
-   [owner comment on PR #7](https://github.com/Ih4c/ghana-cti-pipeline/pull/7#issuecomment-6996754396)
-   explicitly approves M1-01 under v1.3, D011 and D019 retrieval/observation
-   descriptors only: additive offline core contracts, synthetic fixtures, focused
-   tests and related documentation. Author and scope were verified before code
-   edits. No EvidenceRevisionV2, persistence, transport, parsers, live source
-   access, scheduling, deployment or publication is authorized. This task stops
-   at the implementation PR; review/merge remains with the owner.
+1. **M1-02a contract scope approved.** The
+   [owner comment on PR #8](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
+   explicitly approves M1-02a under v1.3, covering D019/D024 data-only evidence,
+   artifact-reference, provenance, source-policy and processing-manifest contracts,
+   synthetic tests and documentation. Author/scope and the PR #8 merge were
+   verified before application edits. All exclusions remain: no persistence,
+   networking, feed processing, transforms, hash/ID generation or operations.
+   This task stops at the implementation PR for independent review.
 2. **Full-text rights unresolved.** Microsoft use/copying/distribution/publication
    restrictions are owner-reported and historically noted; applicable Google/
    FeedBurner terms and robots need review. Establish lawful access, retention,
@@ -49,10 +49,12 @@ preserved in its original worktree and must not be mistaken for delivered work.
    in [feasibility](milestones/M1_SOURCE_FEASIBILITY.md). No source network access
    or new terms verification occurred in this revision. CISA remains the strongest
    initial verification candidate, not an enabled source.
-4. **Technical choices proposed.** D004–D008, D012–D017, D019 beyond descriptors, D020 and D024 still
+4. **Technical choices proposed.** D004–D008, D012–D017, D019/D024 beyond data contracts and D020 still
    need their scoped approvals. Review V2 original/derived associations, identity,
    sanitizer/encoding limits, atomic SQLite/304/reprocessing, retention and purge.
-   D018 collection strategy superseded; D009/D021 remain open.
+   D018 collection strategy superseded; D009/D021 remain open. D025 wire bindings
+   are implemented for review; D026 source-revision versus derivation identity
+   must be resolved before M1-02b, without silently changing immutable history.
 5. **Capacity and operations unresolved.** Keep 2 GiB live cap and $0 paid-service
    budget. Up to 32 MiB/day before overhead cannot fit annual retention. Explicitly
    decide lawful retention/capacity after approved measurements; never increase
@@ -71,25 +73,26 @@ cleared sources or an explicit owner scope revision.
 ## Review follow-ups and handoff
 
 F1/F2 delivered by PR #3. F3 input caps are still unenforced in existing V1/fetch
-interfaces; full-text budgets remain proposals. F4 strict TLP xfail blocks export.
+interfaces; M1-02a validates declared full-text byte/count bounds; runtime enforcement is future work. F4 strict TLP xfail blocks export.
 F5-wide V1 hardening/F6 tooling remain separate. F7 URL syntax is not SSRF defense;
 no transport protections are implemented yet.
 
 ## Implementation validation and next handoff
 
-The implementation adds `core/retrieval.py`, `tests/fixtures/retrieval.json` and
-`tests/test_retrieval.py`, with related contract/coordination documentation.
-Existing V1 code/fixtures, protocols, network guard, dependency checks,
+The implementation adds five independent core modules (`evidence_values`,
+`artifacts`, `evidence`, `source_policy`, `processing`), synthetic evidence fixtures,
+two test modules and [contract documentation](M1_EVIDENCE_CONTRACTS.md). Existing
+V1/M1-01 code and fixtures, protocols, network guard, dependency checks,
 dependencies, CI configuration and report template remain unchanged.
 
-Local Python 3.14 validation: **500 passed, one existing strict TLP xfail**;
-Ruff lint/format, explicit dependency-boundary tests, repository Markdown link
-checks and `git diff --check` pass. See the implementation PR for the committed
-head and review results. No source requests, real feed fixtures, storage,
-deployment, schedule, paid service, reporting or merge occurred.
+Local Python 3.14.10: **663 passed, one existing strict TLP xfail**. Ruff lint
+and format checks pass; explicit dependency tests: **15 passed**. All **133 local
+Markdown links/anchors** and `git diff --check` pass. No source requests,
+real feed fixtures, storage, deployment, schedule, paid service, reporting or merge
+occurred. Commit author/committer must remain the required `ih4c` identity.
 
-Follow [HANDOFF.md](HANDOFF.md) and [DECISIONS.md](DECISIONS.md). Recommended next
-increment is **M1-02a**, additive full-text evidence/policy/manifest contracts and
-synthetic tests after M1-01 review/merge and separate D019/D024 scope approval.
-Cross-record checks, identities, rights enforcement and all runtime gates remain
-future work; M1-01 approval does not carry forward.
+Follow [HANDOFF.md](HANDOFF.md) and [DECISIONS.md](DECISIONS.md). Recommended next:
+**M1-02b identity and digest helpers**, after review/merge, explicit scope approval
+and resolution of D026. Canonical profiles, namespaces and test vectors remain
+unimplemented. Metadata validation does not verify rights, stored bytes, current
+availability, repository-wide identities or conditional-checkpoint eligibility.

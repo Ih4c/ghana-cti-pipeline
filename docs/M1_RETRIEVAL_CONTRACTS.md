@@ -1,7 +1,7 @@
 # M1-01 retrieval and observation contracts
 
 Implemented in [core/retrieval.py](../src/ghana_cti_pipeline/core/retrieval.py),
-pending PR review; see [STATUS.md](STATUS.md). The
+delivered by [PR #8](https://github.com/Ih4c/ghana-cti-pipeline/pull/8); see [STATUS.md](STATUS.md). The
 [owner approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/7#issuecomment-6996754396)
 covers only M1-01 under M1 v1.3, D011 and the descriptor portion of D019.
 The [readiness specification](milestones/M1_READINESS.md) remains authoritative.
