@@ -433,15 +433,21 @@ def test_v1_and_m1_01_fixtures_remain_compatible(records):
 @pytest.mark.parametrize("field", ["decoded_bytes", "transferred_bytes"])
 def test_feed_evidence_enforces_response_cap(examples, field):
     data = examples["microsoft"]
-    data["provenance"]["first_acquisition"]["body_metadata"][field] = 2 * 1024 * 1024
+    data["provenance"]["first_acquisition"]["body_metadata"][field] = 6 * 1024 * 1024
     if field == "decoded_bytes":
-        data["response"]["byte_count"] = 2 * 1024 * 1024
-    EVIDENCE.validate_python(data)
+        data["response"]["byte_count"] = 6 * 1024 * 1024
+    record = EVIDENCE.validate_python(data)
+    assert EVIDENCE.validate_json(record.model_dump_json()) == record
     data["provenance"]["first_acquisition"]["body_metadata"][field] += 1
     if field == "decoded_bytes":
         data["response"]["byte_count"] += 1
     with pytest.raises(ValidationError, match="RSS"):
         EVIDENCE.validate_python(data)
+    for deep in (False, True):
+        with pytest.raises(ValidationError, match="RSS"):
+            record.model_copy(
+                update={"provenance": data["provenance"], "response": data["response"]}, deep=deep
+            )
 
 
 def test_catalog_and_publication_specific_boundaries(examples):

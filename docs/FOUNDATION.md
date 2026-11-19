@@ -114,8 +114,8 @@ requirement, not a guarantee of this scaffold. Before live ingestion, approve
 per-field character limits (identifiers, URLs, titles, excerpts, rationales and
 report bodies) and byte limits for fetched bodies, including decompressed data.
 The current [M1 specification](milestones/M1_COLLECTION.md) proposes text caps
-and source-specific body caps (8 MiB KEV, 2 MiB RSS), revising the earlier blanket
-2 MiB proposal. Source feasibility must confirm these before activation. Report
+and source-specific body caps (8 MiB KEV, 6 MiB RSS under D027), superseding earlier 2 MiB
+RSS limits. Source feasibility must confirm these before activation. Report
 body limits remain a later reporting decision. Enforce body limits while
 streaming and after decompression, reject oversized input without silent
 truncation, and test at/above each limit before any collector is enabled.

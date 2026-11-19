@@ -12,6 +12,12 @@ M1-01 under v1.3. See [STATUS.md](../STATUS.md) for implementation review state.
 Subsequent [M1-02a approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
 covers D019/D024 data contracts only. M1-02b onward and operational gates remain pending.
 
+The subsequent [D027 owner decision](https://github.com/Ih4c/ghana-cti-pipeline/issues/10#issuecomment-7008185129)
+approves only the 6 MiB RSS response/representation-aggregate amendment and synthetic
+boundary tests. Keep 1 MiB per article and generic 8 MiB limits. B1 measurement
+does not block this numeric change, but remains required to confirm headroom;
+no source access, new runtime components or operational gate is approved.
+
 ## Changes affecting readiness
 
 | v1.2 assumption | v1.3 proposal / consequence |
@@ -21,7 +27,7 @@ covers D019/D024 data contracts only. M1-02b onward and operational gates remain
 | Metadata-only 304 can omit raw backing | Current full-text target requires intact permitted original/derived artifacts and manifest. Corruption invalidates checkpoint; rights expiry pauses, without automatic re-fetch. |
 | Article changes may be invisible to metadata identity | Original selected body participates in source revision identity. Sanitizer changes create linked immutable derivatives; do not overwrite originals or historical transforms. |
 | No HTML transformation capability needed | Separate pure sanitization/text-extraction increment, D024. Retain original feed field, sanitized HTML and plain text with independent hashes/parents/versions. No rendering, resource loads or article crawling. |
-| Storage volume is mostly CISA plus metadata | Full-text/derived budget up to 32 MiB/day before overhead, versus unchanged 2 GiB cap. Capacity/retention choice is a live gate, never implicit expansion. |
+| Storage volume is mostly CISA plus metadata | Full-text/derived budget up to 64 MiB/day before overhead, versus unchanged 2 GiB cap. Capacity/retention choice is a live gate, never implicit expansion. |
 | Daily polling versus retry/recovery unclear | One automatic cycle per source/24 hours; attempts, redirects, restart and recovery share persisted budgets. Publisher limits can be stricter; 403 pauses, 429 defers. |
 
 The [evidence/rights design](M1_EVIDENCE.md) supplies precise proposed fields,

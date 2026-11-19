@@ -194,8 +194,8 @@ class FeedFullTextEvidenceRevision(_EvidenceRevision):
         if self.original.locator != self.provenance.locator:
             raise ValueError("feed field locator mismatch")
         body = self.provenance.first_acquisition.body_metadata
-        if max(body.decoded_bytes, body.transferred_bytes) > 2 * 1024 * 1024:
-            raise ValueError("RSS response exceeds the 2 MiB cap")
+        if max(body.decoded_bytes, body.transferred_bytes) > 6 * 1024 * 1024:
+            raise ValueError("RSS response exceeds the 6 MiB cap")
         return self
 
 

@@ -147,15 +147,37 @@ def test_manifest_contradictions_reject(examples, mutation):
 @pytest.mark.parametrize("kind", ["original_html", "sanitized_html", "plain_text", "catalog_entry"])
 def test_aggregate_byte_limit_exact_and_above(examples, kind):
     mode = "catalog_entry" if kind == "catalog_entry" else "feed_full_text"
-    data = batch(examples, mode, 3)
-    cap = 8 * 1024 * 1024 if mode == "catalog_entry" else 2 * 1024 * 1024
+    data = batch(examples, mode, 9)
+    cap = 8 * 1024 * 1024 if mode == "catalog_entry" else 6 * 1024 * 1024
     matching = [a for a in data["artifacts"] if a["kind"] == kind]
-    matching[0]["byte_count"] = cap // 2
-    matching[1]["byte_count"] = cap // 2 - 1
-    matching[2]["byte_count"] = 1
+    # Isolate the aggregate bound: every individual field stays at or below 1 MiB.
+    for artifact in matching[:-1]:
+        artifact["byte_count"] = cap // 8
+    matching[-2]["byte_count"] -= 1
+    matching[-1]["byte_count"] = 1
     ProcessingManifest.model_validate(data)
-    matching[2]["byte_count"] = 2
+    matching[-1]["byte_count"] = 2
     with pytest.raises(ValidationError, match="aggregate"):
+        ProcessingManifest.model_validate(data)
+
+
+def test_rss_aggregate_caps_are_independent(examples):
+    data = batch(examples, "feed_full_text", 6)
+    for artifact in data["artifacts"]:
+        artifact["byte_count"] = 1024 * 1024
+    record = ProcessingManifest.model_validate(data)
+    assert sum(a.byte_count for a in record.artifacts) == 18 * 1024 * 1024
+    assert ProcessingManifest.model_validate_json(record.model_dump_json()) == record
+
+
+@pytest.mark.parametrize("kind", ["original_html", "sanitized_html", "plain_text"])
+def test_rss_item_cap_remains_one_mib(examples, kind):
+    data = batch(examples, "feed_full_text", 1)
+    artifact = next(a for a in data["artifacts"] if a["kind"] == kind)
+    artifact["byte_count"] = 1024 * 1024
+    ProcessingManifest.model_validate(data)
+    artifact["byte_count"] += 1
+    with pytest.raises(ValidationError, match="1048576"):
         ProcessingManifest.model_validate(data)
 
 
@@ -182,15 +204,21 @@ def test_manifest_count_strictness(examples, value):
 @pytest.mark.parametrize("field", ["decoded_bytes", "transferred_bytes"])
 def test_rss_response_cap_in_manifest(examples, field):
     data = examples["manifest"]
-    data["retrieval"]["body_metadata"][field] = 2 * 1024 * 1024
+    data["retrieval"]["body_metadata"][field] = 6 * 1024 * 1024
     if field == "decoded_bytes":
-        data["response"]["byte_count"] = 2 * 1024 * 1024
-    ProcessingManifest.model_validate(data)
+        data["response"]["byte_count"] = 6 * 1024 * 1024
+    record = ProcessingManifest.model_validate(data)
+    assert ProcessingManifest.model_validate_json(record.model_dump_json()) == record
     data["retrieval"]["body_metadata"][field] += 1
     if field == "decoded_bytes":
         data["response"]["byte_count"] += 1
     with pytest.raises(ValidationError, match="RSS"):
         ProcessingManifest.model_validate(data)
+    for deep in (False, True):
+        with pytest.raises(ValidationError, match="RSS"):
+            record.model_copy(
+                update={"retrieval": data["retrieval"], "response": data["response"]}, deep=deep
+            )
 
 
 @pytest.mark.parametrize("state", ["available", "expired", "deleted", "unavailable"])
