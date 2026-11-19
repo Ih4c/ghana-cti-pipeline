@@ -9,7 +9,8 @@ No source requests or new runtime/terms verification occurred.
 D022 accepts full-text collection as the strategy; D023 records risk acceptance,
 not rights clearance. The [owner approval on PR #7](https://github.com/Ih4c/ghana-cti-pipeline/pull/7#issuecomment-6996754396) subsequently authorizes only
 M1-01 under v1.3. See [STATUS.md](../STATUS.md) for implementation review state.
-All later implementation and operational approvals remain pending.
+Subsequent [M1-02a approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
+covers D019/D024 data contracts only. M1-02b onward and operational gates remain pending.
 
 ## Changes affecting readiness
 
@@ -30,7 +31,7 @@ inheritance remains open. No F5-wide cleanup, F6 tooling or report implementatio
 
 ## M1-01: offline retrieval and observation descriptors only
 
-State: **approved for implementation; implementation pending PR review**.
+State: **delivered by PR #8**, merged at `9e30ab5a3d88352f97fd7fa64ea2a676097e0e72`.
 The owner comment above approves **M1-01 under M1 v1.3 / D011 and the
 retrieval/observation portion of D019**. No V2 evidence implementation, storage,
 network or parser approval is implied. Implementation title: **Implement M1-01 retention-neutral retrieval and
@@ -92,20 +93,29 @@ Synthetic hashes/IDs are declared fixture values, not claims of actual retrieval
 Do not add evidence V2, revision generation, policy enforcement, hash calculation,
 SQLite, checkpoint logic, DNS, transport, parser, adapter or retry behavior here.
 
+## M1-02a: full-text evidence contracts
+
+State: **approved data-only scope; implementation pending PR review**.
+The owner comment above names M1 v1.3 and D019/D024. See the
+[contract reference](../M1_EVIDENCE_CONTRACTS.md) for concrete wire fields/limits,
+synthetic tests and remaining cross-record/rights boundaries. D025 records wire
+bindings for review; D026 records the source-revision/derivation identity gap
+that M1-02b must resolve. M1-01/V1 serialized shapes remain unchanged.
+
 ## Revised dependency-ordered PRs
 
 Every increment requires separately recorded owner approval naming its version
 and scope; dependency merges alone grant none. M1-01 remains a small offline
 contract PR; its [contract reference](../M1_RETRIEVAL_CONTRACTS.md) documents
 the implementation. M1-02a is the next contract
-design only after M1-01 is approved/delivered; it does not imply source rights.
+increment, separately approved after M1-01 delivery; it does not imply source rights.
 
 Common constraints for M1-01 through M1-10: synthetic fixtures, blocked real
 network, temporary test stores only, no real source bodies or production paths,
 no paid services/deployment/scheduling/publication, no template/report changes,
 and unchanged V1/protocol compatibility. CI Ruff/format/pytest remain required.
 Later HTTP/XML/HTML dependencies must be minimal, open source, reviewed and pinned.
-Each row lists additional scope/tests/exclusions; only M1-01 is approved.
+Each row lists additional scope/tests/exclusions; only M1-01 and M1-02a data contracts are approved.
 
 | Increment / components | Prerequisites / approval | Scope and acceptance tests | Additional exclusions / rights boundary |
 | --- | --- | --- | --- |
@@ -139,9 +149,8 @@ private host/operator, keys, purge/backup/restore and report-level rights need
 review at their respective gates. Template artifact/license, evidence sufficiency
 and D009 inheritance remain later reporting blockers.
 
-**M1-01 alone is approved under v1.3** by the linked owner comment. Its
-implementation PR ends with offline contracts, synthetic fixtures/tests and docs.
-M1-02a requires separate approval of D019/D024 full-text contracts after M1-01
-review/merge. No source requests, storage, transport, parsers, collectors,
+**M1-01 is delivered and M1-02a data contracts are separately approved under
+v1.3**. The M1-02a PR ends with offline contracts, synthetic fixtures/tests and
+docs. M1-02b requires its own approval and resolution of D026. No source requests, storage, transport, parsers, collectors,
 schedule, deployment or publication are authorized.
 Use the permanent [handoff procedure](../HANDOFF.md) and [STATUS.md](../STATUS.md).

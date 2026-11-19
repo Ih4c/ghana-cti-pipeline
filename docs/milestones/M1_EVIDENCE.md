@@ -3,9 +3,10 @@
 Design **1.1**, 2026-11-19; companion to [M1 v1.3](M1_COLLECTION.md).
 D022 accepts full-text collection as the strategic target, superseding D018's
 metadata-first vendor target. D023 records owner-reported terms findings and risk
-acceptance, not legal clearance. Only M1-01 retrieval/observation descriptors have
-[scoped approval](../DECISIONS.md#verified-m1-01-authorization--2026-11-19);
-the remaining technical design stays proposed. No source
+acceptance, not legal clearance. M1-01 and M1-02a data contracts have
+[scoped approvals](../DECISIONS.md); the remaining technical design stays proposed.
+The [contract reference](../M1_EVIDENCE_CONTRACTS.md) records implementation wire
+choices (D025) and the unresolved identity/association binding (D026). No source
 requests, terms lookups or live verification were performed for this revision.
 
 ## Source coverage and rights gates
@@ -58,8 +59,8 @@ acquisitions and observations. Endpoint availability is separate from rights.
 ## Representation and provenance (D019/D024)
 
 Keep V1 SourceItem/EvidenceRecord, their required nonblank excerpt and exact
-excerpt hash, and Collector/FetchedDocument/EvidenceRepository unchanged. Propose
-additive `EvidenceRevisionV2` later, never silently reinterpret V1 schema 1.0 or
+excerpt hash, and Collector/FetchedDocument/EvidenceRepository unchanged. M1-02a
+implements additive `EvidenceRevisionV2` data contracts for review; never silently reinterpret V1 schema 1.0 or
 stuff a full article into its excerpt. M1-01 remains data-only retrieval/observation
 descriptors with no body bytes or retention claim; V2 is outside that increment.
 

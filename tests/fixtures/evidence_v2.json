@@ -1,0 +1,604 @@
+{
+  "description": "All IDs, digests, dates and publishers are synthetic declarations. No hashes were calculated or source content retrieved.",
+  "microsoft": {
+    "schema_version": "2.0",
+    "kind": "hybrid",
+    "mode": "feed_full_text",
+    "evidence_id": "00000000-0000-4000-8000-000000000210",
+    "logical_item_id": "00000000-0000-4000-8000-000000000211",
+    "provenance": {
+      "source_id": "synthetic-microsoft",
+      "publisher": "Synthetic publisher",
+      "publisher_origin": "configured",
+      "source_key": {
+        "kind": "native_id",
+        "value": "synthetic-guid-1"
+      },
+      "original_url": "https://example.org/synthetic/article?b=%2f&a=1#reference",
+      "publication": {
+        "supplied_text": null,
+        "precision": "unknown",
+        "parse_outcome": "missing"
+      },
+      "first_acquisition": {
+        "schema_version": "1.0",
+        "kind": "received_response",
+        "retrieval_id": "00000000-0000-4000-8000-000000000101",
+        "source_id": "synthetic-microsoft",
+        "requested_url": "https://example.org/feed?b=2&a=%2f",
+        "final_url": "https://example.org/feed?b=2&a=%2f",
+        "redirect_urls": [],
+        "started_at": "2026-01-15T10:30:00Z",
+        "ended_at": "2026-01-15T10:30:01Z",
+        "status": 200,
+        "returned_etag": "\"synthetic-v1\"",
+        "returned_last_modified": "Thu, 15 Jan 2026 10:00:00 GMT",
+        "cache_control": "max-age=3600",
+        "vary": "Accept-Encoding",
+        "body_metadata": {
+          "schema_version": "1.0",
+          "kind": "response_body_metadata",
+          "decoded_bytes": 100,
+          "transferred_bytes": 80,
+          "media_type": "application/rss+xml",
+          "content_encoding": "gzip",
+          "digest": {
+            "schema_version": "1.0",
+            "digest_state": "computed",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "domain": "decoded-http-entity-v1"
+          }
+        }
+      },
+      "request_variant_id": "synthetic-rss-utf8",
+      "locator": "/rss/channel/item[1]/content:encoded",
+      "adapter_version": "synthetic-1",
+      "parser_version": "synthetic-xml-1",
+      "identity_profile": "synthetic-unfrozen-1",
+      "policy": {
+        "source_id": "synthetic-microsoft",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      }
+    },
+    "response": {
+      "kind": "http_response",
+      "artifact_id": "00000000-0000-4000-8000-000000000201",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "digest_domain": "decoded-http-entity-v1",
+      "policy": {
+        "source_id": "synthetic-microsoft",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 100,
+      "retrieval_id": "00000000-0000-4000-8000-000000000101"
+    },
+    "title": "Synthetic test article — no source content",
+    "original": {
+      "kind": "original_html",
+      "artifact_id": "00000000-0000-4000-8000-000000000202",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "digest_domain": "feed-field-html-utf8-v1",
+      "policy": {
+        "source_id": "synthetic-microsoft",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 80,
+      "parent": {
+        "artifact_id": "00000000-0000-4000-8000-000000000201",
+        "kind": "http_response",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "digest_domain": "decoded-http-entity-v1"
+      },
+      "locator": "/rss/channel/item[1]/content:encoded",
+      "source_field": "content:encoded"
+    },
+    "sanitized": {
+      "kind": "sanitized_html",
+      "artifact_id": "00000000-0000-4000-8000-000000000203",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "digest_domain": "sanitized-html-utf8-v1",
+      "policy": {
+        "source_id": "synthetic-microsoft",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 60,
+      "parent": {
+        "artifact_id": "00000000-0000-4000-8000-000000000202",
+        "kind": "original_html",
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "digest_domain": "feed-field-html-utf8-v1"
+      },
+      "transformation": {
+        "operation": "sanitize_html",
+        "implementation_version": "synthetic-1",
+        "parser_version": "synthetic-html-1",
+        "configuration_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      }
+    },
+    "plain_text": {
+      "kind": "plain_text",
+      "artifact_id": "00000000-0000-4000-8000-000000000204",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "digest_domain": "plain-text-utf8-v1",
+      "policy": {
+        "source_id": "synthetic-microsoft",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 30,
+      "parent": {
+        "artifact_id": "00000000-0000-4000-8000-000000000203",
+        "kind": "sanitized_html",
+        "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "digest_domain": "sanitized-html-utf8-v1"
+      },
+      "transformation": {
+        "operation": "extract_text",
+        "implementation_version": "synthetic-1",
+        "parser_version": "synthetic-html-1",
+        "configuration_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      }
+    },
+    "metadata_digest": {
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "domain": "evidence-metadata-json-v1"
+    }
+  },
+  "google": {
+    "schema_version": "2.0",
+    "kind": "hybrid",
+    "mode": "feed_full_text",
+    "evidence_id": "00000000-0000-4000-8000-000000000220",
+    "logical_item_id": "00000000-0000-4000-8000-000000000221",
+    "provenance": {
+      "source_id": "synthetic-google",
+      "publisher": "Synthetic publisher",
+      "publisher_origin": "configured",
+      "source_key": {
+        "kind": "original_url",
+        "value": "https://example.org/synthetic/article?b=%2f&a=1#reference"
+      },
+      "original_url": "https://example.org/synthetic/article?b=%2f&a=1#reference",
+      "publication": {
+        "supplied_text": null,
+        "precision": "unknown",
+        "parse_outcome": "missing"
+      },
+      "first_acquisition": {
+        "schema_version": "1.0",
+        "kind": "received_response",
+        "retrieval_id": "00000000-0000-4000-8000-000000000101",
+        "source_id": "synthetic-google",
+        "requested_url": "https://example.org/feed?b=2&a=%2f",
+        "final_url": "https://example.org/feed?b=2&a=%2f",
+        "redirect_urls": [],
+        "started_at": "2026-01-15T10:30:00Z",
+        "ended_at": "2026-01-15T10:30:01Z",
+        "status": 200,
+        "returned_etag": "\"synthetic-v1\"",
+        "returned_last_modified": "Thu, 15 Jan 2026 10:00:00 GMT",
+        "cache_control": "max-age=3600",
+        "vary": "Accept-Encoding",
+        "body_metadata": {
+          "schema_version": "1.0",
+          "kind": "response_body_metadata",
+          "decoded_bytes": 100,
+          "transferred_bytes": 80,
+          "media_type": "application/rss+xml",
+          "content_encoding": "gzip",
+          "digest": {
+            "schema_version": "1.0",
+            "digest_state": "computed",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "domain": "decoded-http-entity-v1"
+          }
+        }
+      },
+      "request_variant_id": "synthetic-rss-utf8",
+      "locator": "/rss/channel/item[1]/description",
+      "adapter_version": "synthetic-1",
+      "parser_version": "synthetic-xml-1",
+      "identity_profile": "synthetic-unfrozen-1",
+      "policy": {
+        "source_id": "synthetic-google",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      }
+    },
+    "response": {
+      "kind": "http_response",
+      "artifact_id": "00000000-0000-4000-8000-000000000201",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "digest_domain": "decoded-http-entity-v1",
+      "policy": {
+        "source_id": "synthetic-google",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 100,
+      "retrieval_id": "00000000-0000-4000-8000-000000000101"
+    },
+    "title": "Synthetic test article — no source content",
+    "original": {
+      "kind": "original_html",
+      "artifact_id": "00000000-0000-4000-8000-000000000202",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "digest_domain": "feed-field-html-utf8-v1",
+      "policy": {
+        "source_id": "synthetic-google",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 80,
+      "parent": {
+        "artifact_id": "00000000-0000-4000-8000-000000000201",
+        "kind": "http_response",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "digest_domain": "decoded-http-entity-v1"
+      },
+      "locator": "/rss/channel/item[1]/description",
+      "source_field": "description"
+    },
+    "sanitized": {
+      "kind": "sanitized_html",
+      "artifact_id": "00000000-0000-4000-8000-000000000203",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "digest_domain": "sanitized-html-utf8-v1",
+      "policy": {
+        "source_id": "synthetic-google",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 60,
+      "parent": {
+        "artifact_id": "00000000-0000-4000-8000-000000000202",
+        "kind": "original_html",
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "digest_domain": "feed-field-html-utf8-v1"
+      },
+      "transformation": {
+        "operation": "sanitize_html",
+        "implementation_version": "synthetic-1",
+        "parser_version": "synthetic-html-1",
+        "configuration_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      }
+    },
+    "plain_text": {
+      "kind": "plain_text",
+      "artifact_id": "00000000-0000-4000-8000-000000000204",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "digest_domain": "plain-text-utf8-v1",
+      "policy": {
+        "source_id": "synthetic-google",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 30,
+      "parent": {
+        "artifact_id": "00000000-0000-4000-8000-000000000203",
+        "kind": "sanitized_html",
+        "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "digest_domain": "sanitized-html-utf8-v1"
+      },
+      "transformation": {
+        "operation": "extract_text",
+        "implementation_version": "synthetic-1",
+        "parser_version": "synthetic-html-1",
+        "configuration_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      }
+    },
+    "metadata_digest": {
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "domain": "evidence-metadata-json-v1"
+    }
+  },
+  "catalog": {
+    "schema_version": "2.0",
+    "kind": "hybrid",
+    "mode": "catalog_entry",
+    "evidence_id": "00000000-0000-4000-8000-000000000230",
+    "logical_item_id": "00000000-0000-4000-8000-000000000231",
+    "provenance": {
+      "source_id": "synthetic-cisa",
+      "publisher": "Synthetic publisher",
+      "publisher_origin": "configured",
+      "source_key": {
+        "kind": "native_id",
+        "value": "CVE-2099-0001"
+      },
+      "original_url": null,
+      "publication": {
+        "supplied_text": null,
+        "precision": "unknown",
+        "parse_outcome": "missing"
+      },
+      "first_acquisition": {
+        "schema_version": "1.0",
+        "kind": "received_response",
+        "retrieval_id": "00000000-0000-4000-8000-000000000101",
+        "source_id": "synthetic-cisa",
+        "requested_url": "https://example.org/feed?b=2&a=%2f",
+        "final_url": "https://example.org/feed?b=2&a=%2f",
+        "redirect_urls": [],
+        "started_at": "2026-01-15T10:30:00Z",
+        "ended_at": "2026-01-15T10:30:01Z",
+        "status": 200,
+        "returned_etag": "\"synthetic-v1\"",
+        "returned_last_modified": "Thu, 15 Jan 2026 10:00:00 GMT",
+        "cache_control": "max-age=3600",
+        "vary": "Accept-Encoding",
+        "body_metadata": {
+          "schema_version": "1.0",
+          "kind": "response_body_metadata",
+          "decoded_bytes": 100,
+          "transferred_bytes": 80,
+          "media_type": "application/rss+xml",
+          "content_encoding": "gzip",
+          "digest": {
+            "schema_version": "1.0",
+            "digest_state": "computed",
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "domain": "decoded-http-entity-v1"
+          }
+        }
+      },
+      "request_variant_id": "synthetic-rss-utf8",
+      "locator": "/vulnerabilities/0",
+      "adapter_version": "synthetic-1",
+      "parser_version": "synthetic-xml-1",
+      "identity_profile": "synthetic-unfrozen-1",
+      "policy": {
+        "source_id": "synthetic-cisa",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      }
+    },
+    "response": {
+      "kind": "http_response",
+      "artifact_id": "00000000-0000-4000-8000-000000000201",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "digest_domain": "decoded-http-entity-v1",
+      "policy": {
+        "source_id": "synthetic-cisa",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 100,
+      "retrieval_id": "00000000-0000-4000-8000-000000000101"
+    },
+    "catalog": {
+      "title": "Synthetic catalog",
+      "catalog_version": "synthetic-1",
+      "date_released": "2026-01-15T00:00:00Z",
+      "count": 1
+    },
+    "fields": {
+      "cveID": "CVE-2099-0001",
+      "vendorProject": "Synthetic vendor",
+      "product": "Synthetic product",
+      "vulnerabilityName": "Synthetic vulnerability",
+      "dateAdded": "2026-01-14",
+      "shortDescription": "Synthetic fixture, not a vulnerability report",
+      "requiredAction": "Synthetic action",
+      "dueDate": "2026-02-01",
+      "knownRansomwareCampaignUse": "Unknown",
+      "notes": "",
+      "cwes": [
+        "CWE-000"
+      ]
+    },
+    "entry": {
+      "kind": "catalog_entry",
+      "artifact_id": "00000000-0000-4000-8000-000000000232",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "digest_domain": "catalog-entry-json-v1",
+      "policy": {
+        "source_id": "synthetic-cisa",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 500,
+      "parent": {
+        "artifact_id": "00000000-0000-4000-8000-000000000201",
+        "kind": "http_response",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "digest_domain": "decoded-http-entity-v1"
+      },
+      "locator": "/vulnerabilities/0"
+    },
+    "metadata_digest": {
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "domain": "evidence-metadata-json-v1"
+    }
+  },
+  "policy": {
+    "kind": "source_policy",
+    "reference": {
+      "source_id": "synthetic-microsoft",
+      "policy_id": "synthetic-policy",
+      "policy_version": "test-v1"
+    },
+    "endpoint": "https://example.org/feed?b=2&a=%2f",
+    "mode": "feed_full_text",
+    "operator": "synthetic-operator",
+    "purpose": "Synthetic offline tests only",
+    "basis_status": "unresolved",
+    "conditions": "Synthetic declaration only; no live access or publisher permission asserted",
+    "effective_at": "2026-01-01T00:00:00Z",
+    "expires_at": "2026-03-01T00:00:00Z",
+    "retention": {
+      "response": "2026-02-01T00:00:00Z",
+      "original": "2026-02-01T00:00:00Z",
+      "derived": "2026-02-01T00:00:00Z",
+      "metadata": "2026-02-01T00:00:00Z",
+      "digests": "2026-02-01T00:00:00Z",
+      "audit": "2026-02-01T00:00:00Z",
+      "backups": "2026-02-01T00:00:00Z"
+    }
+  },
+  "manifest": {
+    "kind": "processing_manifest",
+    "manifest_id": "00000000-0000-4000-8000-000000000240",
+    "mode": "feed_full_text",
+    "policy": {
+      "source_id": "synthetic-microsoft",
+      "policy_id": "synthetic-policy",
+      "policy_version": "test-v1"
+    },
+    "retrieval": {
+      "schema_version": "1.0",
+      "kind": "received_response",
+      "retrieval_id": "00000000-0000-4000-8000-000000000101",
+      "source_id": "synthetic-microsoft",
+      "requested_url": "https://example.org/feed?b=2&a=%2f",
+      "final_url": "https://example.org/feed?b=2&a=%2f",
+      "redirect_urls": [],
+      "started_at": "2026-01-15T10:30:00Z",
+      "ended_at": "2026-01-15T10:30:01Z",
+      "status": 200,
+      "returned_etag": "\"synthetic-v1\"",
+      "returned_last_modified": "Thu, 15 Jan 2026 10:00:00 GMT",
+      "cache_control": "max-age=3600",
+      "vary": "Accept-Encoding",
+      "body_metadata": {
+        "schema_version": "1.0",
+        "kind": "response_body_metadata",
+        "decoded_bytes": 100,
+        "transferred_bytes": 80,
+        "media_type": "application/rss+xml",
+        "content_encoding": "gzip",
+        "digest": {
+          "schema_version": "1.0",
+          "digest_state": "computed",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "domain": "decoded-http-entity-v1"
+        }
+      }
+    },
+    "request_variant_id": "synthetic-rss-utf8",
+    "adapter_version": "synthetic-1",
+    "parser_version": "synthetic-xml-1",
+    "processing_profile": "synthetic-unfrozen-1",
+    "completeness": "complete",
+    "expected_item_count": 1,
+    "items": [
+      {
+        "mode": "feed_full_text",
+        "evidence_id": "00000000-0000-4000-8000-000000000210",
+        "evidence_kind": "hybrid",
+        "evidence_schema_version": "2.0",
+        "locator": "/rss/channel/item[1]/content:encoded",
+        "original_id": "00000000-0000-4000-8000-000000000202",
+        "sanitized_id": "00000000-0000-4000-8000-000000000203",
+        "plain_text_id": "00000000-0000-4000-8000-000000000204",
+        "evidence_digest": {
+          "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "domain": "evidence-metadata-json-v1"
+        }
+      }
+    ],
+    "response": {
+      "kind": "http_response",
+      "artifact_id": "00000000-0000-4000-8000-000000000201",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "digest_domain": "decoded-http-entity-v1",
+      "policy": {
+        "source_id": "synthetic-microsoft",
+        "policy_id": "synthetic-policy",
+        "policy_version": "test-v1"
+      },
+      "byte_count": 100,
+      "retrieval_id": "00000000-0000-4000-8000-000000000101"
+    },
+    "artifacts": [
+      {
+        "kind": "original_html",
+        "artifact_id": "00000000-0000-4000-8000-000000000202",
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "digest_domain": "feed-field-html-utf8-v1",
+        "policy": {
+          "source_id": "synthetic-microsoft",
+          "policy_id": "synthetic-policy",
+          "policy_version": "test-v1"
+        },
+        "byte_count": 80,
+        "parent": {
+          "artifact_id": "00000000-0000-4000-8000-000000000201",
+          "kind": "http_response",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "digest_domain": "decoded-http-entity-v1"
+        },
+        "locator": "/rss/channel/item[1]/content:encoded",
+        "source_field": "content:encoded"
+      },
+      {
+        "kind": "sanitized_html",
+        "artifact_id": "00000000-0000-4000-8000-000000000203",
+        "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "digest_domain": "sanitized-html-utf8-v1",
+        "policy": {
+          "source_id": "synthetic-microsoft",
+          "policy_id": "synthetic-policy",
+          "policy_version": "test-v1"
+        },
+        "byte_count": 60,
+        "parent": {
+          "artifact_id": "00000000-0000-4000-8000-000000000202",
+          "kind": "original_html",
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "digest_domain": "feed-field-html-utf8-v1"
+        },
+        "transformation": {
+          "operation": "sanitize_html",
+          "implementation_version": "synthetic-1",
+          "parser_version": "synthetic-html-1",
+          "configuration_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        }
+      },
+      {
+        "kind": "plain_text",
+        "artifact_id": "00000000-0000-4000-8000-000000000204",
+        "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "digest_domain": "plain-text-utf8-v1",
+        "policy": {
+          "source_id": "synthetic-microsoft",
+          "policy_id": "synthetic-policy",
+          "policy_version": "test-v1"
+        },
+        "byte_count": 30,
+        "parent": {
+          "artifact_id": "00000000-0000-4000-8000-000000000203",
+          "kind": "sanitized_html",
+          "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "digest_domain": "sanitized-html-utf8-v1"
+        },
+        "transformation": {
+          "operation": "extract_text",
+          "implementation_version": "synthetic-1",
+          "parser_version": "synthetic-html-1",
+          "configuration_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        }
+      }
+    ],
+    "digest": {
+      "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "domain": "processing-manifest-json-v1"
+    }
+  },
+  "availability": {
+    "kind": "artifact_availability",
+    "artifact_id": "00000000-0000-4000-8000-000000000202",
+    "policy": {
+      "source_id": "synthetic-microsoft",
+      "policy_id": "synthetic-policy",
+      "policy_version": "test-v1"
+    },
+    "state": "available",
+    "recorded_at": "2026-01-15T00:00:00Z",
+    "retention_until": "2026-02-01T00:00:00Z"
+  }
+}

@@ -35,6 +35,7 @@ Copy the following fields into the task's PR description or a dated status updat
 - Approval reference and exact scope; remaining approval gates:
 - Changed files and resulting behavior:
 - Implemented contract versions, compatibility checks and unresolved validation boundaries:
+- Source-revision versus derivation/association identity decisions and unresolved canonical profiles:
 - Checks run and outcomes; expected failures and their reasons:
 - Source feasibility evidence and remaining uncertainties:
 - Owner-reported observations versus independently verified findings and their dates:

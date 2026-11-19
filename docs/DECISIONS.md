@@ -22,15 +22,17 @@ approval against the specific milestone version and any conditions.
 | D013 | 2026-11-19, proposed; full-text revision | Atomic SQLite response/original/derived/evidence/manifest/checkpoint BLOB transactions | BLOBs simplify recovery but amplify storage/WAL/backups. Separate artifacts deferred pending measured need and explicit design. Required derivation failure rolls back whole source batch. |
 | D014 | 2026-11-18, proposed; unchanged | Direct-only validated-IP connections with original-host TLS; manual validated redirects; no inherited/explicit proxies | Prove DNS-to-socket binding and revalidation at every hop/retry. Client unresolved; use approved direct egress, never bypass current environment restrictions. |
 | D015 | 2026-11-19, proposed; controls preserved | Whole-source batches; three attempts/180-second source and 10-minute run budgets; existing UTF-8/depth/header/byte/item limits | Recovery and transforms share budgets; 403 pauses, 429 honors Retry-After; source errors isolated. D024 adds explicit proposed full-text/node/attribute/aggregate bounds, never silent truncation. |
-| D016 | 2026-11-19, proposed; boundaries preserved | Gate A names offline implementation increments; B1 authorizes bounded verification; B2 manual collection; C recurrence | Gate A approved for M1-01 only via the owner comment below; B1/B2/C and later increments remain unapproved. |
+| D016 | 2026-11-19, proposed; boundaries preserved | Gate A names offline implementation increments; B1 authorizes bounded verification; B2 manual collection; C recurrence | Gate A approved for M1-01 only via the owner comment below; M1-02a is separately approved below; B1/B2/C and M1-02b onward remain unapproved. |
 | D017 | 2026-11-19, proposed; v1.2 metadata-first assumption superseded | Source-specific lawful basis and deadlines for complete feed/item originals, derivatives, metadata/digests and backups | D023 risk acceptance is not rights clearance. Prohibited/unresolved full-text mode blocked; written permission, applicable grants or other legally supported grounds require scope review. No metadata substitution. |
 | D018 | 2026-11-19, superseded collection strategy by D022 | Historical v1.2 metadata-first vendor target; no longer the intended final capability | Original accepted decision remains in PR #6/Git history. Report-template authority, quality-reference-only Microsoft role and human control are preserved and reaffirmed in D022. |
-| D019 | 2026-11-19, descriptors accepted only; remaining design proposed | Additive V2 catalog_entry/feed_full_text modes, response/item/derived digests, availability and full-text manifests | Eligible 304 now requires intact permitted original/derived backing; v1.2 metadata-only exception no longer targets collection. V1 shapes/excerpts unchanged; no V2 implementation. |
+| D019 | 2026-11-19, M1-01/M1-02a data contracts accepted; remaining design proposed | Additive V2 catalog_entry/feed_full_text modes, response/item/derived digests, availability and full-text manifests | Eligible 304 now requires intact permitted original/derived backing; v1.2 metadata-only exception no longer targets collection. V1/M1-01 unchanged; M1-02a V2/data contracts implemented for review under the approval below. Runtime semantics remain proposed. |
 | D020 | 2026-11-19, proposed; transient-only assumption superseded | Authorized full-text in encrypted private storage with policy-scoped deletion of originals/derivatives/WAL/backups; no public/log leakage | Host dump/temp/swap controls and consistent isolated restore required. SQL DELETE is not verified erasure; rights expiry invalidates checkpoints. No implementation or real content fixtures. |
 | D021 | 2026-11-19, open; before report tooling | Template artifact/version/license, claim-level evidence sufficiency and publication permissions | Retained source text improves reproducibility, not truth or automatic Ghana attribution. Existing template unchanged; no full articles/extensive excerpts in output. D009 review/TLP gates remain open. |
 | D022 | 2026-11-19, accepted strategy only | Full-text collection from all three selected sources where authorized: complete CISA fields, Microsoft RSS content:encoded and Google RSS description; metadata-only vendor collection rejected as final target | Explicit owner task “M1 v1.3 Full-Text Collection Decision,” recorded here without a session link. Supersedes D018 collection direction and affected target assumptions in D004/D005/D008/D012/D013/D017/D019/D020. Existing report template and human workflow remain authoritative. No implementation/source-access approval. |
 | D023 | 2026-11-19, accepted owner risk acknowledgement; rights clearance open | Owner reports Microsoft copying/distribution/publication and permitted-use restrictions, calls for applicable Google terms/robots review, and accepts identified operational/legal risk for private research | Owner-reported findings are not independently verified legal conclusions. Risk acceptance is not a license/exception or authority to disregard restrictions. [Open rights questions/routes](milestones/M1_EVIDENCE.md) require established lawful basis before activation. Commercial use/republication needs separate review and necessary written authorization. |
-| D024 | 2026-11-19, proposed | Separate original feed HTML, sanitized HTML and plain text with independent hashes, parent links and transformation versions; explicit HTML/node/attribute/derived-byte caps | [Evidence design](milestones/M1_EVIDENCE.md) specifies inert allowlist, safe encoding/entities, no execution/resource loads, immutable transformations and bounded processing. CISA remains structured catalog content. Library/policy/cap feasibility needs approval/tests; no transformation code exists. |
+| D024 | 2026-11-19, data contracts accepted only; transformation implementation proposed | Separate original feed HTML, sanitized HTML and plain text with independent hashes, parent links and transformation versions; explicit HTML/node/attribute/derived-byte caps | [Evidence design](milestones/M1_EVIDENCE.md) specifies inert allowlist, safe encoding/entities, no execution/resource loads, immutable transformations and bounded processing. CISA remains structured catalog content. M1-02a descriptor scope approved below; library/runtime policy/cap feasibility still needs review. No transformation code exists. |
+| D025 | 2026-11-19, proposed wire bindings; implemented for review within M1-02a | Freeze the data-only contract serialization, domain labels, helper versions and explicit supplementary bounds in [contract reference](M1_EVIDENCE_CONTRACTS.md) | Prose requirements lacked exact field/domain spellings and some list bounds. No canonicalization, ID generation, hash calculation or runtime rights claim. PR review must assess these bindings before later integrations. |
+| D026 | 2026-11-19, open before M1-02b | Separate immutable source revision identity from versioned derived-representation associations | Evidence bundles contain derived references, but transform changes must not change source revision identity. Exact canonical projections and durable association keys remain unspecified; do not key/overwrite a whole bundle solely by evidence_id. Resolve before identity/storage implementation. |
 
 ## Verified M1-01 authorization — 2026-11-19
 
@@ -48,16 +50,38 @@ authored by repository owner `Ih4c` on 2026-11-19, explicitly states:
 >
 > Create a separate implementation PR for independent review. Do not merge automatically.
 
-This comment was verified before application edits. It supersedes M1-01's prior
+This historical comment was verified before M1-01 application edits. It superseded M1-01's prior
 pending state, not any other decision. The implementation targets M1_COLLECTION
 v1.3 / M1_READINESS review v1.2 without changing their technical scope.
 
-D011 and only D019's descriptor portion are accepted. Existing V1/protocols and
-full-text strategy remain unchanged. D004–D008, D012–D017, the remaining D019,
-D020/D024 stay proposed; D009/D021 stay open. No payload hashing behavior, new
+At that time, D011 and only D019's descriptor portion were accepted. Existing
+V1/protocols and full-text strategy remained unchanged. D004–D008, D012–D017,
+the remaining D019 and D020/D024 stayed proposed; D009/D021 stayed open. No payload hashing behavior, new
 dependencies, V2 evidence, source adapters, storage, networking, parsing,
 sanitization, operations, paid services or publication are part of this approval.
-B1 verification, B2 activation, Gate C scheduling and M1-02a onward remain unapproved.
+At that approval, M1-02a onward remained unapproved. The separate M1-02a approval
+below supersedes that status only; B1/B2/C remain unapproved.
 
 See [STATUS.md](STATUS.md) for delivery state and
 [M1 contract reference](M1_RETRIEVAL_CONTRACTS.md) for implemented behavior/limits.
+
+## Verified M1-02a authorization — 2026-11-19
+
+[Owner approval on PR #8](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844),
+authored by repository owner `Ih4c`, was verified before application edits:
+
+> I approve M1-02a under M1 v1.3, covering D019/D024 data-only evidence,
+> artifact-reference, provenance, source-policy and processing-manifest contracts,
+> synthetic tests and documentation. All stated implementation exclusions remain
+> in force.
+
+PR #8 merged at `9e30ab5a3d88352f97fd7fa64ea2a676097e0e72`; its merged tree matches
+the final reviewed implementation branch. Its discussion had no review findings
+requiring changes; the approval above is separate from the merge.
+
+This accepts only the D019/D024 contract scope. [M1-02a contract reference](M1_EVIDENCE_CONTRACTS.md)
+documents implemented validation and the D025 wire choices/D026 identity gap for
+review. No SQLite, HTTP/source access, RSS/JSON processing, HTML sanitization/text
+extraction, actual hashing, UUIDv5/identity generation, adapters, scheduling,
+deployment, publication or report-template changes. No operational gate is approved.
+M1-02b needs separate approval after contract review and resolution of D026.

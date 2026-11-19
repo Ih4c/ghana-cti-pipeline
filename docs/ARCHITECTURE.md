@@ -47,8 +47,9 @@ plain text distinct, with independent hashes/versions/lineage and explicit backi
 availability. Authorized originals and derivatives stay in private storage; raw
 bodies never belong in public Git, CI or logs. Full-text rights unresolved means
 activation blocked, not metadata substitution. V1 shapes/excerpt rules remain
-unchanged; later V2 is additive. M1-01 descriptors alone are approved and
-implemented in the current review branch; all runtime/processing work remains unapproved.
+unchanged. M1-01 descriptors are delivered by PR #8. Additive [M1-02a evidence
+contracts](M1_EVIDENCE_CONTRACTS.md) have separate approval and are implemented
+for review; all runtime/processing work remains unapproved.
 The existing report template and human review requirements remain authoritative.
 
 ## Security and resilience
