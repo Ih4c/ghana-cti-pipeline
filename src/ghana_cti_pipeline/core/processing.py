@@ -88,7 +88,7 @@ class ProcessingManifest(EvidenceContract):
                 self.retrieval.body_metadata.decoded_bytes,
                 self.retrieval.body_metadata.transferred_bytes,
             )
-            > 2 * 1024 * 1024
+            > 6 * 1024 * 1024
         ):
             raise ValueError("RSS batch count/response cap exceeded")
         if len({item.evidence_id for item in self.items}) != len(self.items) or len(
@@ -125,9 +125,9 @@ class ProcessingManifest(EvidenceContract):
             {"catalog_entry": 8 * 1024 * 1024}
             if self.mode == "catalog_entry"
             else {
-                "original_html": 2 * 1024 * 1024,
-                "sanitized_html": 2 * 1024 * 1024,
-                "plain_text": 2 * 1024 * 1024,
+                "original_html": 6 * 1024 * 1024,
+                "sanitized_html": 6 * 1024 * 1024,
+                "plain_text": 6 * 1024 * 1024,
             }
         )
         for kind, cap in caps.items():

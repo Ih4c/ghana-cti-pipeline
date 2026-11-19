@@ -13,7 +13,7 @@ approval against the specific milestone version and any conditions.
 | D004 | 2026-11-19, proposed onboarding; v1.3 revision | CISA complete permitted catalog; Microsoft RSS content:encoded and Google RSS description full articles | D022 strategy accepted. Vendor mappings are owner observations from 2026-11-18, not independently reconfirmed. Rights/B1/B2 remain open; no metadata fallback or article crawler. |
 | D005 | 2026-11-19, proposed; full-text revision | Private SQLite evidence, retrieval/observation/manifests and permitted original/derived BLOB artifacts for all three sources | Revises metadata-only vendor target. D013/D019/D024 keep response versus item/transform content distinct; no backend or permission to retain is implied. |
 | D006 | 2026-11-19, proposed | Manual CLI first; separately approved daily timer with one automatic cycle per source/24 hours | Persist attempt/cycle budgets across retries/recovery/restarts; stricter publisher limits override. B1/B2/C separate. No schedule enabled. |
-| D007 | 2026-11-19, proposed; cap unchanged | Zero incremental paid-service budget and 2 GiB live-store cap, with WAL/headroom and encrypted backup accounting | Full-text response/artifact budget up to 32 MiB/day before overhead; fewer than 64 such days fit. Measure pilot and obtain explicit capacity/retention decision; no silent expansion or purchase. |
+| D007 | 2026-11-19, proposed; cap unchanged | Zero incremental paid-service budget and 2 GiB live-store cap, with WAL/headroom and encrypted backup accounting | Full-text response/artifact budget up to 64 MiB/day before overhead; fewer than 32 such days fit. Measure pilot and obtain explicit capacity/retention decision; no silent expansion or purchase. |
 | D008 | 2026-11-19, proposed; required before collection | Preserve SSRF/TLS/proxy/request/XML/isolation controls; add full-text transformation and private artifact protection | D024 safe HTML/plain-text design is unimplemented. Real bodies may enter only an authorized private evidence store, never public Git/PR/CI/logs; this revises transient-only vendor storage assumptions. |
 | D009 | 2026-11-18, open; required before exporter | Derived intelligence must not be less restrictive than its sources; resolve evidence, unknown markings and intersecting recipient restrictions | F4 strict xfail records intended CLEAR/RED rejection. Need FIRST guidance review and authenticated review/access design; not numeric TLP ordering alone. M1 has no exporter. |
 | D010 | 2026-11-18, accepted coordination baseline | Permanent requirements in AGENTS/core docs; milestone versions, status/decision ledger and reusable handoff; first-task file historical | [PR #4](https://github.com/Ih4c/ghana-cti-pipeline/pull/4) merged at `50224b3`; owner explicitly designated its documentation the coordination baseline. This is not acceptance of M1 technical proposals or implementation. |
@@ -33,19 +33,41 @@ approval against the specific milestone version and any conditions.
 | D024 | 2026-11-19, data contracts accepted only; transformation implementation proposed | Separate original feed HTML, sanitized HTML and plain text with independent hashes, parent links and transformation versions; explicit HTML/node/attribute/derived-byte caps | [Evidence design](milestones/M1_EVIDENCE.md) specifies inert allowlist, safe encoding/entities, no execution/resource loads, immutable transformations and bounded processing. CISA remains structured catalog content. M1-02a descriptor scope approved below; library/runtime policy/cap feasibility still needs review. No transformation code exists. |
 | D025 | 2026-11-19, proposed wire bindings; delivered within M1-02a (PR #9) | Freeze the data-only contract serialization, domain labels, helper versions and explicit supplementary bounds in [contract reference](M1_EVIDENCE_CONTRACTS.md) | Prose requirements lacked exact field/domain spellings and some list bounds. No canonicalization, ID generation, hash calculation or runtime rights claim. PR review must assess these bindings before later integrations. |
 | D026 | 2026-11-19, open before M1-02b | Separate immutable source revision identity from versioned derived-representation associations | Evidence bundles contain derived references, but transform changes must not change source revision identity. Exact canonical projections and durable association keys remain unspecified; do not key/overwrite a whole bundle solely by evidence_id. Resolve before identity/storage implementation. |
-| D027 | 2026-11-19, proposed; Issue #10 open | Retain existing RSS caps pending separately approved, byte-accurate B1 measurements; no new production cap selected | [Investigation and measurement plan](milestones/M1_RSS_SIZE_INVESTIGATION.md) distinguish transferred/decoded/field/derived/aggregate limits, censored measurements and runtime enforcement gaps. Character counts from truncated views do not establish byte size. Owner must approve measurement scope and any later cap/compatibility/capacity changes; no source activation, test-code or diagnostic-cap exception is granted here. |
+| D027 | 2026-11-19, accepted numeric-cap amendment; Issue #10 open | RSS transferred and decoded response caps each 6 MiB; original HTML, sanitized HTML and plain-text batch aggregates each 6 MiB; per-article fields remain 1 MiB | [Owner decision](https://github.com/Ih4c/ghana-cti-pipeline/issues/10#issuecomment-7008185129) approves numeric validation changes, synthetic boundary tests and documentation under v1.3 without schema redesign. B1 measurements remain planned to confirm headroom and do not block this change. No live requests, activation or B1/B2/C approval; [capacity analysis](milestones/M1_RSS_SIZE_INVESTIGATION.md) rises to 64 MiB/day before overhead, with unchanged 2 GiB live-store and 512 MiB/day transfer caps. |
 
-## Issue #10 investigation scope — 2026-11-19
+## Verified D027 authorization — 2026-11-19
 
-The owner task “Investigate Issue #10” authorizes documentation investigation and
+The [owner comment on Issue #10](https://github.com/Ih4c/ghana-cti-pipeline/issues/10#issuecomment-7008185129),
+authored by repository owner `Ih4c`, was verified before application changes. It
+explicitly approves raising RSS response caps (transferred and decoded) and each
+of the three batch representation caps from 2 MiB to **6 MiB**, with synthetic
+exact-limit/one-byte-over tests, updated documentation and capacity calculations.
+The **1 MiB per-article** and **8 MiB generic receipt/response** caps stay unchanged;
+no schema redesign is intended. Oversized feeds still fail as whole batches,
+without truncation or partial parsing. Existing V1/M1-01/protocol signatures and
+serialized shapes/versions are preserved; only the accepted RSS numeric range widens.
+
+This owner decision supersedes the earlier D027 proposal to wait for measurements
+before changing caps. The selected 6 MiB value is an owner-approved bound, **not a
+measured feed maximum or proven headroom**. B1 measurement stays planned and Issue
+#10 stays open until it is recorded. No transport/parser/harness implementation,
+live requests, source activation, persistence, scheduling, spending or publication
+is authorized. B1/B2/C remain separately gated.
+
+## Historical Issue #10 investigation scope — 2026-11-19
+
+The initial owner task “Investigate Issue #10” authorized documentation investigation and
 a documentation-only PR, including correction of stale PR #13/Issue #11 status.
-No separate authorization for new test code or live B1 measurements was supplied;
+At that time no separate authorization for new test code or live B1 measurements was supplied;
 the [synthetic regression cases and B1 procedure](milestones/M1_RSS_SIZE_INVESTIGATION.md)
-are proposals only. Existing tests may be run to verify the unchanged baseline.
-This records task scope, not a fabricated GitHub approval comment. Issue #10 remains
-open; PR #12 and PR #13 are merged and Issue #11 is closed. D027 does not alter
-D022's full-text direction, D026's separate identity work, existing contract/schema
-limits, rights requirements or B1/B2/C gates.
+were proposals only. PR #14 delivered that documentation-only investigation. The
+subsequent D027 approval above authorizes numeric-cap implementation and synthetic
+contract tests, but not live measurement or a measurement harness.
+That initial scope changed no numeric limits. The subsequent verified D027
+comment approves only the numeric exception and synthetic tests described above.
+Issue #10 remains open; PR #12 and PR #13 are merged and Issue #11 is closed.
+D022's full-text direction, D026's separate identity work, schema versions,
+rights requirements and B1/B2/C gates are preserved.
 
 ## Verified M1-01 authorization — 2026-11-19
 

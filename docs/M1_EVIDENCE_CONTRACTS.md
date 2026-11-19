@@ -7,6 +7,12 @@ and processing-manifest contracts, synthetic tests and documentation.
 [M1_EVIDENCE.md](milestones/M1_EVIDENCE.md) supplies the strategic requirements;
 [STATUS.md](STATUS.md) separates delivered work from this implementation branch.
 
+The separately [approved D027 amendment](https://github.com/Ih4c/ghana-cti-pipeline/issues/10#issuecomment-7008185129)
+raises RSS response and each representation aggregate from 2 MiB to 6 MiB under
+v1.3. The 1 MiB per-article and generic 8 MiB ceilings, schemas and serialized
+shapes are unchanged. This widens accepted declared counts only; runtime byte
+measurement remains unimplemented, and B1 must still establish actual headroom.
+
 ## Modules and schemas
 
 | Module | Responsibility |
@@ -61,7 +67,7 @@ guess time zones or verify that arbitrary publisher text was interpreted correct
   references: `original`, `sanitized`, `plain_text`. Original source field is
   `content:encoded` or `description`; no metadata/summary-only mode. The original
   locator matches provenance. Transferred and decoded RSS receipt counts each cap
-  at 2 MiB. Models contain no article HTML/plain-text payloads.
+  at 6 MiB. Models contain no article HTML/plain-text payloads.
 
 ## Artifact and digest descriptors
 
@@ -73,7 +79,7 @@ supplied artifact digest; no computation happens here.
 
 | Artifact kind | Digest domain | Parent / processing metadata | Byte cap |
 | --- | --- | --- | --- |
-| http_response | decoded-http-entity-v1 | None; required retrieval ID | 0–8 MiB; RSS receipt/manifest applies 2 MiB |
+| http_response | decoded-http-entity-v1 | None; required retrieval ID | 0–8 MiB; RSS receipt/manifest applies 6 MiB |
 | original_html | feed-field-html-utf8-v1 | HTTP response; field locator/source field | 1 byte–1 MiB |
 | sanitized_html | sanitized-html-utf8-v1 | Original HTML; sanitize_html transformation | 1 byte–1 MiB |
 | plain_text | plain-text-utf8-v1 | Sanitized HTML; extract_text transformation | 1 byte–1 MiB |
@@ -126,7 +132,7 @@ feeds/catalogs can have a complete zero-item manifest but produce no evidence.
 
 All listed artifacts must be associated, policies agree, IDs/locators are unique,
 and every supplied parent link resolves with matching digest/kind. Catalog entry
-artifacts total ≤8 MiB; each vendor representation totals ≤2 MiB independently.
+artifacts total ≤8 MiB; each vendor representation totals ≤6 MiB independently.
 Counts cap at 10,000 catalog items or 500 RSS items. Manifest artifact lists cap at
 10,000 (catalog maximum; RSS needs at most 1,500), excluding the one response.
 These local checks do not resolve evidence IDs against a repository, verify payload

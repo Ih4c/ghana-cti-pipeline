@@ -20,7 +20,7 @@ while leaving live activation blocked; state this explicitly.
 | [M1 full-text evidence](M1_EVIDENCE.md), design v1.1 | Proposed; D022 strategy accepted only | Original/sanitized/plain text, V1 compatibility, rights, full-text 304, capacity/deletion and reporting |
 | [M1 readiness / PR plan](M1_READINESS.md), review v1.2 | M1-01 delivered by PR #8; M1-02a data contracts delivered by PR #9; later increments separately gated | Revised M1-01, small dependent PRs, components, acceptance tests and exclusions |
 | [M1 source feasibility](M1_SOURCE_FEASIBILITY.md) | Dated supporting evidence | Separates verified access facts from remaining checks |
-| [M1 RSS size investigation](M1_RSS_SIZE_INVESTIGATION.md) | Documentation proposal; Issue #10 open, D027 proposed | Existing limits, future B1 measurement procedure, proposed offline tests and cap decision matrix; no live checks or cap changes |
+| [M1 RSS size investigation](M1_RSS_SIZE_INVESTIGATION.md) | PR #14 delivered; subsequent D027 numeric amendment approved, Issue #10 open | 6 MiB RSS response/aggregate limits and synthetic contract tests; future B1 measurements remain separately gated |
 | [Template](TEMPLATE.md) | Reusable | Starting point for later milestone specifications |
 
 Milestones 2–5 remain [roadmap](../ROADMAP.md) items until their specifications

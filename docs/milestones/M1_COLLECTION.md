@@ -4,7 +4,7 @@
 - State: **strategy accepted; M1-01/M1-02a data contracts approved only; remaining technical design proposed**
 - Updated: 2026-11-19
 - Verified planning baseline: main `ccd81278472c7847287ffcf20988629435f2c999`
-- Approval boundaries: [DECISIONS.md](../DECISIONS.md), D022–D024.
+- Approval boundaries: [DECISIONS.md](../DECISIONS.md), D022–D024 and the scoped D027 numeric-cap amendment.
 - Evidence: [historical feasibility and owner-reported observations](M1_SOURCE_FEASIBILITY.md).
 
 ## Revision and intended outcome
@@ -27,6 +27,15 @@ operational gates remain unapproved. Earlier v1.2 work is not
 authority to proceed.
 Historical versions remain in Git, not active scope. Existing V1 contracts,
 permanent guidance, authoritative report template and human workflow are preserved.
+
+**D027 numeric-cap amendment under v1.3 (2026-11-19):** the
+[owner decision on Issue #10](https://github.com/Ih4c/ghana-cti-pipeline/issues/10#issuecomment-7008185129)
+approves 6 MiB RSS transferred/decoded response caps and 6 MiB for each batch
+representation aggregate, with synthetic tests and revised capacity analysis.
+Keep 1 MiB per article and the generic 8 MiB ceiling; no schema redesign. This
+supersedes the earlier 2 MiB values without changing the strategic specification
+or granting operational approval. B1 must still confirm headroom; it does not
+block this numeric amendment. Issue #10 stays open until measurement is recorded.
 
 ## Source mapping and permission boundaries
 
@@ -131,10 +140,10 @@ A proposed 365-day reporting target never overrides permissions or capacity.
 
 Retain **2 GiB live-store cap**, warning at 80%, and **512 MiB/day transfer cap**;
 account for WAL/temporary write headroom and stop before exceeding capacity.
-At response maxima: 12 MiB/day of snapshots (~4.28 GiB/year). Including bounded
-original/derived item copies, the proposed upper budget is 32 MiB/day (~11.4
+At response maxima (8 + 6 + 6): 20 MiB/day of snapshots (~7.13 GiB/year). Including bounded
+original/derived item copies, the proposed upper budget is 64 MiB/day (~22.8
 GiB/year), before indexes/WAL. Thus 2 GiB cannot guarantee annual coverage and
-holds fewer than 64 maximum-budget days after overhead. Deduplication benefits
+holds fewer than 32 maximum-budget days after overhead. Deduplication benefits
 must be measured, not promised. Capacity/retention conflicts require an explicit
 owner decision, never automatic expansion, purchase or silent evidence purge.
 Seven encrypted daily backups could add 14 GiB separately and must expire earlier
@@ -193,7 +202,7 @@ preserve still-permitted evidence and use compatible schema/backups for rollback
   TLS certificate. Revalidate every redirect/retry; no second unchecked DNS lookup
   or automatic redirects. Disable inherited proxies; reject explicit proxy mode
   pending separate design. Use permitted direct egress, not environment bypass.
-- Independently cap wire-entity/decompressed bodies at 8 MiB KEV / 2 MiB RSS;
+- Independently cap wire-entity/decompressed bodies at 8 MiB KEV / 6 MiB RSS;
   10,000 KEV / 500 feed items, UTF-8 only with optional BOM, depth 64, 32 KiB headers.
   No DTDs/custom entities/external resources. Invalid/empty envelopes and duplicate
   conflicting native IDs fail the whole batch. Empty valid RSS is not a retraction.
@@ -215,7 +224,7 @@ Software/open public routes are proposed at $0 license/API charges; paid-service
 budget remains **$0**. Existing approved hardware still incurs electricity,
 connectivity and operator time. No host is purchased or selected here. At one
 cycle/day, about 90 primary GETs/month, ≤270 top-level attempts plus bounded
-redirect/policy requests; body maxima imply ~360 MiB/month primary or ~1,080 MiB
+redirect/policy requests; body maxima imply ~600 MiB/30-day month primary or ~1,800 MiB
 with every attempt at cap, excluding headers/redirect/policy overhead. Stricter
 source restrictions can reduce these maxima. Measure before operational approval.
 

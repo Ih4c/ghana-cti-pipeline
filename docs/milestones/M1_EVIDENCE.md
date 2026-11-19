@@ -9,6 +9,12 @@ The [contract reference](../M1_EVIDENCE_CONTRACTS.md) records implementation wir
 choices (D025) and the unresolved identity/association binding (D026). No source
 requests, terms lookups or live verification were performed for this revision.
 
+D027 is a separately [approved numeric-cap amendment](../DECISIONS.md) under
+M1 v1.3: RSS responses and each representation aggregate rise from 2 to 6 MiB;
+1 MiB per article and 8 MiB generic ceilings remain. No schema redesign or source
+access is approved. The resulting capacity bounds below are calculations, not
+measured feed sizes; B1 still needs to confirm headroom.
+
 ## Source coverage and rights gates
 
 | Source | Required source content | Evidence basis and unresolved activation conditions |
@@ -135,10 +141,10 @@ No paraphrasing, IOC enrichment, attribution or Ghana relevance generation.
 Original HTML is never rendered directly. A future analyst viewer needs separate
 review and output escaping/isolation; no viewer is introduced by M1.
 
-Keep complete response caps: 8 MiB KEV and 2 MiB per RSS, independently enforced
+Keep complete response caps: 8 MiB KEV and 6 MiB per RSS, independently enforced
 on transferred and decompressed entity bytes; 10,000 KEV/500 RSS items; depth 64,
 32 KiB headers, existing metadata/URL limits. D024 additionally **proposes**:
-1 MiB UTF-8 per vendor original/sanitized/plain-text item, 2 MiB aggregate per
+1 MiB UTF-8 per vendor original/sanitized/plain-text item, 6 MiB aggregate per
 representation per vendor response, 50,000 HTML nodes per source batch, depth 64
 and 32 input attributes per element with values ≤4,096 characters. CISA retained
 entry projections total ≤8 MiB per catalog. These are bounds, not measured feed
@@ -208,10 +214,10 @@ explicit reviewed decision; no silent external-artifact backend or cap increase.
 Keep the **2 GiB live-store cap** (warn at 80%), single writer/run and $0 incremental
 paid-service budget. Capacity accounting must include DB/WAL/temporary processing
 headroom; pause before writes cannot fit, not after exhausting the disk. At daily
-response caps, snapshots alone total 12 MiB/day (~4.28 GiB/year). With up to 8 MiB
-CISA entry projections plus three 2 MiB vendor representations per feed, the
-planning upper bound is **32 MiB/day (~11.4 GiB/year)** before metadata/indexes/WAL.
-A 2 GiB cap holds fewer than 64 such days after overhead; deduplication may help,
+response caps, snapshots alone total 20 MiB/day (~7.13 GiB/year). With up to 8 MiB
+CISA entry projections plus three 6 MiB vendor representations per feed, the
+planning upper bound is **64 MiB/day (~22.8 GiB/year)** before metadata/indexes/WAL.
+A 2 GiB cap holds fewer than 32 such days after overhead; deduplication may help,
 but no retention guarantee follows. These are worst-case budget calculations,
 not measured source sizes. Measure an authorized pilot; resolve capacity/retention
 explicitly before activation. No automatic storage purchase or increase.
