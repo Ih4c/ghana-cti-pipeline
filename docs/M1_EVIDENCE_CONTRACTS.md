@@ -1,6 +1,6 @@
 # M1-02a full-text evidence contracts
 
-Implementation under M1 v1.3, pending independent PR review. The
+Implementation under M1 v1.3, delivered by PR #9. The
 [owner approval on PR #8](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
 covers D019/D024 data-only evidence, artifact-reference, provenance, source-policy
 and processing-manifest contracts, synthetic tests and documentation.
@@ -145,7 +145,7 @@ Neither form performs DNS or SSRF checks.
 D025 records wire-level details absent from the prose specification: named domain
 labels, known KEV field projection, maximum 128 CWE values/32 policy references,
 nonempty item-artifact byte assertions, and required finite policy deadlines.
-They are implemented for review, not claims that runtime source feasibility has
+They were delivered by PR #9 and are not claims that runtime source feasibility has
 been measured. If an article yields an empty derivative, this contract cannot
 claim full-text completion; transformation behavior remains a later decision.
 
