@@ -26,7 +26,8 @@ measurement remains unimplemented, and B1 must still establish actual headroom.
 Every model inherits frozen, extra-forbid validation and revalidated shallow/deep
 copy updates. Nested new models revalidate supplied instances. Use validated
 construction/JSON ingestion, never unchecked `model_construct` at trust boundaries.
-No ID, timestamp, digest or source content is generated. Helper/descriptor schemas
+These data models generate no ID, timestamp, digest or source content; the
+separately approved M1-02b pure helpers return explicit computed values. Helper/descriptor schemas
 are `1.0`; the two evidence modes are `2.0`, with `kind: hybrid`, compatible with
 M1-01 observations. Required `mode` discriminates `EvidenceRevisionV2`; use Pydantic
 `TypeAdapter(EvidenceRevisionV2)` for union ingestion. Existing V1/M1-01 code and
@@ -90,15 +91,15 @@ digest and domain; transformation descriptors carry operation, implementation
 version, parser version and configuration SHA-256. Supplied graphs reject missing
 parents, mismatched kind/domain/digest, self/duplicate IDs and different policies.
 Graph topology is response → original → sanitized → plain, or response → entry.
-Hashes are declared exactly 64 lowercase hex characters; they are never computed
-or compared with actual bytes. Artifact IDs are association references, not a
+Model hashes are declared exactly 64 lowercase hex characters; model validation
+does not calculate them or compare them with actual bytes. Artifact IDs are association references, not a
 claim that identical hashes share permission or acquisition history.
 
 `EvidenceMetadataDigest` uses `evidence-metadata-json-v1`;
 `ManifestDigest` uses `processing-manifest-json-v1`. These and the derived/catalog
-domain labels are explicit wire choices (D025), not implemented canonicalizers.
-M1-02b must freeze canonical field projections/vectors, excluding self-digests,
-and distinguish source identity from transformation identity before hashing.
+domain labels are the existing wire choices (D025). Separately approved M1-02b
+[profiles and helpers](M1_IDENTITY_PROFILES.md) implement canonical field projections
+and hashing, exclude self-digests and keep source/derivation identities distinct.
 
 `ArtifactAvailability` is a separate dated record: artifact/policy reference,
 state `available/expired/deleted/unavailable`, recorded_at and retention_until.
@@ -155,13 +156,13 @@ They were delivered by PR #9 and are not claims that runtime source feasibility 
 been measured. If an article yields an empty derivative, this contract cannot
 claim full-text completion; transformation behavior remains a later decision.
 
-D026 remains open: the prose requires immutable source revisions while allowing
-new transformations of the same original. This evidence bundle includes derived
-references, but source revision identity must exclude transformation changes.
-There is no approved durable key/association layout yet. Do not key/store/overwrite
-an entire bundle solely by evidence_id or infer a new source revision from a new
-transform. M1-02b must settle the versioned projections and association identity;
-M1-03 must enforce them. This increment supplies immutable data values only.
+D026 is resolved for M1-02b by the [identity profile](M1_IDENTITY_PROFILES.md):
+`evidence_id` identifies original source content, while a separately computed
+evidence-association UUID identifies the full immutable bundle. Derived identities
+bind output, transform versions/configuration and immutable parents. A manifest
+item selects an association using evidence ID plus metadata digest. Never overwrite
+a bundle keyed only by evidence_id; M1-03 must enforce those storage keys. Existing
+wire fields and versions remain unchanged, including D027 and per-article limits.
 
 ## Validation and exclusions
 
@@ -171,7 +172,10 @@ contradictory provenance/derivations, exact and excessive byte/count/text limits
 date precision, policy/availability metadata, nested/shallow/deep copy validation,
 compatibility and blocked network. See [STATUS.md](STATUS.md) for results.
 
-No persistence, networking, source requests, feed parsing, sanitization, hash/ID
-generation, adapters, scheduling, deployment or reporting changes. Validation
+M1-02b adds [digests.py](../src/ghana_cti_pipeline/core/digests.py) and
+[identities.py](../src/ghana_cti_pipeline/core/identities.py), with synthetic
+[golden vectors](../tests/fixtures/identity_vectors.json) and tests. There is no
+persistence, networking, source access, feed parsing, sanitization, adapters,
+scheduling, deployment or reporting change. Validation
 errors may include rejected input; future logging must use safe codes, not raw
 ValidationError payloads. Rights and operational approval gates remain unchanged.

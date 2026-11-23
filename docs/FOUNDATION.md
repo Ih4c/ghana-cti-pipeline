@@ -45,7 +45,8 @@ outside these packages; it is not implemented now.
 
 All records have `schema_version: "1.0"`, reject extra fields and unsupported
 versions, and are frozen after validated construction. IDs are caller-supplied
-UUIDs; deterministic source identity/deduplication policy is deferred. Use
+UUIDs; V1 does not automatically derive source identities. Additive M1-02b
+[identity helpers](M1_IDENTITY_PROFILES.md) leave these V1 shapes unchanged. Use
 `model_validate`/`model_validate_json` at trust boundaries and `model_dump_json`
 for serialization. `Contract.model_copy(update=...)` reconstructs and validates
 the resulting record, including updates; nested records may be reconstructed
@@ -56,7 +57,8 @@ explicit migration, never a silent reinterpretation of old evidence.
 The proposed [full-text M1 extension](milestones/M1_EVIDENCE.md) does not change
 these V1 rules or force complete articles into V1 excerpts. Additive V2
 associates permitted original source content and sanitized/plain-text references.
-The approved [M1-02a data contracts](M1_EVIDENCE_CONTRACTS.md) were delivered by PR #9; digest calculation, storage and version-aware lookup remain future work.
+The approved [M1-02a data contracts](M1_EVIDENCE_CONTRACTS.md) were delivered by PR #9; M1-02b adds separately approved pure digest/identity helpers; storage and
+version-aware lookup remain future work.
 The additive [M1-01 descriptors](M1_RETRIEVAL_CONTRACTS.md) are delivered by PR #8.
 Response hashes do not imply archived or lawful content.
 

@@ -22,8 +22,10 @@ PR #7 merged this strategy without implementation authorization. Subsequent
 authorizes **M1-01 under v1.3 only**, D011 and D019 retrieval/observation
 descriptors, synthetic tests and related documentation. After PR #8 merged,
 [separate owner approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
-authorizes M1-02a D019/D024 data contracts only. M1-02b onward, source access and
-operational gates remain unapproved. Earlier v1.2 work is not
+authorizes M1-02a D019/D024 data contracts only. The later
+[PR #15 owner approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/15#issuecomment-7008787831)
+authorizes M1-02b pure identity/digest helpers and D026 resolution. M1-03 onward,
+source access and operational gates remain unapproved. Earlier v1.2 work is not
 authority to proceed.
 Historical versions remain in Git, not active scope. Existing V1 contracts,
 permanent guidance, authoritative report template and human workflow are preserved.
@@ -249,4 +251,4 @@ parsing/transforms, independent adapters and manual offline integration. B1/B2
 verification/activation and Gate C scheduling remain separately approved work.
 The M1-01 implementation PR stops at offline descriptors/tests/documentation.
 M1-02a is separately approved for data contracts and stops at its review PR.
-See [delivery status](../STATUS.md); M1-02b onward needs fresh scoped approval. The full-text strategic target and acceptance criteria are unchanged.
+See [delivery status](../STATUS.md); M1-02b has scoped approval and stops at its implementation review PR; M1-03 onward needs fresh approval. The full-text strategic target and acceptance criteria are unchanged.

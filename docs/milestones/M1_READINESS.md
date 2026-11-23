@@ -10,7 +10,8 @@ D022 accepts full-text collection as the strategy; D023 records risk acceptance,
 not rights clearance. The [owner approval on PR #7](https://github.com/Ih4c/ghana-cti-pipeline/pull/7#issuecomment-6996754396) subsequently authorizes only
 M1-01 under v1.3. See [STATUS.md](../STATUS.md) for implementation review state.
 Subsequent [M1-02a approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
-covers D019/D024 data contracts only. M1-02b onward and operational gates remain pending.
+covers D019/D024 data contracts only. M1-02b pure helpers now have the separate PR #15 approval below; M1-03 onward
+and operational gates remain pending.
 
 The subsequent [D027 owner decision](https://github.com/Ih4c/ghana-cti-pipeline/issues/10#issuecomment-7008185129)
 approves only the 6 MiB RSS response/representation-aggregate amendment and synthetic
@@ -105,22 +106,33 @@ State: **delivered by PR #9 (approved data-only scope)**.
 The owner comment above names M1 v1.3 and D019/D024. See the
 [contract reference](../M1_EVIDENCE_CONTRACTS.md) for concrete wire fields/limits,
 synthetic tests and remaining cross-record/rights boundaries. D025 records wire bindings delivered by PR #9; D026 records the source-revision/derivation identity gap
-that M1-02b must resolve. M1-01/V1 serialized shapes remain unchanged.
+resolved by the M1-02b profile below. M1-01/V1 serialized shapes remain unchanged.
+
+## M1-02b: deterministic identities and digests
+
+[Owner approval on PR #15](https://github.com/Ih4c/ghana-cti-pipeline/pull/15#issuecomment-7008787831)
+covers D012/D024 pure helpers and D026 resolution under v1.3. The
+[profile specification](../M1_IDENTITY_PROFILES.md) fixes original source projections,
+separate derived/association keys, namespaces, canonical JSON and digest domains.
+Synthetic tests cover A→B→A, transform independence, exact source-key boundaries,
+Unicode, fixed vectors, supplied-record consistency, immutable copies and no I/O.
+Existing contracts, D027, per-article caps and the TLP xfail stay unchanged.
 
 ## Revised dependency-ordered PRs
 
 Every increment requires separately recorded owner approval naming its version
 and scope; dependency merges alone grant none. M1-01 remains a small offline
 contract PR; its [contract reference](../M1_RETRIEVAL_CONTRACTS.md) documents
-the implementation. M1-02a is the next contract
-increment, separately approved after M1-01 delivery; it does not imply source rights.
+the implementation. M1-02a is delivered by PR #9 and D027 by PR #15; neither
+implies source rights. M1-02b stops at its independent implementation review PR.
 
 Common constraints for M1-01 through M1-10: synthetic fixtures, blocked real
 network, temporary test stores only, no real source bodies or production paths,
 no paid services/deployment/scheduling/publication, no template/report changes,
 and unchanged V1/protocol compatibility. CI Ruff/format/pytest remain required.
 Later HTTP/XML/HTML dependencies must be minimal, open source, reviewed and pinned.
-Each row lists additional scope/tests/exclusions; only M1-01 and M1-02a data contracts are approved.
+Each row lists additional scope/tests/exclusions; M1-01/M1-02a contracts and
+M1-02b pure helpers are approved. Later increments remain separately gated.
 
 | Increment / components | Prerequisites / approval | Scope and acceptance tests | Additional exclusions / rights boundary |
 | --- | --- | --- | --- |
@@ -154,8 +166,9 @@ private host/operator, keys, purge/backup/restore and report-level rights need
 review at their respective gates. Template artifact/license, evidence sufficiency
 and D009 inheritance remain later reporting blockers.
 
-**M1-01 is delivered and M1-02a data contracts are separately approved under
-v1.3**. The M1-02a PR ends with offline contracts, synthetic fixtures/tests and
-docs. M1-02b requires its own approval and resolution of D026. No source requests, storage, transport, parsers, collectors,
-schedule, deployment or publication are authorized.
+**M1-01/M1-02a are delivered; M1-02b pure helpers have separate approval under
+v1.3**. M1-02b ends with offline helpers, synthetic vectors/tests, D026 resolution
+and documentation for independent review. M1-03 requires fresh approval. No source
+requests, storage, transport, parsers, collectors, schedule, deployment or
+publication are authorized.
 Use the permanent [handoff procedure](../HANDOFF.md) and [STATUS.md](../STATUS.md).
