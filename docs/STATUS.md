@@ -1,11 +1,12 @@
 # Project status
 
-Last reviewed: **2026-11-19**. Repository: `Ih4c/ghana-cti-pipeline`.
-Application contracts delivered through [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) (M1-02a);
+Last reviewed: **2026-11-23**. Repository: `Ih4c/ghana-cti-pipeline`.
+Application contracts delivered by [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) (M1-02a),
+with D027 numeric caps delivered by [PR #15](https://github.com/Ih4c/ghana-cti-pipeline/pull/15);
 documentation follow-ups [PR #12](https://github.com/Ih4c/ghana-cti-pipeline/pull/12)
 and [PR #13](https://github.com/Ih4c/ghana-cti-pipeline/pull/13), and the RSS investigation
 [PR #14](https://github.com/Ih4c/ghana-cti-pipeline/pull/14), are merged.
-Verified against GitHub on 2026-11-19: main was `82c18aa` (the PR #14 merge). This
+Verified against GitHub on 2026-11-23: main was `0638c5e` (the PR #15 merge). This
 is a dated snapshot, so always fetch current main on resumption and treat the PR
 list as the source of truth for what is delivered.
 
@@ -18,28 +19,28 @@ list as the source of truth for what is delivered.
 | Readiness and hybrid documentation | Merged planning history | [PR #5](https://github.com/Ih4c/ghana-cti-pipeline/pull/5), [PR #6](https://github.com/Ih4c/ghana-cti-pipeline/pull/6); v1.2 metadata-first vendor strategy now superseded |
 | Full-text direction | Accepted strategy only, D022 | Complete permitted CISA fields and vendor RSS articles; report template/human workflow unchanged |
 | Owner risk acknowledgement | Recorded, D023; rights unresolved | Owner-reported terms findings and acceptance do not confer license, exception or permission to ignore restrictions |
-| M1 v1.3 technical design | PR #7 merged; **M1-01 and M1-02a contracts approved only**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
+| M1 v1.3 technical design | PR #7 merged; **M1-01/M1-02a contracts and M1-02b pure helpers approved**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
 | M1-01 implementation | Delivered by PR #8 | Five [retrieval/observation contracts](M1_RETRIEVAL_CONTRACTS.md), discriminated outcomes, synthetic fixtures/tests; no I/O |
 | M1-02a implementation | Delivered by [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) | [V2 evidence, artifact, policy and manifest contracts](M1_EVIDENCE_CONTRACTS.md); synthetic tests only |
 | Documentation consistency | PR #12 and PR #13 merged; Issue #11 closed | Current-state sync and permanent pre-PR SHA/PR-state/test-count checks delivered; historical milestone references preserved |
 | RSS size investigation | Delivered by PR #14; Issue #10 open | [Limits, B1 measurement plan and decision matrix](milestones/M1_RSS_SIZE_INVESTIGATION.md); actual sizes/headroom unmeasured |
-| D027 numeric-cap amendment | Owner approved; implemented on this feature branch for review | RSS response and each representation aggregate 6 MiB, article fields 1 MiB; synthetic boundary tests only; no B1/B2/C approval |
+| D027 numeric-cap amendment | Delivered by PR #15 | RSS response and each representation aggregate 6 MiB, article fields 1 MiB; synthetic boundary tests only; no B1/B2/C approval |
+| M1-02b identities/digests | Approved; implemented on this feature branch for review | [Profiles, namespaces and D026 resolution](M1_IDENTITY_PROFILES.md), pure helpers, synthetic vectors and supplied-record checks; no I/O |
 | M2–M5 | Roadmap only | No implementation or publication approval |
 
-Main delivers the foundation, M1-01 and M1-02a (663 passed, one existing strict
+Main delivers the foundation, M1-01, M1-02a and D027 (667 passed, one existing strict
 TLP xfail). No collectors, storage, HTTP/HTML processing, scheduler or publisher
 exists. The unfinished v1.2 draft remains preserved in its original worktree.
 
 ## Blockers and decisions
 
-1. **M1-02a contract scope approved.** The
-   [owner comment on PR #8](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
-   explicitly approves M1-02a under v1.3, covering D019/D024 data-only evidence,
-   artifact-reference, provenance, source-policy and processing-manifest contracts,
-   synthetic tests and documentation. Author/scope and the PR #8 merge were
-   verified before application edits. All exclusions remain: no persistence,
-   networking, feed processing, transforms, hash/ID generation or operations.
-   PR #9 delivered this scope; M1-02b onward needs fresh scoped approval.
+1. **M1-02b pure helper scope approved.** The
+   [owner comment on PR #15](https://github.com/Ih4c/ghana-cti-pipeline/pull/15#issuecomment-7008787831)
+   approves M1-02b under v1.3: D012/D024 identity and digest helpers, D026 resolution,
+   canonicalization, UUIDv5, SHA-256, synthetic golden vectors, tests and docs.
+   Author/scope were verified before application changes and rechecked 2026-11-23.
+   Preserve existing wire shapes, D027 caps and Issue #10. No persistence, network,
+   parsing, sanitization, adapters or operations. M1-03 onward needs fresh approval.
 2. **Full-text rights unresolved.** Microsoft use/copying/distribution/publication
    restrictions are owner-reported and historically noted; applicable Google/
    FeedBurner terms and robots need review. Establish lawful access, retention,
@@ -54,12 +55,14 @@ exists. The unfinished v1.2 draft remains preserved in its original worktree.
    in [feasibility](milestones/M1_SOURCE_FEASIBILITY.md). No source network access
    or new terms verification occurred in this revision. CISA remains the strongest
    initial verification candidate, not an enabled source.
-4. **Technical choices proposed.** D004–D008, D012–D017, D019/D024 beyond data contracts and D020 still
+4. **Technical choices proposed.** D004–D008, D013–D017, D019/D024 beyond contracts/pure helpers and D020 still
    need their scoped approvals. Review V2 original/derived associations, identity,
    sanitizer/encoding limits, atomic SQLite/304/reprocessing, retention and purge.
    D018 collection strategy superseded; D009/D021 remain open. D025 wire bindings
    are delivered by PR #9; D026 source-revision versus derivation identity
-   must be resolved before M1-02b, without silently changing immutable history.
+   is resolved in the [profile specification](M1_IDENTITY_PROFILES.md). Review
+   its exact projections and association keys before M1-03; storage semantics and
+   lifecycle enforcement remain unimplemented.
 5. **Capacity and operations unresolved.** Keep 2 GiB live cap and $0 paid-service
    budget. Up to 64 MiB/day before overhead cannot fit annual retention. Explicitly
    decide lawful retention/capacity after approved measurements; never increase
@@ -94,9 +97,9 @@ interfaces; M1-02a validates declared full-text byte/count bounds; runtime enfor
 F5-wide V1 hardening/F6 tooling remain separate. F7 URL syntax is not SSRF defense;
 no transport protections are implemented yet.
 
-## Implementation validation and next handoff
+## Delivered validation and next handoff
 
-The implementation adds five independent core modules (`evidence_values`,
+PR #9 added five independent core modules (`evidence_values`,
 `artifacts`, `evidence`, `source_policy`, `processing`), synthetic evidence fixtures,
 two test modules and [contract documentation](M1_EVIDENCE_CONTRACTS.md). Existing
 V1/M1-01 code and fixtures, protocols, network guard, dependency checks,
@@ -113,7 +116,7 @@ PR #14's Issue #10 documentation review on 2026-11-19 re-ran the unchanged main 
 code or source requests were authorized or performed in that PR. D027's subsequent
 owner approval supersedes only its recommendation to retain 2 MiB pending B1.
 
-This D027 branch changes numeric validation in `evidence`/`processing` and their
+PR #15 changed numeric validation in `evidence`/`processing` and their
 synthetic tests. Schema versions, serialized shapes, generic receipt/artifact and
 per-article bounds, V1/protocols, dependencies and the report template stay unchanged.
 Capacity calculations now allow 64 MiB/day before overhead, fewer than 32 full-size
@@ -122,13 +125,24 @@ days in the unchanged 2 GiB store; primary body transfer is 20 MiB/day, at most
 cap and $0 paid-service budget remain. No runtime enforcement or measured headroom
 is claimed; no live requests or operational actions occurred.
 
-D027 branch validation: **667 passed, one existing strict TLP xfail**; Ruff lint
+PR #15 validation: **667 passed, one existing strict TLP xfail**; Ruff lint
 and format passed, explicit boundary suite **15 passed**, **152 local Markdown
 links/anchors** passed, and `git diff --check` passed. Commit author and committer
-must remain the required `ih4c` identity; leave this change for independent review.
+must remain the required `ih4c` identity.
+
+M1-02b adds only `core/digests.py`, `core/identities.py`, synthetic vectors/tests
+and documentation. Source revisions are independent of transform versions and
+parsed metadata; separate immutable association keys prevent bundle overwrites.
+No existing model, public protocol, dependency, D027 limit or expected failure
+is changed. Validation on Python **3.11.18 and 3.14.10**: **732 passed, one existing
+strict TLP xfail** on each. Ruff lint/format and the **15 dependency-boundary tests**
+pass. Synthetic vectors cover 11 identity scenarios, five canonical JSON examples
+and seven digest domains; helper calls are checked for filesystem/network/clock/
+randomness side effects. Documentation links and diff checks accompany the PR.
 
 Follow [HANDOFF.md](HANDOFF.md) and [DECISIONS.md](DECISIONS.md). Recommended next:
-**M1-02b identity and digest helpers**, after explicit scope approval and
-resolution of D026. Canonical profiles, namespaces and test vectors remain
-unimplemented. Metadata validation does not verify rights, stored bytes, current
-availability, repository-wide identities or conditional-checkpoint eligibility.
+**M1-03 SQLite evidence persistence**, after M1-02b review/merge and separate owner
+approval. Enforce immutable association keys, transactional references and policy
+lifecycle there. Helpers verify supplied values only, not actual backing bytes,
+rights, availability, publisher truth or conditional-checkpoint eligibility.
+Issue #10 remains open; B1/B2/C are not approved.

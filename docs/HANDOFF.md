@@ -35,7 +35,9 @@ Copy the following fields into the task's PR description or a dated status updat
 - Approval reference and exact scope; remaining approval gates:
 - Changed files and resulting behavior:
 - Implemented contract versions, compatibility checks and unresolved validation boundaries:
-- Source-revision versus derivation/association identity decisions and unresolved canonical profiles:
+- Source-revision versus derivation/association identity decisions, selected profile
+  versions, fixed namespaces/golden vectors and unresolved migrations
+  ([current M1 profiles](M1_IDENTITY_PROFILES.md)):
 - Checks run and outcomes; expected failures and their reasons:
 - Source feasibility evidence and remaining uncertainties:
 - Owner-reported observations versus independently verified findings and their dates:

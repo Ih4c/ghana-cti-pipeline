@@ -6,7 +6,8 @@ metadata-first vendor target. D023 records owner-reported terms findings and ris
 acceptance, not legal clearance. M1-01 and M1-02a data contracts have
 [scoped approvals](../DECISIONS.md); the remaining technical design stays proposed.
 The [contract reference](../M1_EVIDENCE_CONTRACTS.md) records implementation wire
-choices (D025) and the unresolved identity/association binding (D026). No source
+choices (D025) and [resolved identity/association profiles](../M1_IDENTITY_PROFILES.md)
+(D026), implemented by separately approved M1-02b pure helpers. No source
 requests, terms lookups or live verification were performed for this revision.
 
 D027 is a separately [approved numeric-cap amendment](../DECISIONS.md) under
@@ -157,10 +158,12 @@ limits do not apply to the separately bounded full-text artifacts.
 ## Identity, atomic commits and conditional requests (D012/D013/D019)
 
 Logical keys use source ID, native-key-kind and exact GUID/native ID or original
-URL fallback. Fixed versioned UUID namespaces and canonical JSON vectors remain
-required. Source revisions depend on original selected content and approved
-source fields/publication precision, excluding retrieval time, item order and
-catalog release metadata. Reordered feed items do not change item identity.
+URL fallback. [M1-02b profiles](../M1_IDENTITY_PROFILES.md) fix namespaces,
+canonical JSON and golden vectors. Source revisions depend on original content
+and explicit supplied feed metadata/publication text, excluding parsed date
+interpretations, typed catalog projections, retrieval time, item order and
+catalog release metadata. Complete original catalog entry digests cover source
+fields and extensions; parsed publication precision remains association metadata. Reordered feed items do not change item identity.
 A→B→A reuses still-available A and adds an observation, without mutable predecessor
 links. A changed original article creates a revision even if sanitization yields
 the same text. Transform version/configuration changes create new immutable
