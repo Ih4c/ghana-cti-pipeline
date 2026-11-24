@@ -45,7 +45,9 @@ Copy the following fields into the task's PR description or a dated status updat
 - Collection representation, policy/retention version, backing availability and verification limits:
 - Persistence schema/API versions, immutable association keys, transaction and
   checkpoint integrity checks, tested recovery boundaries and remaining lifecycle
-  gates ([current offline storage reference](M1_SQLITE_STORAGE.md)):
+  gates ([offline storage](M1_SQLITE_STORAGE.md), [lifecycle/runbook](M1_LIFECYCLE.md)):
+- Trusted rights-ledger authority/deadline, pending maintenance, managed-copy inventory,
+  restore isolation and precise logical-versus-physical deletion claims:
 - Authoritative report-template reference and any unresolved artifact/license check:
 - Decisions accepted/proposed/open (stable IDs):
 - Operational state: enabled sources, scheduler, storage, spend, deployments:

@@ -18,7 +18,8 @@ Start with the [documentation index](docs/README.md). Permanent development rule
 
 The project provides typed contracts, deterministic identity/digest helpers and
 an [offline SQLite evidence store](docs/M1_SQLITE_STORAGE.md), exercised only with
-synthetic data and temporary databases. There are no live collectors, AI calls,
+synthetic data and temporary databases, plus [offline recovery/lifecycle](docs/M1_LIFECYCLE.md)
+mechanisms. There are no live collectors, AI calls,
 approval workflows or publishers; production storage/operations remain gated.
 See [Foundation contracts](docs/FOUNDATION.md) for boundaries,
 failure semantics, unresolved decisions, expected costs and the phased plan.

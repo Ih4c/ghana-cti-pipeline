@@ -206,8 +206,10 @@ No source becomes complete merely because metadata or a response hash survives.
 ## Storage, capacity and lifecycle (D005/D013/D017/D020)
 
 M1-03 now has scoped approval for [offline SQLite persistence](../M1_SQLITE_STORAGE.md)
-with synthetic temporary databases. Production lifecycle and rights controls below
-remain proposals requiring separate approval. The target uses one private SQLite
+with synthetic temporary databases, delivered by PR #17. Separately approved
+[M1-04 mechanisms](../M1_LIFECYCLE.md) cover offline capacity/recovery and
+backup/restore/purge. Production lifecycle and rights controls below remain
+proposals requiring separate approval. The target uses one private SQLite
 database with foreign keys, typed artifact modes,
 policy-aware associations and content-addressed BLOBs for bounded response,
 original and derived artifacts. Shared digests do not share rights or extend

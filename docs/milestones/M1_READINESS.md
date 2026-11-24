@@ -13,7 +13,9 @@ Subsequent [M1-02a approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#i
 covers D019/D024 data contracts only. PR #15 separately approves M1-02b helpers,
 delivered by PR #16. The [PR #16 owner comment](https://github.com/Ih4c/ghana-cti-pipeline/pull/16#issuecomment-7108040658)
 approves M1-03 offline SQLite persistence and synthetic temporary-database tests.
-M1-04 onward and operational gates remain pending.
+The [PR #17 owner comment](https://github.com/Ih4c/ghana-cti-pipeline/pull/17#issuecomment-7119143529)
+subsequently approves M1-04 offline recovery/lifecycle and capacity checks. M1-05
+onward and operational gates remain pending.
 
 The subsequent [D027 owner decision](https://github.com/Ih4c/ghana-cti-pipeline/issues/10#issuecomment-7008185129)
 approves only the 6 MiB RSS response/representation-aggregate amendment and synthetic
@@ -142,7 +144,7 @@ M1-02b pure helpers are approved. Later increments remain separately gated.
 | M1-02a full-text contracts; core/tests | M1-01; D019/D024 artifact/derivation design approval | Proposed catalog_entry/feed_full_text V2, policy/availability/manifest and original/derived references; provenance, version/mode mismatch, missing full-text backing, dates and size bounds | No backend, transforms, hash computation or metadata-only completion |
 | M1-02b identities/digests; core/vectors | M1-02a; D012/D024 approval | Fixed namespaces, canonical profiles and independent response/original/derived digest helpers; body changes, reordering, A→B→A, same sanitized output with changed original, transform-version changes | No cross-source merge, overwritten originals, deleted-record resurrection or I/O |
 | M1-03 SQLite; storage/protocols/tests | M1-02b delivered; D005/D013/D019 offline scope approved on PR #16 | Atomic response/item/derived/manifest/observation/checkpoint store; policy-bound BLOB associations, conflicts/FKs/replay and rollback; valid 304 needs all required backing | Synthetic temporary DB only; no production paths or actual content |
-| M1-04 recovery/lifecycle; storage/tests/runbook | M1-03; D017/D020 and concrete purge/restore design approval | Crash/disk-full/read-only/schema/locking tests, 2 GiB accounting/headroom, consistent backup, WAL/purge/expiry/revocation and isolated restore; all derived copies included | No operational backup job; no claim SQL DELETE proves erasure; real-host validation before B2 |
+| M1-04 recovery/lifecycle; storage/tests/runbook | M1-03 delivered; D007/D017/D020 offline scope approved on PR #17; D029 binding for review | Crash/disk-full/read-only/schema/locking tests, 2 GiB accounting/headroom, consistent backup, WAL/purge/expiry/revocation and isolated restore; all derived copies included | No operational backup job; no claim SQL DELETE proves erasure; real-host validation before B2 |
 | M1-05 HTTPS; collectors transport/tests | M1-01; D008/D014/D015 approval | Injected resolver/socket/clock proves IP pinning/TLS, rebinding, redirects, proxy rejection, headers/byte/time limits, descriptive UA, conditionals, 403 no-retry and Retry-After | No live HTTP, proxy bypass or automatic links; minimum approved client only |
 | M1-06a parsing; collectors pure parser/tests | M1-02a; D015/D024 approval | Safe XML/JSON, UTF-8/conflicting encodings, DTD/entity/depth/count/size tests; exact complete source-field extraction, missing/truncated body failure and original response/field distinction | No HTML execution, storage/transport imports, live feeds or article requests |
 | M1-06b transformations; collectors pure helpers/tests | M1-02b, M1-06a; D024 policy/library approval | Synthetic full HTML to separate original/sanitized/plain representations; independent hashes/parents/versions; active tags/attributes/resources, malformed/mutation-XSS, encoding/entity, node/attribute/aggregate limits, deterministic text and failure tests | No viewer/browser, rendering, embedded-resource fetch, AI summary or replacement of original; reviewed sanitizer/parser dependencies only |
@@ -168,10 +170,10 @@ private host/operator, keys, purge/backup/restore and report-level rights need
 review at their respective gates. Template artifact/license, evidence sufficiency
 and D009 inheritance remain later reporting blockers.
 
-**M1-01/M1-02a/M1-02b are delivered; M1-03 offline SQLite persistence has separate
-approval under v1.3.** M1-03 stops at independent review of its
-[storage binding](../M1_SQLITE_STORAGE.md), synthetic temporary-database tests and
-documentation. M1-04 recovery/lifecycle needs fresh approval. No production storage,
-source requests, transport, parsers, collectors, backup/purge jobs, schedule,
-deployment or publication are authorized.
+**M1-01 through M1-03 are delivered; M1-04 offline recovery/lifecycle has separate
+approval under v1.3.** M1-04 stops at independent review of the
+[lifecycle binding/runbook](../M1_LIFECYCLE.md), synthetic temporary-database tests
+and documentation. M1-05 needs fresh approval. No production paths, real source
+content, source requests, transport, parsers, collectors, operational backup/purge
+jobs, key management, schedule, deployment or publication are authorized.
 Use the permanent [handoff procedure](../HANDOFF.md) and [STATUS.md](../STATUS.md).
