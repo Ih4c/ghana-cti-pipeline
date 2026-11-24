@@ -16,8 +16,10 @@ Start with the [documentation index](docs/README.md). Permanent development rule
 
 ## Development
 
-This scaffold provides typed contracts and module interfaces only. There are no
-live collectors, AI calls, storage backends, approval workflows or publishers.
+The project provides typed contracts, deterministic identity/digest helpers and
+an [offline SQLite evidence store](docs/M1_SQLITE_STORAGE.md), exercised only with
+synthetic data and temporary databases. There are no live collectors, AI calls,
+approval workflows or publishers; production storage/operations remain gated.
 See [Foundation contracts](docs/FOUNDATION.md) for boundaries,
 failure semantics, unresolved decisions, expected costs and the phased plan.
 

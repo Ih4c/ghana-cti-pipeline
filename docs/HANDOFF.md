@@ -43,6 +43,9 @@ Copy the following fields into the task's PR description or a dated status updat
 - Owner-reported observations versus independently verified findings and their dates:
 - Rights basis versus risk acknowledgement; superseded scope and fresh approval required:
 - Collection representation, policy/retention version, backing availability and verification limits:
+- Persistence schema/API versions, immutable association keys, transaction and
+  checkpoint integrity checks, tested recovery boundaries and remaining lifecycle
+  gates ([current offline storage reference](M1_SQLITE_STORAGE.md)):
 - Authoritative report-template reference and any unresolved artifact/license check:
 - Decisions accepted/proposed/open (stable IDs):
 - Operational state: enabled sources, scheduler, storage, spend, deployments:
