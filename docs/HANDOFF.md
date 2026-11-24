@@ -48,6 +48,8 @@ Copy the following fields into the task's PR description or a dated status updat
   gates ([offline storage](M1_SQLITE_STORAGE.md), [lifecycle/runbook](M1_LIFECYCLE.md)):
 - Trusted rights-ledger authority/deadline, pending maintenance, managed-copy inventory,
   restore isolation and precise logical-versus-physical deletion claims:
+- Transport URL/IP/encoding profiles, injected-I/O boundaries, deadline/byte accounting
+  and real-host verification still needed ([current transport reference](M1_TRANSPORT.md)):
 - Authoritative report-template reference and any unresolved artifact/license check:
 - Decisions accepted/proposed/open (stable IDs):
 - Operational state: enabled sources, scheduler, storage, spend, deployments:
