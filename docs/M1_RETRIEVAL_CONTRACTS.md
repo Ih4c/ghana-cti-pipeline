@@ -40,7 +40,8 @@ Only these optional HTTP strings are accepted: `returned_etag`,
 304. They default to null; present values are nonblank strict strings of 1–1,024
 characters without Unicode control/format characters. No arbitrary header map,
 auth/cookie fields or raw header dump. Header grammar and the runtime aggregate
-32 KiB limit belong to future transport; these are bounded metadata values.
+32 KiB limit are enforced separately by [M1-05 transport](M1_TRANSPORT.md); the
+descriptors themselves validate bounded metadata values only.
 
 `RetrievalOutcome` is a Pydantic discriminated union on `kind` for the 200, 304
 and failure records. Failure codes are `timeout`, `connection_error`, `tls_error`,
@@ -72,7 +73,10 @@ no dependencies, networking, storage, parser or source behavior is added.
 These descriptors cannot resolve evidence IDs, establish that a referenced 200
 was processed, reject a cross-source 304 link, or prove actual bytes, digest,
 rights, retention, backing integrity or network safety. Later approved components
-must enforce those rules, including no observations for 304s. No source is active.
+enforce those rules. M1-03/M1-04 provide offline backing/lifecycle checks;
+[M1-05 transport](M1_TRANSPORT.md) separately enforces its supplied URL/TLS/byte/
+time/conditional context. It creates no observations for 304s and makes no backing
+or rights assertion. No source is active.
 The full-text strategic direction is unchanged.
 
 No diagnostics/logging are implemented. Validation errors can include rejected
