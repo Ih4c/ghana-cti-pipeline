@@ -161,7 +161,7 @@ D026 is resolved for M1-02b by the [identity profile](M1_IDENTITY_PROFILES.md):
 evidence-association UUID identifies the full immutable bundle. Derived identities
 bind output, transform versions/configuration and immutable parents. A manifest
 item selects an association using evidence ID plus metadata digest. Never overwrite
-a bundle keyed only by evidence_id; M1-03 must enforce those storage keys. Existing
+a bundle keyed only by evidence_id; M1-03 enforces those storage keys. Existing
 wire fields and versions remain unchanged, including D027 and per-article limits.
 
 ## Validation and exclusions
@@ -174,8 +174,11 @@ compatibility and blocked network. See [STATUS.md](STATUS.md) for results.
 
 M1-02b adds [digests.py](../src/ghana_cti_pipeline/core/digests.py) and
 [identities.py](../src/ghana_cti_pipeline/core/identities.py), with synthetic
-[golden vectors](../tests/fixtures/identity_vectors.json) and tests. There is no
-persistence, networking, source access, feed parsing, sanitization, adapters,
+[golden vectors](../tests/fixtures/identity_vectors.json) and tests. The separately
+approved [M1-03 store](M1_SQLITE_STORAGE.md) persists these unchanged contracts,
+rechecks actual BLOB lengths/hashes and guards conditional checkpoints using
+complete policy/manifest/observation backing. It introduces no core wire changes.
+There is no networking, source access, feed parsing, sanitization, adapters,
 scheduling, deployment or reporting change. Validation
 errors may include rejected input; future logging must use safe codes, not raw
 ValidationError payloads. Rights and operational approval gates remain unchanged.

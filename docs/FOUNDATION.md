@@ -27,7 +27,7 @@ contract changes still need explicit review/versioning; see D001 in the decision
 | --- | --- | --- |
 | `core` | Immutable, versioned contracts and vocabulary | Shared schemas, identifiers, configuration, audit events |
 | `collectors` | Fetch/parse protocol and source-local error type | Independent permitted-source adapters, Stage 1 (partly AI-assisted) |
-| `storage` | Evidence repository protocol only | Private persistence, idempotency and retention |
+| `storage` | V1 repository protocol; additive offline V2 SQLite transactions, immutable associations and policy-bound backing checks | Production lifecycle, capacity, backup/purge and V1 backend |
 | `triage` | Package placeholder | Stage 2 deterministic ranking; optional bounded, labeled AI assistance |
 | `enrichment` | Package placeholder | Stage 3 deterministic tools, analyst verification, no AI |
 | `analysis` | Package placeholder | Stage 4 human judgments and attribution, no AI |
@@ -57,8 +57,10 @@ explicit migration, never a silent reinterpretation of old evidence.
 The proposed [full-text M1 extension](milestones/M1_EVIDENCE.md) does not change
 these V1 rules or force complete articles into V1 excerpts. Additive V2
 associates permitted original source content and sanitized/plain-text references.
-The approved [M1-02a data contracts](M1_EVIDENCE_CONTRACTS.md) were delivered by PR #9; M1-02b adds separately approved pure digest/identity helpers; storage and
-version-aware lookup remain future work.
+The approved [M1-02a data contracts](M1_EVIDENCE_CONTRACTS.md) were delivered by PR #9;
+PR #16 delivers pure digest/identity helpers. Separately approved
+[M1-03 storage](M1_SQLITE_STORAGE.md) adds offline persistence for these contracts;
+V1 backend implementation and production lifecycle remain future work.
 The additive [M1-01 descriptors](M1_RETRIEVAL_CONTRACTS.md) are delivered by PR #8.
 Response hashes do not imply archived or lawful content.
 
@@ -125,7 +127,8 @@ truncation, and test at/above each limit before any collector is enabled.
 `EvidenceRepository.get(id)` returns a record or None. `add(record)` must be
 idempotent for identical ID/content and reject conflicting content with
 `ValueError`; a backend must preserve the full snapshot and segregate restricted
-or unclassified records. No storage implementation or access control is provided.
+or unclassified records. No V1 backend or application access control is provided.
+The additive M1-03 store has a separate V2 API and is not a V1 protocol adapter.
 
 Before live collection, each adapter needs explicit timeouts, size limits,
 rate limits/Retry-After handling, bounded backoff, permissions and quotas. A future

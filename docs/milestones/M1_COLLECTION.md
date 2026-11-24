@@ -1,8 +1,8 @@
 # M1 — Full-text intelligence collection plan
 
 - Specification version: **1.3**
-- State: **strategy accepted; M1-01/M1-02a data contracts approved only; remaining technical design proposed**
-- Updated: 2026-11-19
+- State: **strategy accepted; scoped offline M1-01 through M1-03 approved; remaining technical design proposed**
+- Updated: 2026-11-24
 - Verified planning baseline: main `ccd81278472c7847287ffcf20988629435f2c999`
 - Approval boundaries: [DECISIONS.md](../DECISIONS.md), D022–D024 and the scoped D027 numeric-cap amendment.
 - Evidence: [historical feasibility and owner-reported observations](M1_SOURCE_FEASIBILITY.md).
@@ -24,8 +24,10 @@ descriptors, synthetic tests and related documentation. After PR #8 merged,
 [separate owner approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/8#issuecomment-6997113844)
 authorizes M1-02a D019/D024 data contracts only. The later
 [PR #15 owner approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/15#issuecomment-7008787831)
-authorizes M1-02b pure identity/digest helpers and D026 resolution. M1-03 onward,
-source access and operational gates remain unapproved. Earlier v1.2 work is not
+authorizes M1-02b pure identity/digest helpers and D026 resolution. The
+[PR #16 owner approval](https://github.com/Ih4c/ghana-cti-pipeline/pull/16#issuecomment-7108040658)
+authorizes M1-03 offline SQLite persistence, synthetic temporary-database tests and
+documentation. M1-04 onward, source access and operational gates remain unapproved. Earlier v1.2 work is not
 authority to proceed.
 Historical versions remain in Git, not active scope. Existing V1 contracts,
 permanent guidance, authoritative report template and human workflow are preserved.
@@ -97,7 +99,7 @@ manual CLI / separately approved daily timer
 | --- | --- |
 | `core/` | Existing V1 unchanged; additive M1-01 metadata descriptors, later V2 source/derived artifact references, policy and manifest contracts. No network/storage implementation. |
 | `collectors/` | Independent CISA/Microsoft/Google mappings; injected shared transport, pure safe parsers and versioned deterministic HTML/text transforms. No concrete storage imports or cross-adapter imports. |
-| `storage/` | Separate reviewed protocols for V2/artifacts/state; implement existing V1 EvidenceRepository without changing its signature. Atomic source transactions and policy-aware retention. |
+| `storage/` | Separate reviewed protocols for V2/artifacts/state; Whole-M1 target includes a V1 EvidenceRepository backend without signature changes; M1-03 implements only the additive V2 store. Atomic source transactions and policy-aware retention. |
 | Future composition/CLI | Static registry, source budgets, failure isolation and diagnostics. Narrow tested import-boundary exception; no dynamic plugin loading or autonomous publication. |
 | Later-stage packages | No behavioral changes; human-led analysis/reporting and existing template authority preserved. |
 
@@ -251,4 +253,4 @@ parsing/transforms, independent adapters and manual offline integration. B1/B2
 verification/activation and Gate C scheduling remain separately approved work.
 The M1-01 implementation PR stops at offline descriptors/tests/documentation.
 M1-02a is separately approved for data contracts and stops at its review PR.
-See [delivery status](../STATUS.md); M1-02b has scoped approval and stops at its implementation review PR; M1-03 onward needs fresh approval. The full-text strategic target and acceptance criteria are unchanged.
+See [delivery status](../STATUS.md); M1-02b is delivered by PR #16. M1-03 has scoped offline approval and stops at independent implementation review; M1-04 onward needs fresh approval. The full-text strategic target and acceptance criteria are unchanged.

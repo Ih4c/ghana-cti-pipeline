@@ -1,12 +1,13 @@
 # Project status
 
-Last reviewed: **2026-11-23**. Repository: `Ih4c/ghana-cti-pipeline`.
+Last reviewed: **2026-11-24**. Repository: `Ih4c/ghana-cti-pipeline`.
 Application contracts delivered by [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) (M1-02a),
 with D027 numeric caps delivered by [PR #15](https://github.com/Ih4c/ghana-cti-pipeline/pull/15);
 documentation follow-ups [PR #12](https://github.com/Ih4c/ghana-cti-pipeline/pull/12)
 and [PR #13](https://github.com/Ih4c/ghana-cti-pipeline/pull/13), and the RSS investigation
 [PR #14](https://github.com/Ih4c/ghana-cti-pipeline/pull/14), are merged.
-Verified against GitHub on 2026-11-23: main was `0638c5e` (the PR #15 merge). This
+M1-02b helpers are delivered by [PR #16](https://github.com/Ih4c/ghana-cti-pipeline/pull/16).
+Verified against GitHub on 2026-11-24: main was `8a3a85d` (the PR #16 merge). This
 is a dated snapshot, so always fetch current main on resumption and treat the PR
 list as the source of truth for what is delivered.
 
@@ -19,28 +20,32 @@ list as the source of truth for what is delivered.
 | Readiness and hybrid documentation | Merged planning history | [PR #5](https://github.com/Ih4c/ghana-cti-pipeline/pull/5), [PR #6](https://github.com/Ih4c/ghana-cti-pipeline/pull/6); v1.2 metadata-first vendor strategy now superseded |
 | Full-text direction | Accepted strategy only, D022 | Complete permitted CISA fields and vendor RSS articles; report template/human workflow unchanged |
 | Owner risk acknowledgement | Recorded, D023; rights unresolved | Owner-reported terms findings and acceptance do not confer license, exception or permission to ignore restrictions |
-| M1 v1.3 technical design | PR #7 merged; **M1-01/M1-02a contracts and M1-02b pure helpers approved**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
+| M1 v1.3 technical design | PR #7 merged; **M1-01 through M1-03 scoped offline work approved**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
 | M1-01 implementation | Delivered by PR #8 | Five [retrieval/observation contracts](M1_RETRIEVAL_CONTRACTS.md), discriminated outcomes, synthetic fixtures/tests; no I/O |
 | M1-02a implementation | Delivered by [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) | [V2 evidence, artifact, policy and manifest contracts](M1_EVIDENCE_CONTRACTS.md); synthetic tests only |
 | Documentation consistency | PR #12 and PR #13 merged; Issue #11 closed | Current-state sync and permanent pre-PR SHA/PR-state/test-count checks delivered; historical milestone references preserved |
 | RSS size investigation | Delivered by PR #14; Issue #10 open | [Limits, B1 measurement plan and decision matrix](milestones/M1_RSS_SIZE_INVESTIGATION.md); actual sizes/headroom unmeasured |
 | D027 numeric-cap amendment | Delivered by PR #15 | RSS response and each representation aggregate 6 MiB, article fields 1 MiB; synthetic boundary tests only; no B1/B2/C approval |
-| M1-02b identities/digests | Approved; implemented on this feature branch for review | [Profiles, namespaces and D026 resolution](M1_IDENTITY_PROFILES.md), pure helpers, synthetic vectors and supplied-record checks; no I/O |
+| M1-02b identities/digests | Delivered by PR #16 | [Profiles, namespaces and D026 resolution](M1_IDENTITY_PROFILES.md), pure helpers, synthetic vectors and supplied-record checks; no I/O |
+| M1-03 SQLite persistence | Approved; implemented on this feature branch for independent review | [Offline storage reference](M1_SQLITE_STORAGE.md); atomic synthetic batches, immutable associations, replay/rollback, policy-bound bytes and validated 304 checkpoints; no operational activation |
 | M2–M5 | Roadmap only | No implementation or publication approval |
 
-Main delivers the foundation, M1-01, M1-02a and D027 (667 passed, one existing strict
-TLP xfail). No collectors, storage, HTTP/HTML processing, scheduler or publisher
-exists. The unfinished v1.2 draft remains preserved in its original worktree.
+Main delivers the foundation, M1-01, M1-02a, M1-02b and D027 (732 passed, one existing
+strict TLP xfail). This branch adds offline SQLite storage; main has no storage
+backend yet. No collectors, HTTP/HTML processing, scheduler or publisher exists.
+The unfinished v1.2 draft remains preserved in its original worktree.
 
 ## Blockers and decisions
 
-1. **M1-02b pure helper scope approved.** The
-   [owner comment on PR #15](https://github.com/Ih4c/ghana-cti-pipeline/pull/15#issuecomment-7008787831)
-   approves M1-02b under v1.3: D012/D024 identity and digest helpers, D026 resolution,
-   canonicalization, UUIDv5, SHA-256, synthetic golden vectors, tests and docs.
-   Author/scope were verified before application changes and rechecked 2026-11-23.
-   Preserve existing wire shapes, D027 caps and Issue #10. No persistence, network,
-   parsing, sanitization, adapters or operations. M1-03 onward needs fresh approval.
+1. **M1-03 offline persistence scope approved.** The
+   [owner comment on PR #16](https://github.com/Ih4c/ghana-cti-pipeline/pull/16#issuecomment-7108040658)
+   approves D005/D013/D019 offline SQLite persistence under v1.3: atomic records,
+   policy-bound BLOB associations, immutable keys, reference integrity, replay,
+   rollback and complete 304 backing, with synthetic tests and documentation.
+   Author/scope were verified before application changes. Preserve existing wire
+   shapes, D027 caps and Issue #10. Only temporary databases and synthetic content
+   are used. M1-04 onward, production paths, backup/purge jobs and all source access
+   and operational gates need separate approval.
 2. **Full-text rights unresolved.** Microsoft use/copying/distribution/publication
    restrictions are owner-reported and historically noted; applicable Google/
    FeedBurner terms and robots need review. Establish lawful access, retention,
@@ -55,14 +60,15 @@ exists. The unfinished v1.2 draft remains preserved in its original worktree.
    in [feasibility](milestones/M1_SOURCE_FEASIBILITY.md). No source network access
    or new terms verification occurred in this revision. CISA remains the strongest
    initial verification candidate, not an enabled source.
-4. **Technical choices proposed.** D004–D008, D013–D017, D019/D024 beyond contracts/pure helpers and D020 still
-   need their scoped approvals. Review V2 original/derived associations, identity,
-   sanitizer/encoding limits, atomic SQLite/304/reprocessing, retention and purge.
+4. **Technical choices remain scoped.** D005/D013/D019 offline persistence is now
+   approved; D028 records its concrete schema/API choices for independent review.
+   Transport, sanitizer/encoding limits, capacity, retention jobs and purge still
+   need their respective design and implementation approvals.
    D018 collection strategy superseded; D009/D021 remain open. D025 wire bindings
    are delivered by PR #9; D026 source-revision versus derivation identity
    is resolved in the [profile specification](M1_IDENTITY_PROFILES.md). Review
-   its exact projections and association keys before M1-03; storage semantics and
-   lifecycle enforcement remain unimplemented.
+   its exact projections and association keys alongside the M1-03 storage review.
+   Operational lifecycle enforcement remains unimplemented.
 5. **Capacity and operations unresolved.** Keep 2 GiB live cap and $0 paid-service
    budget. Up to 64 MiB/day before overhead cannot fit annual retention. Explicitly
    decide lawful retention/capacity after approved measurements; never increase
@@ -130,7 +136,7 @@ and format passed, explicit boundary suite **15 passed**, **152 local Markdown
 links/anchors** passed, and `git diff --check` passed. Commit author and committer
 must remain the required `ih4c` identity.
 
-M1-02b adds only `core/digests.py`, `core/identities.py`, synthetic vectors/tests
+PR #16 delivered only `core/digests.py`, `core/identities.py`, synthetic vectors/tests
 and documentation. Source revisions are independent of transform versions and
 parsed metadata; separate immutable association keys prevent bundle overwrites.
 No existing model, public protocol, dependency, D027 limit or expected failure
@@ -140,9 +146,18 @@ pass. Synthetic vectors cover 11 identity scenarios, five canonical JSON example
 and seven digest domains; helper calls are checked for filesystem/network/clock/
 randomness side effects. Documentation links and diff checks accompany the PR.
 
-Follow [HANDOFF.md](HANDOFF.md) and [DECISIONS.md](DECISIONS.md). Recommended next:
-**M1-03 SQLite evidence persistence**, after M1-02b review/merge and separate owner
-approval. Enforce immutable association keys, transactional references and policy
-lifecycle there. Helpers verify supplied values only, not actual backing bytes,
-rights, availability, publisher truth or conditional-checkpoint eligibility.
-Issue #10 remains open; B1/B2/C are not approved.
+M1-03 adds four storage modules, a synthetic fixture builder and focused temporary
+database tests. All existing core contracts, helpers, protocols, dependencies,
+CI configuration, numeric caps and report template remain unchanged. New tests
+cover reopen, replay, A→B→A/transform history, FK/conflict failures, transaction
+rollback, policy/retention gates, damaged backing and 304 chains. Full-suite
+validation on Python **3.11 and 3.14**: **811 passed, one existing strict TLP xfail**
+on each; **79** tests exercise the new store. Ruff lint/format, **15 dependency-boundary tests**, **183 local Markdown
+links/anchors** and diff checks pass. No live source requests or
+operational actions occurred.
+
+Follow [HANDOFF.md](HANDOFF.md) and [DECISIONS.md](DECISIONS.md). Stop at independent
+M1-03 review. Recommended next: **M1-04 recovery and lifecycle design/implementation**,
+after review/merge and separate scoped approval. Review crash/disk-full recovery,
+2 GiB headroom, encryption/host controls, backup/restore and policy-bound purge
+before production use. Issue #10 remains open; B1/B2/C are not approved.
