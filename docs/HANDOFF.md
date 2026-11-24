@@ -50,6 +50,8 @@ Copy the following fields into the task's PR description or a dated status updat
   restore isolation and precise logical-versus-physical deletion claims:
 - Transport URL/IP/encoding profiles, injected-I/O boundaries, deadline/byte accounting
   and real-host verification still needed ([current transport reference](M1_TRANSPORT.md)):
+- Parser profile, selected expanded field names, original-byte versus decoded-field
+  distinction, numeric compatibility and completeness limits ([parsing reference](M1_PARSING.md)):
 - Authoritative report-template reference and any unresolved artifact/license check:
 - Decisions accepted/proposed/open (stable IDs):
 - Operational state: enabled sources, scheduler, storage, spend, deployments:
