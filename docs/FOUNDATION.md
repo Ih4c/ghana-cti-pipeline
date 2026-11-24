@@ -27,7 +27,7 @@ contract changes still need explicit review/versioning; see D001 in the decision
 | --- | --- | --- |
 | `core` | Immutable, versioned contracts and vocabulary | Shared schemas, identifiers, configuration, audit events |
 | `collectors` | Fetch/parse protocol and source-local error type | Independent permitted-source adapters, Stage 1 (partly AI-assisted) |
-| `storage` | V1 repository protocol; additive offline V2 SQLite transactions, immutable associations and policy-bound backing checks | Production lifecycle, capacity, backup/purge and V1 backend |
+| `storage` | V1 repository protocol; additive offline V2 SQLite transactions, immutable associations and policy-bound backing checks | Production lifecycle/host controls and V1 backend |
 | `triage` | Package placeholder | Stage 2 deterministic ranking; optional bounded, labeled AI assistance |
 | `enrichment` | Package placeholder | Stage 3 deterministic tools, analyst verification, no AI |
 | `analysis` | Package placeholder | Stage 4 human judgments and attribution, no AI |
@@ -60,7 +60,9 @@ associates permitted original source content and sanitized/plain-text references
 The approved [M1-02a data contracts](M1_EVIDENCE_CONTRACTS.md) were delivered by PR #9;
 PR #16 delivers pure digest/identity helpers. Separately approved
 [M1-03 storage](M1_SQLITE_STORAGE.md) adds offline persistence for these contracts;
-V1 backend implementation and production lifecycle remain future work.
+[M1-04 lifecycle mechanisms](M1_LIFECYCLE.md) add offline recovery/capacity and
+backup/restore/purge. V1 backend implementation and production operations remain
+future work.
 The additive [M1-01 descriptors](M1_RETRIEVAL_CONTRACTS.md) are delivered by PR #8.
 Response hashes do not imply archived or lawful content.
 

@@ -7,7 +7,8 @@ documentation follow-ups [PR #12](https://github.com/Ih4c/ghana-cti-pipeline/pul
 and [PR #13](https://github.com/Ih4c/ghana-cti-pipeline/pull/13), and the RSS investigation
 [PR #14](https://github.com/Ih4c/ghana-cti-pipeline/pull/14), are merged.
 M1-02b helpers are delivered by [PR #16](https://github.com/Ih4c/ghana-cti-pipeline/pull/16).
-Verified against GitHub on 2026-11-24: main was `8a3a85d` (the PR #16 merge). This
+M1-03 offline persistence is delivered by [PR #17](https://github.com/Ih4c/ghana-cti-pipeline/pull/17).
+Verified against GitHub on 2026-11-24: main was `c256b3f` (the PR #17 merge). This
 is a dated snapshot, so always fetch current main on resumption and treat the PR
 list as the source of truth for what is delivered.
 
@@ -20,32 +21,32 @@ list as the source of truth for what is delivered.
 | Readiness and hybrid documentation | Merged planning history | [PR #5](https://github.com/Ih4c/ghana-cti-pipeline/pull/5), [PR #6](https://github.com/Ih4c/ghana-cti-pipeline/pull/6); v1.2 metadata-first vendor strategy now superseded |
 | Full-text direction | Accepted strategy only, D022 | Complete permitted CISA fields and vendor RSS articles; report template/human workflow unchanged |
 | Owner risk acknowledgement | Recorded, D023; rights unresolved | Owner-reported terms findings and acceptance do not confer license, exception or permission to ignore restrictions |
-| M1 v1.3 technical design | PR #7 merged; **M1-01 through M1-03 scoped offline work approved**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
+| M1 v1.3 technical design | PR #7 merged; **M1-01 through M1-04 scoped offline work approved**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
 | M1-01 implementation | Delivered by PR #8 | Five [retrieval/observation contracts](M1_RETRIEVAL_CONTRACTS.md), discriminated outcomes, synthetic fixtures/tests; no I/O |
 | M1-02a implementation | Delivered by [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) | [V2 evidence, artifact, policy and manifest contracts](M1_EVIDENCE_CONTRACTS.md); synthetic tests only |
 | Documentation consistency | PR #12 and PR #13 merged; Issue #11 closed | Current-state sync and permanent pre-PR SHA/PR-state/test-count checks delivered; historical milestone references preserved |
 | RSS size investigation | Delivered by PR #14; Issue #10 open | [Limits, B1 measurement plan and decision matrix](milestones/M1_RSS_SIZE_INVESTIGATION.md); actual sizes/headroom unmeasured |
 | D027 numeric-cap amendment | Delivered by PR #15 | RSS response and each representation aggregate 6 MiB, article fields 1 MiB; synthetic boundary tests only; no B1/B2/C approval |
 | M1-02b identities/digests | Delivered by PR #16 | [Profiles, namespaces and D026 resolution](M1_IDENTITY_PROFILES.md), pure helpers, synthetic vectors and supplied-record checks; no I/O |
-| M1-03 SQLite persistence | Approved; implemented on this feature branch for independent review | [Offline storage reference](M1_SQLITE_STORAGE.md); atomic synthetic batches, immutable associations, replay/rollback, policy-bound bytes and validated 304 checkpoints; no operational activation |
+| M1-03 SQLite persistence | Delivered by PR #17 | [Offline storage reference](M1_SQLITE_STORAGE.md); atomic synthetic batches, immutable associations, replay/rollback, policy-bound bytes and validated 304 checkpoints; no operational activation |
+| M1-04 recovery/lifecycle | Approved; implemented on this feature branch for independent review | [Offline lifecycle/runbook](M1_LIFECYCLE.md); bounded private workspace, consistent backup, isolated restore, rights ledger and policy purge; no production job |
 | M2–M5 | Roadmap only | No implementation or publication approval |
 
-Main delivers the foundation, M1-01, M1-02a, M1-02b and D027 (732 passed, one existing
-strict TLP xfail). This branch adds offline SQLite storage; main has no storage
-backend yet. No collectors, HTTP/HTML processing, scheduler or publisher exists.
+Main delivers the foundation, M1-01 through M1-03 and D027 (811 passed, one existing
+strict TLP xfail). This branch adds offline recovery/lifecycle mechanisms.
+No collectors, HTTP/HTML processing, scheduler or publisher exists.
 The unfinished v1.2 draft remains preserved in its original worktree.
 
 ## Blockers and decisions
 
-1. **M1-03 offline persistence scope approved.** The
-   [owner comment on PR #16](https://github.com/Ih4c/ghana-cti-pipeline/pull/16#issuecomment-7108040658)
-   approves D005/D013/D019 offline SQLite persistence under v1.3: atomic records,
-   policy-bound BLOB associations, immutable keys, reference integrity, replay,
-   rollback and complete 304 backing, with synthetic tests and documentation.
-   Author/scope were verified before application changes. Preserve existing wire
-   shapes, D027 caps and Issue #10. Only temporary databases and synthetic content
-   are used. M1-04 onward, production paths, backup/purge jobs and all source access
-   and operational gates need separate approval.
+1. **M1-04 offline recovery/lifecycle approved.** The
+   [owner comment on PR #17](https://github.com/Ih4c/ghana-cti-pipeline/pull/17#issuecomment-7119143529)
+   approves D017/D020 offline mechanisms and D007 accounting under v1.3: failure
+   handling, 2 GiB/80%/headroom checks, consistent backup, isolated verified restore,
+   policy expiry/revocation/purge, append-only ledger, synthetic tests and runbook.
+   Author/scope were verified before application changes. Existing contracts/caps
+   and Issue #10 remain unchanged. M1-05 onward and source/operational gates need
+   separate approval; no production paths, real content, key management or jobs.
 2. **Full-text rights unresolved.** Microsoft use/copying/distribution/publication
    restrictions are owner-reported and historically noted; applicable Google/
    FeedBurner terms and robots need review. Establish lawful access, retention,
@@ -61,19 +62,21 @@ The unfinished v1.2 draft remains preserved in its original worktree.
    or new terms verification occurred in this revision. CISA remains the strongest
    initial verification candidate, not an enabled source.
 4. **Technical choices remain scoped.** D005/D013/D019 offline persistence is now
-   approved; D028 records its concrete schema/API choices for independent review.
-   Transport, sanitizer/encoding limits, capacity, retention jobs and purge still
-   need their respective design and implementation approvals.
+   delivered by PR #17 with D028 schema/API bindings. M1-04 offline mechanisms are
+   separately approved; D029 records their concrete choices for review. Transport,
+   sanitizer/encoding limits, production capacity and operational jobs still need
+   their respective approvals.
    D018 collection strategy superseded; D009/D021 remain open. D025 wire bindings
    are delivered by PR #9; D026 source-revision versus derivation identity
    is resolved in the [profile specification](M1_IDENTITY_PROFILES.md). Review
-   its exact projections and association keys alongside the M1-03 storage review.
-   Operational lifecycle enforcement remains unimplemented.
+   its exact projections and association keys alongside M1-04 lifecycle review.
+   Real-host controls and operational lifecycle jobs remain unimplemented.
 5. **Capacity and operations unresolved.** Keep 2 GiB live cap and $0 paid-service
    budget. Up to 64 MiB/day before overhead cannot fit annual retention. Explicitly
    decide lawful retention/capacity after approved measurements; never increase
-   storage silently. Private host/operator, encryption/keys, backups, WAL/purge,
+   storage silently. Private host/operator, encryption/keys, real-host backup/WAL/purge behavior,
    one-cycle/24h budgets and publisher-stricter restrictions require verification.
+   Offline tests do not prove physical erasure or independently establish rights.
 6. **Reporting gates remain.** Existing report-template reference/standards unchanged;
    actual template artifact/version/license absent/unverified in this repository.
    Original human analysis may cite permitted evidence, but full articles/raw
@@ -146,7 +149,7 @@ pass. Synthetic vectors cover 11 identity scenarios, five canonical JSON example
 and seven digest domains; helper calls are checked for filesystem/network/clock/
 randomness side effects. Documentation links and diff checks accompany the PR.
 
-M1-03 adds four storage modules, a synthetic fixture builder and focused temporary
+PR #17 delivered four storage modules, a synthetic fixture builder and focused temporary
 database tests. All existing core contracts, helpers, protocols, dependencies,
 CI configuration, numeric caps and report template remain unchanged. New tests
 cover reopen, replay, A→B→A/transform history, FK/conflict failures, transaction
@@ -156,8 +159,23 @@ on each; **79** tests exercise the new store. Ruff lint/format, **15 dependency-
 links/anchors** and diff checks pass. No live source requests or
 operational actions occurred.
 
+M1-04 adds five storage modules, one focused synthetic test module and a lifecycle
+reference/runbook. Existing M1-03/core code, wire contracts, schema v1, dependencies,
+CI and report template remain unchanged. Verification covers all retained graphs,
+not only the newest checkpoint. Purge preserves shared bytes only through surviving
+independent policy associations. Restore candidates have no operational selectors.
+New tests cover real child-process crash rollback, WAL recovery, SQLite FULL and
+read-only errors, locks, corruption, backup permissions/deadlines, ledger integrity,
+interrupted purge/backup, policy retirement and absence of synthetic canaries from
+remaining managed files. A purge result never claims physical erasure.
+
+Validation: **852 passed, one existing strict TLP xfail** on Python **3.11 and
+3.14**; **41** new lifecycle cases. Ruff lint/format, **15 dependency-boundary
+tests**, **192 local Markdown links/anchors** and diff checks pass. No source requests or operational jobs occurred.
+
 Follow [HANDOFF.md](HANDOFF.md) and [DECISIONS.md](DECISIONS.md). Stop at independent
-M1-03 review. Recommended next: **M1-04 recovery and lifecycle design/implementation**,
-after review/merge and separate scoped approval. Review crash/disk-full recovery,
-2 GiB headroom, encryption/host controls, backup/restore and policy-bound purge
-before production use. Issue #10 remains open; B1/B2/C are not approved.
+M1-04 review. Next proposed increment: **M1-05 hardened HTTPS transport**, after
+review/merge and its separate scoped approval. POSIX host validation, ledger
+protection/renewal, encryption/keys, external backup inventory, capacity/retention
+and lawful basis remain open before live use. Issue #10 stays open; B1/B2/C are not
+approved.

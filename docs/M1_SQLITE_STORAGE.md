@@ -1,6 +1,8 @@
 # M1-03 offline SQLite evidence storage
 
-Implementation specification, 2026-11-24; M1 v1.3. The
+M1-03 implementation specification, delivered by PR #17; M1 v1.3.
+The later [M1-04 lifecycle layer](M1_LIFECYCLE.md) has separate offline approval
+and wraps this unchanged schema/API. Its mechanisms do not activate operations. The
 [owner approval on PR #16](https://github.com/Ih4c/ghana-cti-pipeline/pull/16#issuecomment-7108040658)
 covers D005/D013/D019 offline persistence, atomic batches, immutable associations,
 foreign keys, replay, rollback and complete 304 backing. PR #16 is merged at
@@ -21,7 +23,7 @@ SQLite uses application ID `0x47435449` and database schema version 1. Initializ
 only an empty database; reject foreign/unsupported schemas without migration.
 Enable foreign keys, explicit `BEGIN IMMEDIATE` transactions, rollback-journal
 mode and `synchronous=FULL`. WAL tuning, process-crash/storage-pressure recovery,
-backup, purge, restore and migration procedures belong to separately approved M1-04.
+backup, purge, restore and migration procedures belong to the separately approved offline M1-04 layer; production jobs remain gated.
 New files use owner-only permissions; deployment encryption and protected host
 directories remain requirements, not capabilities of SQLite or this increment.
 
@@ -123,7 +125,8 @@ current `CheckpointContext`; `record_failure` never advances a checkpoint.
 `get_artifact` evaluates policy and availability in one read snapshot.
 `record_availability` appends an assertion; it performs no purge or restoration.
 Internal `get_evidence`/`get_retrieval` metadata reads do not assert body access
-or rights. Operational metadata retention/deletion remains M1-04 work.
+or rights. Policy-driven metadata retirement is enforced by the separate M1-04 facade;
+the raw M1-03 API does not provide that operational boundary.
 
 Storage exposes bounded `StoreError` codes, suppressing raw SQL/validation error
 text that could contain evidence. It logs no payloads. SQLite locks serialize
