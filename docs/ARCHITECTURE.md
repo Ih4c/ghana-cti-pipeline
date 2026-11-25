@@ -14,7 +14,7 @@ Source adapters (independent)
 ```
 
 ## Component boundaries
-- `collectors/`: common fetch/parse interface and injected-fake HTTPS transport; source adapters and pure parsers remain future work, with failures isolated.
+- `collectors/`: common fetch/parse interface, injected-fake HTTPS transport and pure RSS/XML/JSON parsing; source adapters and HTML transformations remain future work, with failures isolated.
 - `core/`: schemas, provenance, identifiers, error types, configuration, audit events.
 - `triage/`: deterministic filtering and optional LLM-assisted prioritization; no unsourced claims.
 - `enrichment/`: deterministic extraction and enrichment utilities, outputs pending analyst validation.
@@ -50,7 +50,9 @@ activation blocked, not metadata substitution. V1 shapes/excerpt rules remain
 unchanged. M1-01 descriptors are delivered by PR #8. Additive [M1-02a evidence
 contracts](M1_EVIDENCE_CONTRACTS.md) had separate approval and are delivered by PR #9; M1-02b
 [pure identity/digest helpers](M1_IDENTITY_PROFILES.md) have separate approval;
-source processing remains unimplemented and gated. Separately approved
+source mapping and HTML transformation remain unimplemented and gated. Separately
+approved [M1-06a parsers](M1_PARSING.md) extract bounded complete source fields
+without transport/storage imports or source-specific mappings. Separately approved
 [M1-05 transport](M1_TRANSPORT.md) is tested with injected resolver/socket/TLS/clock
 objects; no live I/O or source registry is enabled. The separately
 approved [M1-03 store](M1_SQLITE_STORAGE.md) adds offline persistence and backing

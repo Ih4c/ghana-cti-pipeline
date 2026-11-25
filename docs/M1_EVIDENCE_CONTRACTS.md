@@ -10,8 +10,9 @@ and processing-manifest contracts, synthetic tests and documentation.
 The separately [approved D027 amendment](https://github.com/Ih4c/ghana-cti-pipeline/issues/10#issuecomment-7008185129)
 raises RSS response and each representation aggregate from 2 MiB to 6 MiB under
 v1.3. The 1 MiB per-article and generic 8 MiB ceilings, schemas and serialized
-shapes are unchanged. This widens accepted declared counts only; runtime byte
-measurement remains unimplemented, and B1 must still establish actual headroom.
+shapes are unchanged. The original amendment widened declared counts only. M1-05 now bounds synthetic
+transport bodies; [M1-06a](M1_PARSING.md) adds actual decoded-input and extracted-field
+checks in pure parsers. B1 must still establish actual publisher headroom.
 
 ## Modules and schemas
 
@@ -178,7 +179,9 @@ M1-02b adds [digests.py](../src/ghana_cti_pipeline/core/digests.py) and
 approved [M1-03 store](M1_SQLITE_STORAGE.md) persists these unchanged contracts,
 rechecks actual BLOB lengths/hashes and guards conditional checkpoints using
 complete policy/manifest/observation backing. It introduces no core wire changes.
-There is no networking, source access, feed parsing, sanitization, adapters,
-scheduling, deployment or reporting change. Validation
+[M1-05](M1_TRANSPORT.md) separately adds injected-fake transport and
+[M1-06a](M1_PARSING.md) adds pure source parsing; neither changes these contracts.
+There is no live source access, sanitization, adapter, scheduling, deployment or
+reporting change. Validation
 errors may include rejected input; future logging must use safe codes, not raw
 ValidationError payloads. Rights and operational approval gates remain unchanged.

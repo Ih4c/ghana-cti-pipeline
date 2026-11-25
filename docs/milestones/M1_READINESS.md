@@ -16,8 +16,10 @@ approves M1-03 offline SQLite persistence and synthetic temporary-database tests
 The [PR #17 owner comment](https://github.com/Ih4c/ghana-cti-pipeline/pull/17#issuecomment-7119143529)
 subsequently approves M1-04 offline recovery/lifecycle and capacity checks. The
 [PR #18 owner comment](https://github.com/Ih4c/ghana-cti-pipeline/pull/18#issuecomment-7119629449)
-approves M1-05 standard-library HTTPS transport with injected fakes only. M1-06a
-onward and operational gates remain pending.
+approves M1-05 standard-library HTTPS transport with injected fakes only, delivered
+by PR #19. The [PR #19 owner comment](https://github.com/Ih4c/ghana-cti-pipeline/pull/19#issuecomment-7138988824)
+approves M1-06a pure offline Expat/JSON parsing. M1-06b onward and operational
+gates remain pending.
 
 The subsequent [D027 owner decision](https://github.com/Ih4c/ghana-cti-pipeline/issues/10#issuecomment-7008185129)
 approves only the 6 MiB RSS response/representation-aggregate amendment and synthetic
@@ -147,8 +149,8 @@ M1-02b pure helpers are approved. Later increments remain separately gated.
 | M1-02b identities/digests; core/vectors | M1-02a; D012/D024 approval | Fixed namespaces, canonical profiles and independent response/original/derived digest helpers; body changes, reordering, A→B→A, same sanitized output with changed original, transform-version changes | No cross-source merge, overwritten originals, deleted-record resurrection or I/O |
 | M1-03 SQLite; storage/protocols/tests | M1-02b delivered; D005/D013/D019 offline scope approved on PR #16 | Atomic response/item/derived/manifest/observation/checkpoint store; policy-bound BLOB associations, conflicts/FKs/replay and rollback; valid 304 needs all required backing | Synthetic temporary DB only; no production paths or actual content |
 | M1-04 recovery/lifecycle; storage/tests/runbook | M1-03 delivered; D007/D017/D020 offline scope approved on PR #17; D029 binding for review | Crash/disk-full/read-only/schema/locking tests, 2 GiB accounting/headroom, consistent backup, WAL/purge/expiry/revocation and isolated restore; all derived copies included | No operational backup job; no claim SQL DELETE proves erasure; real-host validation before B2 |
-| M1-05 HTTPS; collectors transport/tests | M1-01 delivered; D008/D014/D015 offline scope approved on PR #18; D030 for review | Injected resolver/socket/clock proves IP pinning/TLS, rebinding, redirects, proxy rejection, headers/byte/time limits, descriptive UA, conditionals, 403 no-retry and Retry-After | No live HTTP, proxy bypass or automatic links; minimum approved client only |
-| M1-06a parsing; collectors pure parser/tests | M1-02a; D015/D024 approval | Safe XML/JSON, UTF-8/conflicting encodings, DTD/entity/depth/count/size tests; exact complete source-field extraction, missing/truncated body failure and original response/field distinction | No HTML execution, storage/transport imports, live feeds or article requests |
+| M1-05 HTTPS; collectors transport/tests | Delivered by PR #19 under PR #18 approval; D030 binding | Injected resolver/socket/clock proves IP pinning/TLS, rebinding, redirects, proxy rejection, headers/byte/time limits, descriptive UA, conditionals, 403 no-retry and Retry-After | No live HTTP, proxy bypass or automatic links; minimum approved client only |
+| M1-06a parsing; collectors pure parser/tests | M1-02a delivered; D015/D024 parsing scope approved on PR #19; D031 for review | Safe XML/JSON, UTF-8/conflicting encodings, DTD/entity/depth/count/size tests; exact complete source-field extraction, missing/truncated body failure and original response/field distinction | No HTML execution, storage/transport imports, live feeds or article requests |
 | M1-06b transformations; collectors pure helpers/tests | M1-02b, M1-06a; D024 policy/library approval | Synthetic full HTML to separate original/sanitized/plain representations; independent hashes/parents/versions; active tags/attributes/resources, malformed/mutation-XSS, encoding/entity, node/attribute/aggregate limits, deterministic text and failure tests | No viewer/browser, rendering, embedded-resource fetch, AI summary or replacement of original; reviewed sanitizer/parser dependencies only |
 | M1-07 CISA adapter; own module/tests | M1-02b, M1-05/06a; D004 mapping approval | Complete synthetic entry fields/catalog count/date precision, duplicate/conflict/reordering/change tests, locators and raw associations; no invented HTML representation | Catalog license scope only; no linked material or real requests |
 | M1-08 Microsoft adapter; own module/tests | M1-02b, M1-05/06a/06b; D004/D024 mapping approval | Synthetic content:encoded namespace/full body, missing/truncated field fail, GUID/URL fallback, original/sanitized/plain association, dates/versions/provenance and failure isolation | Disabled until rights and B1/B2; no real fixtures, article crawler or metadata fallback |
@@ -172,10 +174,12 @@ private host/operator, keys, purge/backup/restore and report-level rights need
 review at their respective gates. Template artifact/license, evidence sufficiency
 and D009 inheritance remain later reporting blockers.
 
-**M1-01 through M1-04 are delivered; M1-05 offline HTTPS transport has separate
-approval under v1.3.** M1-05 stops at independent review of the
-[transport binding](../M1_TRANSPORT.md), injected-fake tests and documentation.
-M1-06a needs fresh approval. No live DNS/HTTP, source registry/default endpoints,
-robots/policy fetching, source parsing, sanitization, adapters, storage integration,
-persisted retry budgets, deployment, schedule or publication are authorized.
+**M1-01 through M1-05 are delivered; M1-06a pure source parsing has separate
+approval under v1.3.** M1-06a stops at independent review of the
+[parsing binding](../M1_PARSING.md), synthetic tests and documentation. The narrow
+RSS envelope/field profile, duplicate rules and exact JSON numeric handling need
+review. Syntax alone cannot prove publisher article completeness. M1-06b needs
+fresh policy/library and implementation approval. No live DNS/HTTP, source registry,
+robots/policy fetching, HTML transformation, adapters, storage integration,
+persisted retry budgets, deployment, scheduling or publication are authorized.
 Use the permanent [handoff procedure](../HANDOFF.md) and [STATUS.md](../STATUS.md).

@@ -115,9 +115,10 @@ not force CISA into HTML. Original values, source context and date precision sur
 
 ## Safe parsing and transformations (D008/D015/D024)
 
-All transformations are proposed deterministic source processing, not AI analysis.
-Use maintained, pinned open-source XML/HTML parsing and sanitization components,
-selected in a separately reviewed implementation. Do not use regex as an HTML
+Source processing is deterministic, not AI analysis. Separately approved
+[M1-06a](../M1_PARSING.md) uses standard-library Expat/JSON for pure offline parsing;
+HTML transformations remain proposed. Use maintained, reviewed open-source HTML
+parsing/sanitization components selected in the separately approved M1-06b increment. Do not use regex as an HTML
 sanitizer or run a browser. Existing XML rules stay: UTF-8 only (optional BOM),
 reject conflicting/unsupported encoding declarations, DTDs, custom entities and
 external resources; predefined XML entities/CDATA are decoded by the safe parser.
