@@ -117,22 +117,24 @@ not force CISA into HTML. Original values, source context and date precision sur
 
 Source processing is deterministic, not AI analysis. Separately approved
 [M1-06a](../M1_PARSING.md) uses standard-library Expat/JSON for pure offline parsing;
-HTML transformations remain proposed. Use maintained, reviewed open-source HTML
-parsing/sanitization components selected in the separately approved M1-06b increment. Do not use regex as an HTML
+[M1-06b](../M1_TRANSFORMS.md) separately implements offline standard-library HTML
+sanitation/text extraction. D032 specifies its conservative fragment profile;
+operational processing and source feasibility remain gated. Do not use regex as an HTML
 sanitizer or run a browser. Existing XML rules stay: UTF-8 only (optional BOM),
 reject conflicting/unsupported encoding declarations, DTDs, custom entities and
 external resources; predefined XML entities/CDATA are decoded by the safe parser.
 Preserve original bytes so decoding/normalization is auditable. No double-unescape
 pass after sanitization. Invalid or over-budget source batches fail atomically.
 
-Proposed HTML policy: allow inert structural tags only (`p`, `br`, headings,
+D024 policy, concretely bound by [D032](../M1_TRANSFORMS.md): allow inert structural tags only (`p`, `br`, headings,
 lists, blockquote, pre/code, strong/em and basic table structure); remove all
 attributes, including event handlers, styles, IDs and resource-bearing URLs.
 Unwrap anchors to visible text; retain original article URL only as provenance.
 Drop script/style, iframe/object/embed, forms/controls, media/image, SVG/MathML,
 base/meta/link elements and their active subtrees, comments and processing
 instructions. Unknown inert wrappers may be unwrapped after safe parsing.
-Define/test exact allowlist and serialization in the approved sanitizer PR.
+The M1-06b reference specifies the exact allowlist/serialization and stricter
+rejection of malformed fragments, declarations and processing instructions.
 Never execute HTML, load remote fonts/images/scripts, resolve embedded links,
 or treat sanitization as permission to publish or a complete viewer security model.
 
@@ -145,7 +147,7 @@ review and output escaping/isolation; no viewer is introduced by M1.
 
 Keep complete response caps: 8 MiB KEV and 6 MiB per RSS, independently enforced
 on transferred and decompressed entity bytes; 10,000 KEV/500 RSS items; depth 64,
-32 KiB headers, existing metadata/URL limits. D024 additionally **proposes**:
+32 KiB headers, existing metadata/URL limits. D024 now has scoped offline M1-06b implementation approval for:
 1 MiB UTF-8 per vendor original/sanitized/plain-text item, 6 MiB aggregate per
 representation per vendor response, 50,000 HTML nodes per source batch, depth 64
 and 32 input attributes per element with values ≤4,096 characters. CISA retained

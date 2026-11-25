@@ -26,7 +26,7 @@ contract changes still need explicit review/versioning; see D001 in the decision
 | Package | Responsibility now | Later boundary |
 | --- | --- | --- |
 | `core` | Immutable, versioned contracts and vocabulary | Shared schemas, identifiers, configuration, audit events |
-| `collectors` | Fetch/parse protocol, source-local error type, offline-testable HTTPS transport and pure RSS/JSON parsers | Independent permitted-source adapters, Stage 1 (partly AI-assisted) |
+| `collectors` | Fetch/parse protocol, source-local error type, offline-testable HTTPS transport and pure RSS/JSON parsers plus HTML/text transformations | Independent permitted-source adapters, Stage 1 (partly AI-assisted) |
 | `storage` | V1 repository protocol; additive offline V2 SQLite transactions, immutable associations and policy-bound backing checks | Production lifecycle/host controls and V1 backend |
 | `triage` | Package placeholder | Stage 2 deterministic ranking; optional bounded, labeled AI assistance |
 | `enrichment` | Package placeholder | Stage 3 deterministic tools, analyst verification, no AI |

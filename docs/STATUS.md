@@ -1,6 +1,6 @@
 # Project status
 
-Last reviewed: **2026-11-24**. Repository: `Ih4c/ghana-cti-pipeline`.
+Last reviewed: **2026-11-25**. Repository: `Ih4c/ghana-cti-pipeline`.
 Application contracts delivered by [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) (M1-02a),
 with D027 numeric caps delivered by [PR #15](https://github.com/Ih4c/ghana-cti-pipeline/pull/15);
 documentation follow-ups [PR #12](https://github.com/Ih4c/ghana-cti-pipeline/pull/12)
@@ -10,7 +10,8 @@ M1-02b helpers are delivered by [PR #16](https://github.com/Ih4c/ghana-cti-pipel
 M1-03 offline persistence is delivered by [PR #17](https://github.com/Ih4c/ghana-cti-pipeline/pull/17).
 M1-04 offline lifecycle is delivered by [PR #18](https://github.com/Ih4c/ghana-cti-pipeline/pull/18).
 M1-05 offline transport is delivered by [PR #19](https://github.com/Ih4c/ghana-cti-pipeline/pull/19).
-Verified against GitHub on 2026-11-24: main was `170ab1a` (the PR #19 merge). This
+M1-06a pure source parsing is delivered by [PR #20](https://github.com/Ih4c/ghana-cti-pipeline/pull/20).
+Verified against GitHub on 2026-11-25: main was `64224f1` (the PR #20 merge). This
 is a dated snapshot, so always fetch current main on resumption and treat the PR
 list as the source of truth for what is delivered.
 
@@ -23,7 +24,7 @@ list as the source of truth for what is delivered.
 | Readiness and hybrid documentation | Merged planning history | [PR #5](https://github.com/Ih4c/ghana-cti-pipeline/pull/5), [PR #6](https://github.com/Ih4c/ghana-cti-pipeline/pull/6); v1.2 metadata-first vendor strategy now superseded |
 | Full-text direction | Accepted strategy only, D022 | Complete permitted CISA fields and vendor RSS articles; report template/human workflow unchanged |
 | Owner risk acknowledgement | Recorded, D023; rights unresolved | Owner-reported terms findings and acceptance do not confer license, exception or permission to ignore restrictions |
-| M1 v1.3 technical design | PR #7 merged; **M1-01 through M1-06a scoped offline work approved**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
+| M1 v1.3 technical design | PR #7 merged; **M1-01 through M1-06b scoped offline work approved**, remaining design proposed | [Specification](milestones/M1_COLLECTION.md), [full-text evidence/rights design](milestones/M1_EVIDENCE.md), [PR sequence](milestones/M1_READINESS.md) |
 | M1-01 implementation | Delivered by PR #8 | Five [retrieval/observation contracts](M1_RETRIEVAL_CONTRACTS.md), discriminated outcomes, synthetic fixtures/tests; no I/O |
 | M1-02a implementation | Delivered by [PR #9](https://github.com/Ih4c/ghana-cti-pipeline/pull/9) | [V2 evidence, artifact, policy and manifest contracts](M1_EVIDENCE_CONTRACTS.md); synthetic tests only |
 | Documentation consistency | PR #12 and PR #13 merged; Issue #11 closed | Current-state sync and permanent pre-PR SHA/PR-state/test-count checks delivered; historical milestone references preserved |
@@ -33,25 +34,25 @@ list as the source of truth for what is delivered.
 | M1-03 SQLite persistence | Delivered by PR #17 | [Offline storage reference](M1_SQLITE_STORAGE.md); atomic synthetic batches, immutable associations, replay/rollback, policy-bound bytes and validated 304 checkpoints; no operational activation |
 | M1-04 recovery/lifecycle | Delivered by PR #18 | [Offline lifecycle/runbook](M1_LIFECYCLE.md); bounded private workspace, consistent backup, isolated restore, rights ledger and policy purge; no production job |
 | M1-05 HTTPS transport | Delivered by PR #19 | [Transport profiles and limits](M1_TRANSPORT.md); injected-fake DNS/TLS/HTTP/clock tests, safe descriptors and caller-owned budgets; no source endpoints or live I/O |
-| M1-06a source parsing | Approved; implemented on this feature branch for independent review | [Pure parsing profile](M1_PARSING.md); Expat RSS 2.0/JSON with synthetic fixtures, bounded complete fields and safe failures; no source mapping or HTML transformation |
+| M1-06a source parsing | Delivered by PR #20 | [Pure parsing profile](M1_PARSING.md); Expat RSS 2.0/JSON with synthetic fixtures, bounded complete fields and safe failures; no source mapping or HTML transformation |
+| M1-06b HTML/text transformations | Approved; implemented on this feature branch for independent review | [Strict inert transformation profile](M1_TRANSFORMS.md); separately versioned helpers, preserved originals and bounded all-or-nothing synthetic batches; no integration or live content |
 | M2–M5 | Roadmap only | No implementation or publication approval |
 
-Main delivers the foundation, M1-01 through M1-05 and D027 (981 passed, one existing
-strict TLP xfail). This branch adds pure offline RSS/XML and JSON parsing.
-No source adapters, HTML transformation, scheduler or publisher exists.
+Main delivers the foundation, M1-01 through M1-06a and D027 (1,112 passed, one
+existing strict TLP xfail). This branch adds pure offline HTML/text transformations.
+No source adapters, orchestration, scheduler or publisher exists.
 The unfinished v1.2 draft remains preserved in its original worktree.
 
 ## Blockers and decisions
 
-1. **M1-06a pure parsing approved.** The
-   [owner comment on PR #19](https://github.com/Ih4c/ghana-cti-pipeline/pull/19#issuecomment-7138988824)
-   approves D015 and the safe-parsing portion of D024: pure offline Expat RSS 2.0
-   and JSON catalog parsing, synthetic tests and documentation. Author/scope were
-   verified before application changes. The [D031 reference](M1_PARSING.md) records
-   complete-field extraction, namespace selection, metadata/depth/byte/count bounds,
-   duplicate rules and exact numeric handling for review. No transport/storage
-   imports, I/O, clock or randomness. No source mappings, HTML transformations,
-   integration or live collection. M1-06b onward and B1/B2/C need fresh approval.
+1. **M1-06b offline HTML/text transformations approved.** The
+   [owner comment on PR #20](https://github.com/Ih4c/ghana-cti-pipeline/pull/20#issuecomment-7149971631)
+   approves D024 pure standard-library sanitization and extraction of already
+   extracted article strings, separate versions, bounded deterministic output,
+   unchanged originals, synthetic adversarial tests and documentation. Author/scope
+   were verified before application changes. [D032](M1_TRANSFORMS.md) records the
+   narrow fragment grammar, allowlist, escaping, text separators and budgets for
+   review. No dependency was added. M1-07 onward and B1/B2/C need fresh approval.
 2. **Full-text rights unresolved.** Microsoft use/copying/distribution/publication
    restrictions are owner-reported and historically noted; applicable Google/
    FeedBurner terms and robots need review. Establish lawful access, retention,
@@ -69,9 +70,9 @@ The unfinished v1.2 draft remains preserved in its original worktree.
 4. **Technical choices remain scoped.** D005/D013/D019 offline persistence is now
    delivered by PR #17 with D028 schema/API bindings. M1-04 offline mechanisms are
    delivered by PR #18 with D029. M1-05 transport/D030 is delivered by PR #19.
-   M1-06a parsing has separate approval; D031 records its concrete profile for
-   review. HTML sanitizers, source mappings, real-host transport/capacity verification
-   and operational jobs still need their respective approvals.
+   M1-06a parsing/D031 is delivered by PR #20. M1-06b has separate approval; D032
+   records its concrete profile for review. Source mappings, integration, real-host
+   transport/capacity verification and operational jobs need their respective approvals.
    D018 collection strategy superseded; D009/D021 remain open. D025 wire bindings
    are delivered by PR #9; D026 source-revision versus derivation identity
    is resolved in the [profile specification](M1_IDENTITY_PROFILES.md). Review
@@ -195,7 +196,7 @@ Validation: **981 passed, one existing strict TLP xfail** on Python **3.11 and
 bombs, peer/SNI/IP binding, rebinding, redirects, deadlines, budgets, conditionals,
 403 behavior, Retry-After and source isolation with all real network calls blocked.
 
-M1-06a adds three pure collector-side parser/value modules, a synthetic fixture
+PR #20 delivered three pure collector-side parser/value modules, a synthetic fixture
 builder and focused tests, plus D031 and a parsing reference. Existing core,
 transport/storage, wire contracts, interfaces, digest profiles, dependencies,
 CI and report template remain unchanged. Standard-library Expat and JSON preserve
@@ -209,13 +210,32 @@ Side-effect traps and static import checks cover filesystem/network/clock/random
 exclusions. Exact/one-over tests cover input/body/metadata/depth/count limits;
 existing suites preserve V1 through M1-05 compatibility.
 
+M1-06b adds five collector-side modules for a shared strict HTML fragment profile,
+independent sanitizer/extractor and atomic in-memory batch helper, plus one synthetic
+test module and D032/reference documentation. Original input is preserved separately
+from the inert attribute-free HTML and plain-text derivatives. Existing core,
+transport/storage/parsers, contracts, profiles, interfaces, dependencies, CI and
+report template remain unchanged. No real source content or I/O is involved.
+
+Validation: **1,255 passed, one existing strict TLP xfail** on Python **3.11 and
+3.14**; **143** transformation cases. Ruff lint/format, **15 dependency-boundary
+tests**, **234 local Markdown links/anchors** across **32 documents**, and diff
+checks pass. Synthetic vectors/adversarial cases cover inert output, strict syntax,
+entity handling, original preservation and exact caps; side-effect traps/static
+imports confirm no filesystem/network/clock/randomness use.
+
+PR #21 remains open for re-review of the [resource-bound correction](https://github.com/Ih4c/ghana-cti-pipeline/pull/21#issuecomment-7150432812).
+Attribute limits now reject before scanning and tag-terminator checks avoid suffix
+copies. Eight new regression cases cover early rejection and bounded 512 KiB/1 MiB
+tags (many attributes, long values/names, whitespace and unfinished quotes). The
+transform reference also records preserved bidi/invisible-text display limitations.
+
 Follow [HANDOFF.md](HANDOFF.md) and [DECISIONS.md](DECISIONS.md). Stop at independent
-M1-06a review. Next proposed increment: **M1-06b HTML sanitization and text
-extraction**, after separate policy/library and implementation approval. Review
-D031's narrow RSS envelope, duplicate rules, 4,300-digit integer bound and exact
-Decimal handling. The existing canonical profile still rejects decimals/out-of-range
-integers; no rounding or profile widening. Syntax cannot establish article
-completeness: B1/source mapping must verify it. Narrow transport profiles, a bounded
-production resolver, actual source behavior, packet accounting, POSIX host/ledger/
-encryption and lawful basis gates remain open. Issue #10 stays open; B1/B2/C are
-not approved.
+M1-06b review. Review D032's strict grammar, allowlist, node/attribute accounting,
+separator rules and runtime compatibility. This intentionally rejects some
+browser-recoverable HTML; source compatibility needs future B1 evidence. Inert
+output is not viewer certification, completeness verification or publication
+permission. Next proposed increment: **M1-07 offline CISA adapter**, after separate
+scoped approval. Lawful basis remains open and blocks real full-text activation.
+Source mappings, host/capacity checks and operational integration remain gated;
+Issue #10 stays open and B1/B2/C are not approved.

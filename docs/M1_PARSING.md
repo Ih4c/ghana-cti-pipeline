@@ -152,4 +152,6 @@ source adapters/mappings (M1-07–09), storage integration, live requests, artic
 fetches, real feed fixtures, scheduling, deployment, publication or paid services.
 The 2 GiB storage and $0 paid-service limits remain. Issue #10 stays open for
 separately approved B1 measurements. B1/B2/C remain unapproved. Stop at independent
-review; M1-06b requires separate policy/library and implementation approval.
+review. M1-06a is delivered by PR #20; the separately approved
+[M1-06b increment](M1_TRANSFORMS.md) now implements offline HTML/text helpers
+without changing this parser profile or authorizing later gates.

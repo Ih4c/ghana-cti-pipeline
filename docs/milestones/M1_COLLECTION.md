@@ -1,8 +1,8 @@
 # M1 — Full-text intelligence collection plan
 
 - Specification version: **1.3**
-- State: **strategy accepted; scoped offline M1-01 through M1-06a approved; remaining technical design proposed**
-- Updated: 2026-11-24
+- State: **strategy accepted; scoped offline M1-01 through M1-06b approved; remaining technical design proposed**
+- Updated: 2026-11-25
 - Verified planning baseline: main `ccd81278472c7847287ffcf20988629435f2c999`
 - Approval boundaries: [DECISIONS.md](../DECISIONS.md), D022–D024 and the scoped D027 numeric-cap amendment.
 - Evidence: [historical feasibility and owner-reported observations](M1_SOURCE_FEASIBILITY.md).
@@ -33,7 +33,9 @@ authorizes M1-04 offline recovery/lifecycle and capacity mechanisms only. The
 authorizes M1-05 standard-library HTTPS transport with injected fakes only.
 The [PR #19 owner comment](https://github.com/Ih4c/ghana-cti-pipeline/pull/19#issuecomment-7138988824)
 authorizes M1-06a pure offline Expat/JSON parsing only; see [D031](../M1_PARSING.md).
-M1-06b onward, source access and operational gates remain unapproved. Earlier v1.2 work is not
+The [PR #20 owner comment](https://github.com/Ih4c/ghana-cti-pipeline/pull/20#issuecomment-7149971631)
+authorizes M1-06b pure standard-library HTML/text transformations; see
+[D032](../M1_TRANSFORMS.md). M1-07 onward, source access and operational gates remain unapproved. Earlier v1.2 work is not
 authority to proceed.
 Historical versions remain in Git, not active scope. Existing V1 contracts,
 permanent guidance, authoritative report template and human workflow are preserved.
@@ -259,4 +261,4 @@ parsing/transforms, independent adapters and manual offline integration. B1/B2
 verification/activation and Gate C scheduling remain separately approved work.
 The M1-01 implementation PR stops at offline descriptors/tests/documentation.
 M1-02a is separately approved for data contracts and stops at its review PR.
-See [delivery status](../STATUS.md); M1-02b is delivered by PR #16. M1-03 is delivered by PR #17. M1-04 is delivered by PR #18. M1-05 is delivered by PR #19. M1-06a has scoped offline approval and stops at independent implementation review; M1-06b onward needs fresh approval. The full-text strategic target and acceptance criteria are unchanged.
+See [delivery status](../STATUS.md); M1-02b is delivered by PR #16. M1-03 is delivered by PR #17. M1-04 is delivered by PR #18. M1-05 is delivered by PR #19. M1-06a is delivered by PR #20. M1-06b has scoped offline approval and stops at independent implementation review; M1-07 onward needs fresh approval. The full-text strategic target and acceptance criteria are unchanged.
