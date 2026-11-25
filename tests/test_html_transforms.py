@@ -6,6 +6,8 @@ import io
 import os
 import random
 import socket
+import subprocess
+import sys
 import time
 import uuid
 from dataclasses import FrozenInstanceError
@@ -505,3 +507,65 @@ def test_original_not_replaced_when_transform_changes_content():
     assert result.plain_text == "e\u0301" and result.plain_text != "é"
     with pytest.raises(ValueError, match="unsupported transformation error code"):
         TransformError("CANARY")
+
+
+@pytest.mark.parametrize("attrs", [[("a", "x")] * 33, [("a", "x" * 4097)]])
+def test_attribute_limits_precede_fragment_scan(monkeypatch, attrs):
+    def denied(*args):
+        raise AssertionError("Oversized attributes must reject before scanning")
+
+    monkeypatch.setattr(html_fragment, "_TAG", type("NoScan", (), {"match": denied})())
+    parser = html_fragment.FragmentParser("", html_profile.NodeBudget())
+    fails(lambda: parser.start("p", attrs, closed=False), "attribute_limit")
+
+
+@pytest.mark.parametrize(
+    "shape,size,expected",
+    [
+        ("many_attributes", ARTICLE_LIMIT // 2, "attribute_limit"),
+        ("many_attributes", ARTICLE_LIMIT, "attribute_limit"),
+        ("long_value", ARTICLE_LIMIT, "attribute_limit"),
+        ("long_name", ARTICLE_LIMIT, "success"),
+        ("whitespace", ARTICLE_LIMIT, "success"),
+        ("unfinished_value", ARTICLE_LIMIT, "malformed_html"),
+    ],
+)
+def test_large_tag_shapes_finish_within_bounded_subprocess(shape, size, expected):
+    prefix, suffix = "<p ", ">x</p>"
+    room = size - len(prefix) - len(suffix)
+    if shape == "many_attributes":
+        middle = "a=x " * (room // 4) + " " * (room % 4)
+    elif shape == "long_value":
+        middle = 'a="' + "x" * (room - 4) + '"'
+    elif shape == "long_name":
+        middle = "a" * room
+    elif shape == "whitespace":
+        middle = " " * room
+    else:
+        middle = 'a="' + "x" * (room - 3)
+    raw = prefix + middle + suffix
+    assert len(raw.encode("utf-8")) == size <= ARTICLE_LIMIT
+    # Kill a quadratic regression instead of leaving CI stuck in the parser.
+    # This generous deadline includes interpreter/import/pipe overhead; it is not
+    # a production timeout or a tight, machine-dependent microbenchmark.
+    script = """
+import sys
+from ghana_cti_pipeline.collectors.html_profile import TransformError
+from ghana_cti_pipeline.collectors.html_sanitizer import sanitize_html
+try:
+    result = sanitize_html(sys.stdin.read())
+except TransformError as error:
+    print(error.code)
+else:
+    print("success" if result == "<p>x</p>" else "unexpected_output")
+"""
+    completed = subprocess.run(
+        [sys.executable, "-c", script],
+        input=raw,
+        text=True,
+        capture_output=True,
+        timeout=8,
+        check=True,
+    )
+    assert completed.stdout.strip() == expected
+    assert completed.stderr == ""

@@ -87,7 +87,9 @@ reference is followed or resolved.
 Emit canonical `<tag>` / `</tag>` tokens (`<br>` only for the allowed void tag).
 Escape all data `&`, `<`, `>` as `&amp;`, `&lt;`, `&gt;`; text quotes do not need
 attribute escaping because no attribute context exists. Preserve data whitespace,
-line endings and Unicode without normalization. Thus even entity-encoded markup
+line endings and Unicode without normalization. Bidirectional overrides and other
+non-control invisible Unicode characters remain text; an analyst-facing viewer
+must account for misleading visual order and invisible content. Thus even entity-encoded markup
 remains text on reparsing. Output contains no executable or resource-bearing
 markup regardless of how a browser might repair its inert structural elements.
 Successful sanitization is idempotent under this profile.
@@ -135,6 +137,13 @@ validation. D024 node/attribute budgets are now explicit implementation bindings
 Escaping can expand output, so the output writer checks before appending. Any
 violation rejects the entire result; no partial yield, truncation or fallback.
 Limits apply to intermediate construction too, before final LF trimming.
+Attribute count/value limits are checked before the fragment scan. End-of-tag
+checks use fixed-prefix comparisons without copying the remaining tag text; this
+avoids quadratic work on attribute-heavy input. The
+[PR #21 review](https://github.com/Ih4c/ghana-cti-pipeline/pull/21#issuecomment-7150432812)
+requested this resource-bound correction. Regression tests use 512 KiB/1 MiB
+synthetic tags and an eight-second child-process deadline, including startup,
+to terminate a performance regression; this is not a production timeout guarantee.
 
 Functions raise `TransformError` with only finite codes: invalid_input,
 input_limit, output_limit, batch_limit, item_limit, invalid_character,

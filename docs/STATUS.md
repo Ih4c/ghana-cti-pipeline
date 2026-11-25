@@ -217,12 +217,18 @@ from the inert attribute-free HTML and plain-text derivatives. Existing core,
 transport/storage/parsers, contracts, profiles, interfaces, dependencies, CI and
 report template remain unchanged. No real source content or I/O is involved.
 
-Validation: **1,247 passed, one existing strict TLP xfail** on Python **3.11 and
-3.14**; **135** transformation cases. Ruff lint/format, **15 dependency-boundary
+Validation: **1,255 passed, one existing strict TLP xfail** on Python **3.11 and
+3.14**; **143** transformation cases. Ruff lint/format, **15 dependency-boundary
 tests**, **234 local Markdown links/anchors** across **32 documents**, and diff
 checks pass. Synthetic vectors/adversarial cases cover inert output, strict syntax,
 entity handling, original preservation and exact caps; side-effect traps/static
 imports confirm no filesystem/network/clock/randomness use.
+
+PR #21 remains open for re-review of the [resource-bound correction](https://github.com/Ih4c/ghana-cti-pipeline/pull/21#issuecomment-7150432812).
+Attribute limits now reject before scanning and tag-terminator checks avoid suffix
+copies. Eight new regression cases cover early rejection and bounded 512 KiB/1 MiB
+tags (many attributes, long values/names, whitespace and unfinished quotes). The
+transform reference also records preserved bidi/invisible-text display limitations.
 
 Follow [HANDOFF.md](HANDOFF.md) and [DECISIONS.md](DECISIONS.md). Stop at independent
 M1-06b review. Review D032's strict grammar, allowlist, node/attribute accounting,

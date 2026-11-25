@@ -76,6 +76,8 @@ class FragmentParser(HTMLParser):
         self.in_text = text
 
     def start(self, tag, attrs, *, closed):
+        if len(attrs) > 32 or any(v is not None and len(v) > 4096 for _, v in attrs):
+            raise TransformError("attribute_limit")
         if tag == "plaintext":
             raise TransformError("malformed_html")
         raw = self.get_starttag_text()
@@ -87,7 +89,9 @@ class FragmentParser(HTMLParser):
             before = index
             while index < len(raw) and raw[index] in "\t\n\r ":
                 index += 1
-            if raw[index:] in {">", "/>"}:
+            if (index == len(raw) - 1 and raw.startswith(">", index)) or (
+                index == len(raw) - 2 and raw.startswith("/>", index)
+            ):
                 break
             if index == before:
                 raise TransformError("malformed_html")
@@ -98,8 +102,6 @@ class FragmentParser(HTMLParser):
             index = attribute.end()
         else:
             raise TransformError("malformed_html")
-        if len(attrs) > 32 or any(v is not None and len(v) > 4096 for _, v in attrs):
-            raise TransformError("attribute_limit")
         if len({k for k, _ in attrs}) != len(attrs):
             raise TransformError("malformed_html")
         if closed and tag not in VOID:

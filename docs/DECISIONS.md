@@ -40,6 +40,11 @@ approval against the specific milestone version and any conditions.
 | D031 | 2026-11-25, implementation binding delivered by PR #20 | Pure Expat RSS 2.0 and JSON envelope parsing, exact selected fields, bounded complete batches and no source-specific mappings | [Parsing reference](M1_PARSING.md) specifies channel validation, expanded field names, duplicate semantics, transient results and safe errors. Finite JSON decimals are preserved exactly; the integer-only canonical profile remains unchanged and rejects incompatible values. A 4,300-digit integer safety ceiling is explicit. Syntax validates complete fields, not publisher article completeness. |
 | D032 | 2026-11-25, concrete implementation binding proposed for independent M1-06b review | Separate versioned standard-library sanitizer/extractor, strict balanced fragments, attribute-free inert output and independent original/derived batch limits | [Transformation reference](M1_TRANSFORMS.md) fixes the allowlist, removed subtrees, canonical escaping, text separators, node/attribute accounting and Python 3.11/3.14 lexical modes. No browser-style repair, new dependency, storage integration or original replacement. Outputs do not establish rights, viewer safety or source completeness. |
 
+D032 review follow-up, 2026-11-25: the [PR #21 review](https://github.com/Ih4c/ghana-cti-pipeline/pull/21#issuecomment-7150432812)
+holds merge for early attribute-limit rejection and constant-time tag-terminator
+checks. This branch corrects the scan and adds bounded synthetic runtime tests;
+profile versions, caps and scope stay unchanged. PR #21 remains unmerged for re-review.
+
 ## Verified M1-06b authorization — 2026-11-25
 
 The [owner comment on PR #20](https://github.com/Ih4c/ghana-cti-pipeline/pull/20#issuecomment-7149971631),
