@@ -20,7 +20,8 @@ The project provides typed contracts, deterministic identity/digest helpers and
 an [offline SQLite evidence store](docs/M1_SQLITE_STORAGE.md), exercised only with
 synthetic data and temporary databases, plus [offline recovery/lifecycle](docs/M1_LIFECYCLE.md)
 mechanisms, [HTTPS transport tested with injected fakes](docs/M1_TRANSPORT.md),
-and [pure offline RSS/JSON parsing](docs/M1_PARSING.md).
+[pure offline RSS/JSON parsing](docs/M1_PARSING.md), and
+[offline HTML/text transformations](docs/M1_TRANSFORMS.md).
 There are no live collectors, AI calls,
 approval workflows or publishers; production storage/operations remain gated.
 See [Foundation contracts](docs/FOUNDATION.md) for boundaries,

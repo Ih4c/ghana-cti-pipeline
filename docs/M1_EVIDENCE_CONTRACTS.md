@@ -180,8 +180,9 @@ approved [M1-03 store](M1_SQLITE_STORAGE.md) persists these unchanged contracts,
 rechecks actual BLOB lengths/hashes and guards conditional checkpoints using
 complete policy/manifest/observation backing. It introduces no core wire changes.
 [M1-05](M1_TRANSPORT.md) separately adds injected-fake transport and
-[M1-06a](M1_PARSING.md) adds pure source parsing; neither changes these contracts.
-There is no live source access, sanitization, adapter, scheduling, deployment or
+[M1-06a](M1_PARSING.md) adds pure source parsing; [M1-06b](M1_TRANSFORMS.md) adds
+pure HTML/text derivatives. These increments do not change the contracts.
+There is no live source access, adapter, scheduling, deployment or
 reporting change. Validation
 errors may include rejected input; future logging must use safe codes, not raw
 ValidationError payloads. Rights and operational approval gates remain unchanged.

@@ -14,7 +14,7 @@ Source adapters (independent)
 ```
 
 ## Component boundaries
-- `collectors/`: common fetch/parse interface, injected-fake HTTPS transport and pure RSS/XML/JSON parsing; source adapters and HTML transformations remain future work, with failures isolated.
+- `collectors/`: common fetch/parse interface, injected-fake HTTPS transport and pure RSS/XML/JSON parsing and HTML/text transformations; source adapters remain future work, with failures isolated.
 - `core/`: schemas, provenance, identifiers, error types, configuration, audit events.
 - `triage/`: deterministic filtering and optional LLM-assisted prioritization; no unsourced claims.
 - `enrichment/`: deterministic extraction and enrichment utilities, outputs pending analyst validation.
@@ -50,7 +50,9 @@ activation blocked, not metadata substitution. V1 shapes/excerpt rules remain
 unchanged. M1-01 descriptors are delivered by PR #8. Additive [M1-02a evidence
 contracts](M1_EVIDENCE_CONTRACTS.md) had separate approval and are delivered by PR #9; M1-02b
 [pure identity/digest helpers](M1_IDENTITY_PROFILES.md) have separate approval;
-source mapping and HTML transformation remain unimplemented and gated. Separately
+source mapping remains unimplemented and gated. Separately approved
+[M1-06b helpers](M1_TRANSFORMS.md) create bounded inert HTML and plain-text
+derivatives without modifying original fields or integrating storage. Separately
 approved [M1-06a parsers](M1_PARSING.md) extract bounded complete source fields
 without transport/storage imports or source-specific mappings. Separately approved
 [M1-05 transport](M1_TRANSPORT.md) is tested with injected resolver/socket/TLS/clock
